@@ -7,6 +7,11 @@ All notable user-facing changes are recorded here. The format follows
 
 ### Added
 
+- M2: the `<redstone-viewer>` web component (orbit, pan, zoom, hover and click inspector with the Bedrock mapping,
+  layer slider with isolate and ghosting, explode, direction arrows, instructions mode, port labels and
+  annotation pins, keyboard control, light and dark themes, bottom-sheet inspector on narrow screens), the
+  playground page, a benchmark page, and `rsd bundle` for a single-file offline viewer.
+
 - M1: the `rsd/1` format (JSON Schema), a parser that never throws, hard limits with a fuzz corpus, the block
   registry for the 28 v1 types with Bedrock mappings checked against pinned Mojang data, `rsd validate` (stage 1)
   and `rsd registry dump`, five example designs, `AUTHORING.md`, and generated `docs/bedrock-mapping.md`,

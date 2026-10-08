@@ -15,5 +15,10 @@
   },
   "engines": {
     "node": ">=22"
+  },
+  "dependencies": {
+    "@dustwright/core": "workspace:*",
+    "@dustwright/validator": "workspace:*",
+    "@dustwright/viewer": "workspace:*"
   }
 }

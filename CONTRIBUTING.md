@@ -13,6 +13,22 @@ Use Node 22 LTS or newer (`.nvmrc`). Dependency lifecycle scripts are blocked; a
 install script fails `pnpm install` until it is reviewed in `pnpm-workspace.yaml`. Dependencies are pinned to
 exact versions.
 
+## Browser tests
+
+`pnpm build && pnpm e2e` runs the Playwright suite in `e2e/` against the built site (served by `vite preview`)
+and against single-file bundles made with `rsd bundle`. Install the browser once with
+`pnpm exec playwright install chromium`. WebGL runs on SwiftShader, so screenshots differ per platform: baselines
+live in `e2e/__screenshots__/` with a `-darwin` or `-linux` suffix and are compared with a 2% pixel tolerance.
+After an intended visual change, regenerate them with `pnpm e2e --update-snapshots` on macOS, and for Linux (CI)
+inside the Playwright image:
+
+```sh
+docker run --rm --platform linux/amd64 --ipc=host -v "$PWD":/work mcr.microsoft.com/playwright:v1.63.0-noble \
+  bash -c "cd /work && corepack enable && pnpm install --frozen-lockfile && pnpm build && pnpm e2e --update-snapshots"
+```
+
+(Run that from a clean copy of the repo: it reinstalls `node_modules` for Linux.)
+
 ## Ground rules
 
 - The architecture spec is the source of truth. Format, orientation semantics and diagnostic codes change only

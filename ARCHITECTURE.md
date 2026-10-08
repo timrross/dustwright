@@ -99,6 +99,20 @@ core; the profile objects live in `@dustwright/validator` (`BEDROCK_PROFILE`, `J
 `sim` for mechanics and `export` for exporters. The Java profile is a stub whose only rule is E015 until M9. See
 `docs/adr/0004-edition-profiles.md`.
 
+## Viewer
+
+`@dustwright/viewer` turns each block into procedural boxes (`geometry.ts`, one builder per registry
+`geometry.builder`, colours from an original palette) and draws all of them with three instanced meshes: solid
+parts, ghosted parts (layers above the cut, 15% opacity) and direction arrows. Changing the layer, isolate,
+explode, overlay or step rebuilds the instance buffers; rendering is on demand. Picking tests the ray against each
+shown block's whole cell, so thin parts (wall torches, dust) are as easy to click as cubes. Labels, pins, the
+inspector and diagnostics are DOM in the shadow root, written with `textContent` only.
+
+Three shapes ship: the library (`@dustwright/viewer` for Node-safe geometry, `@dustwright/viewer/browser` for the
+element), an IIFE bundle (`dist/bundle/redstone-viewer.js`) with three.js and the parser inlined, and the site's
+pages. `rsd bundle` inlines that IIFE into one HTML file: `packages/cli/scripts/copy-viewer.mjs` copies it into
+`packages/cli/assets/` at build time, so the CLI never depends on the viewer as code.
+
 ## Generated files
 
 | File                                                       | Source                            | Command                                            | CI check          |

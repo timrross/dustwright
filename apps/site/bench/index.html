@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dustwright viewer benchmark</title>
+  </head>
+  <body>
+    <header>
+      <strong>Dustwright</strong>
+      <span>Viewer benchmark</span>
+      <span id="fps" class="status" role="status" aria-live="polite">measuring…</span>
+    </header>
+    <main>
+      <p class="status">
+        A generated design of <span id="count"></span> blocks, orbiting continuously. Use
+        <code>?blocks=N</code> to change the size. M2 target: 60 fps at 10,000 blocks on an Apple Silicon
+        laptop.
+      </p>
+      <redstone-viewer id="viewer" height="70vh" theme="auto"></redstone-viewer>
+    </main>
+    <script type="module" src="../src/bench.ts"></script>
+  </body>
+</html>

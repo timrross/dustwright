@@ -1,2 +1,2 @@
-// The site entry point. Pages arrive in M2 (playground) and M7 (public site).
-export {};
+// The landing page. The full site (view, patterns, docs) arrives in M7.
+import "./site.css";

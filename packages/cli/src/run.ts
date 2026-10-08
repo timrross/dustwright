@@ -1,4 +1,5 @@
 import { parseArgs } from "node:util";
+import { bundleCommand } from "./commands/bundle.js";
 import { registryDumpCommand } from "./commands/registry.js";
 import { validateCommand } from "./commands/validate.js";
 import { HELP_TEXT, VERSION } from "./help.js";
@@ -16,7 +17,6 @@ export interface RunResult {
 
 /** Commands listed in the help that later milestones implement, with the milestone that brings each. */
 const PLANNED_COMMANDS: Readonly<Record<string, string>> = {
-  bundle: "M2",
   export: "M3",
   sheets: "M7",
   pack: "M7",
@@ -69,6 +69,10 @@ export async function run(argv: readonly string[], io: RunIO): Promise<RunResult
           { json: values.json ?? false, strict: values.strict ?? false },
           io,
         );
+      }
+      case "bundle": {
+        if (args.length !== 1) return usage(io, "bundle takes exactly one file and -o <html>");
+        return await bundleCommand(args[0] as string, values.output, io);
       }
       case "registry": {
         if (args[0] !== "dump" || args.length !== 1) return usage(io, 'registry takes the subcommand "dump"');

@@ -39,6 +39,8 @@ pnpm build
 pnpm rsd validate examples/not-gate.rsd.json          # human-readable diagnostics
 pnpm rsd validate examples/not-gate.rsd.json --json   # {"ok": true, "diagnostics": [...]}
 pnpm rsd registry dump | head                         # the Bedrock mapping table
+pnpm rsd bundle examples/not-gate.rsd.json -o not-gate.html   # one self-contained HTML viewer
+pnpm --filter @dustwright/site dev                    # the playground at http://localhost:5173/play/
 ```
 
 A design is layers of character rows plus a legend; see [AUTHORING.md](AUTHORING.md) and `examples/`.
@@ -53,6 +55,7 @@ pnpm build       # every package and the site
 pnpm gen         # regenerate packages/core/src/generated from the registry and schema
 pnpm docs:gen    # regenerate docs/bedrock-mapping.md, docs/diagnostics.md, docs/verify-in-game.md
 pnpm fetch:bedrock-data  # cache the pinned Mojang block metadata used by the mapping tests
+pnpm e2e         # Playwright viewer tests against the built site (run pnpm build first)
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), [ARCHITECTURE.md](ARCHITECTURE.md) and [SECURITY.md](SECURITY.md).

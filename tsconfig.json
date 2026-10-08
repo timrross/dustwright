@@ -11,7 +11,8 @@
       "@dustwright/viewer": ["./packages/viewer/src/index.ts"],
       "@dustwright/export": ["./packages/export/src/index.ts"],
       "@dustwright/mcp": ["./packages/mcp/src/index.ts"],
-      "dustwright": ["./packages/cli/src/index.ts"]
+      "dustwright": ["./packages/cli/src/index.ts"],
+      "@dustwright/viewer/browser": ["./packages/viewer/src/browser.ts"]
     }
   },
   "include": [
@@ -22,6 +23,9 @@
     "apps/*/*.config.ts",
     "scripts",
     "test",
-    "*.config.ts"
+    "*.config.ts",
+    "packages/*/vite.config.ts",
+    "e2e",
+    "playwright.config.ts"
   ]
 }

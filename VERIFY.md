@@ -77,3 +77,58 @@ Deviations and decisions:
   the bounding box). Its toggle depends on a timing race (see its annotation); build it first at M3.
 - **The observer clock has no `tests`:** v1 tests read one value at one tick, which cannot express a clock's
   period (`expectTrace` is in `docs/ideas.md`). Its period is cross-checked in game at M6.
+
+## M2: Viewer MVP (2026-10-08)
+
+Environment: as M0; Playwright 1.63.0 with headless Chromium (SwiftShader WebGL) for the automated checks; the
+same Mac (Apple M3) for the performance run.
+
+| Item                                                                                                                                  | How                                                                                                                                                                                                                                                                        | Result                                                                                   |
+| ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| All five examples render; Playwright screenshot per example at fixed camera angles, committed as baselines                            | `e2e/viewer.spec.ts` "examples render": iso and top views of each example, baselines in `e2e/__screenshots__/` per OS (`-darwin`, `-linux`), 2% pixel tolerance                                                                                                            | Pass                                                                                     |
+| Clicking each directional block in the NOT gate and piston door shows the states written in the design                                | The test isolates the block's layer, looks from the top, clicks the block with the real mouse, and compares the `select` event's position, type and states with core's parse of the same file (levers, torches, sticky pistons)                                            | Pass                                                                                     |
+| Layer slider at each Y shows exactly the blocks of layers 0..Y                                                                        | Moves the real range input through every Y of the piston door and T flip-flop and compares `visibleBlockCount()` with the model's block count for y ≤ Y                                                                                                                    | Pass                                                                                     |
+| Hostile name `</script><img onerror=alert(1)>` in the name and an annotation renders as literal text in the inspector and the pins    | Playground test: title bar, inspector heading and the opened pin note equal the literal string; no `<img>` in the document or shadow root; no dialog                                                                                                                       | Pass                                                                                     |
+| Performance: 10,000-block design holds 60 fps on Tim's Mac                                                                            | `/bench/?blocks=10000` (orbits continuously and counts frames), run on this Mac in headless Chromium on the Apple M3 GPU (ANGLE Metal): 60 fps at 10,000 blocks and at 50,000                                                                                              | Pass (automated). **Optional:** Tim opens `/bench/` in his own browser to confirm by eye |
+| The single-file build opens with networking disabled and renders the NOT gate, and the hostile-name design without executing anything | `rsd bundle` output opened from `file://` with the browser offline: no non-file request, the model's block count matches; the hostile bundle shows the literal name, has one script element, no `<img>`, no dialog                                                         | Pass                                                                                     |
+| Security row "Viewer text"                                                                                                            | All design text goes through `textContent`; ESLint bans HTML sinks, `eval` and `new Function`; hostile-name tests above                                                                                                                                                    | Pass                                                                                     |
+| Security row "Runtime network"                                                                                                        | `test/no-network.test.ts`: no network API in core, validator, sim, export, cli or mcp; the viewer's one `fetch` is `loadSrc` (same-origin or https:, 2 MB cap, parsed before render). E2E: loading every example in the playground requests nothing outside its own origin | Pass                                                                                     |
+| M1 leftover: a Java design renders                                                                                                    | Playground test: E015 in the diagnostics, blocks drawn                                                                                                                                                                                                                     | Pass                                                                                     |
+
+Also checked (e2e unless noted): a design with stage 1 errors shows its diagnostics in place of the canvas; `[`
+and `]` change the layer; keyboard alone selects and moves between blocks (Enter, Shift with arrows and Page
+Up/Down); instructions mode steps through every step and emits `step` events with the right block counts;
+reduced motion jumps straight to the explode position; inline JSON loads when the viewer script runs in `<head>`;
+at 320 × 640 (playground) and 320 × 480 (bundle) the inspector is a bottom sheet, the 3D stage keeps at least 35%
+of the element, nothing scrolls sideways, and every block projects inside the canvas in the reset and top views;
+every example is fully framed at desktop size; theme text, outline, port-label, selection and hover colours pass
+4.5:1 (unit test); every block type builds geometry for every state combination, and direction arrows (including
+up and down, drawn on the south face) point the way the orientation semantics say (unit tests).
+
+After review: the narrow layout no longer collapses the stage (it measured 0 to 16 px before), framing uses the
+narrower of the two fields of view and re-frames after the first layout and after explode, the camera matrix is
+updated before projecting or picking, `src` redirects are re-checked, the bundle passes the design as text through
+the same parser guards as a file, and `n`/`b` act only in instructions mode.
+
+Bundle: 655 KB for the NOT gate (target under 1.5 MB), one inline script, no `src` or `href`; the only URL-like
+string left is the XHTML namespace three.js passes to `createElementNS` (a three.js shader-comment citation is
+stripped at build).
+
+Deviations:
+
+- The spec lists explode and instructions mode as viewer features without a milestone; both shipped in M2.
+  Inbound `postMessage` commands (`setStep`, `setLayer`, `setMode` with `allowed-origins`) are M7 work.
+- The playground has the editor, live diagnostics and viewer; its Share and Download buttons are M7.
+- Below 520 px wide the toolbar hides the N/E/S/W snap buttons and the explode slider to keep the 3D stage usable;
+  the reset and top views, arrow-key orbit and touch gestures remain, and wider screens show everything.
+- Picking selects whole cells rather than the drawn parts, so thin wall torches and dust are clickable.
+- The viewer package exports three entry points rather than one `index.ts`: `.` (Node-safe geometry and types),
+  `./browser` (the custom element; it touches `HTMLElement`) and `./bundle` (the prebuilt IIFE). Each is a
+  documented public API.
+- Block edges are thin dark lines judged against the block faces they outline, not the background, so they are
+  outside the 4.5:1 check; selection and hover outlines, which sit against the background, pass it.
+- Linux baselines were generated in the official `mcr.microsoft.com/playwright:v1.63.0-noble` image (amd64,
+  emulated on Apple Silicon) and then re-checked in compare mode there: 22 of 22 pass. CI's first run on GitHub
+  confirms them on native amd64.
+- Screenshot comparison allows 300 differing pixels (SwiftShader anti-aliasing noise); orientation is checked
+  exactly by the geometry unit tests and the select test.

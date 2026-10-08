@@ -155,6 +155,8 @@ steps. Exceeding a limit is E013.
 4. **Fix:** each diagnostic has a `code`, a `pos` `[x,y,z]` (or a JSON Pointer `path`), a `message` and a `hint`
    naming the edit. Apply it and go to 3. Stop after 6 rounds and report what still fails. **Never edit ports or
    tests to make a failure go away**; if the brief was wrong, say so.
+5. **Show:** `rsd bundle design.rsd.json -o design.html` writes one self-contained HTML viewer (publish it as an
+   artifact or open it offline).
 
 Common codes: E002 ragged grid, E003 character not in legend, E004 unknown type (hint has the closest names),
 E005 bad key or value (hint lists the allowed ones), E008 position outside the grid or on air, E011 port or test

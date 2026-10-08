@@ -202,7 +202,9 @@ export function* mutations(designText: string, count: number, seed = 12345): Gen
     "true",
     '"\\u0000"',
     '"..."',
-    " ",
+    "\u2028",
+    " ",
+    "\t",
     "x",
   ];
   for (let i = 0; i < count; i++) {

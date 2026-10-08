@@ -14,10 +14,11 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "assets"
   ],
   "scripts": {
-    "build": "tsc -b tsconfig.build.json && node -e \"require('node:fs').chmodSync('dist/bin.js', 0o755)\""
+    "build": "tsc -b tsconfig.build.json && node -e \"require('node:fs').chmodSync('dist/bin.js', 0o755)\" && node scripts/copy-viewer.mjs"
   },
   "dependencies": {
     "@dustwright/core": "workspace:*",
