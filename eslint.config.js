@@ -13,6 +13,8 @@ export default tseslint.config(
       "**/test-results/**",
       "packages/core/src/generated/**",
       "packages/cli/assets/**",
+      // Copied into the site at build time (apps/site/scripts/sync-public.mjs).
+      "apps/site/public/redstone-viewer.js",
       "playwright-report/**",
     ],
   },

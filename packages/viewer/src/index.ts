@@ -12,6 +12,8 @@ export type { Box, NeighbourLookup, Part, PartRole } from "./geometry.js";
 export { hasColor, sceneColor, THEMES } from "./palette.js";
 export type { ThemeName } from "./palette.js";
 export { blockInfo } from "./scene.js";
+export { parseAllowedOrigins, parseCommand } from "./messages.js";
+export type { ViewerCommand } from "./messages.js";
 export type { BlockInfo, SnapView, ViewerMode } from "./scene.js";
 
 /**

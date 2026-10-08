@@ -29,6 +29,9 @@ importers:
       eslint-config-prettier:
         specifier: 10.1.8
         version: 10.1.8(eslint@10.11.0)
+      fflate:
+        specifier: 0.8.3
+        version: 0.8.3
       globals:
         specifier: 17.12.0
         version: 17.12.0
@@ -56,6 +59,12 @@ importers:
       '@dustwright/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@dustwright/export':
+        specifier: workspace:*
+        version: link:../../packages/export
+      '@dustwright/sim':
+        specifier: workspace:*
+        version: link:../../packages/sim
       '@dustwright/validator':
         specifier: workspace:*
         version: link:../../packages/validator
@@ -63,6 +72,9 @@ importers:
         specifier: workspace:*
         version: link:../../packages/viewer
     devDependencies:
+      marked:
+        specifier: 18.0.14
+        version: 18.0.14
       vite:
         specifier: 7.3.6
         version: 7.3.6(@types/node@22.20.4)(tsx@4.23.15)
@@ -84,6 +96,10 @@ importers:
       '@dustwright/validator':
         specifier: workspace:*
         version: link:../validator
+    devDependencies:
+      fflate:
+        specifier: 0.8.3
+        version: 0.8.3
 
   packages/core: {}
 
@@ -92,6 +108,9 @@ importers:
       '@dustwright/core':
         specifier: workspace:*
         version: link:../core
+      fflate:
+        specifier: 0.8.3
+        version: 0.8.3
       nbtify:
         specifier: 2.2.0
         version: 2.2.0
@@ -913,6 +932,11 @@ packages:
 
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
+
+  marked@18.0.14:
+    resolution: {integrity: sha512-mBHK6FBHuBAlhgRe88w9F0O1AbwwXJUcQibUbC/QcdTbVGAD7aWza+xt3N6oT/jCZx3/OMeS+8rnuiHZcQ9s7A==}
+    engines: {node: '>= 20'}
+    hasBin: true
 
   meshoptimizer@1.1.1:
     resolution: {integrity: sha512-oRFNWJRDA/WTrVj7NWvqa5HqE1t9MYDj2VaWirQCzCCrAd2GHrqR/sQezCxiWATPNlKTcRaPRHPJwIRoPBAp5g==}
@@ -1880,6 +1904,8 @@ snapshots:
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
+
+  marked@18.0.14: {}
 
   meshoptimizer@1.1.1: {}
 

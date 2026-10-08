@@ -1,7 +1,9 @@
 import { defineRedstoneViewer } from "@dustwright/viewer/browser";
 import { validateText } from "@dustwright/validator";
 import type { Diagnostic } from "@dustwright/core";
+import { download } from "./download.js";
 import { EXAMPLES } from "./examples.js";
+import { decodeFragment, shareFragment } from "./fragment.js";
 import "./site.css";
 
 defineRedstoneViewer();
@@ -58,18 +60,154 @@ function update(): void {
   document.body.dataset.validated = String(Date.now());
 }
 
+// The draft is kept in this browser only, as a convenience: storage can be missing or full, so every access is
+// guarded, and the downloaded file is the durable copy.
+const DRAFT_KEY = "dustwright:draft";
+function saveDraft(): void {
+  try {
+    localStorage.setItem(DRAFT_KEY, editor.value);
+  } catch {
+    // No storage: the draft lives only in the page.
+  }
+}
+function loadDraft(): string | null {
+  try {
+    return localStorage.getItem(DRAFT_KEY);
+  } catch {
+    return null;
+  }
+}
+
 let timer = 0;
 editor.addEventListener("input", () => {
   clearTimeout(timer);
-  timer = window.setTimeout(update, 150);
+  timer = window.setTimeout(() => {
+    update();
+    saveDraft();
+  }, 150);
 });
 picker.addEventListener("change", () => {
   editor.value = EXAMPLES.get(picker.value) ?? "";
   update();
+  saveDraft();
 });
 
-const requested = new URLSearchParams(location.search).get("example");
-const first = requested && EXAMPLES.has(requested) ? requested : "not-gate";
-picker.value = first;
-editor.value = EXAMPLES.get(first) ?? "";
-update();
+const notice = document.querySelector<HTMLSpanElement>("#notice")!;
+const shareLink = document.querySelector<HTMLInputElement>("#share-link")!;
+
+/** The current design when it has no errors, else null with a notice saying why. */
+function validModel() {
+  const result = validateText(editor.value);
+  if (!result.model || result.diagnostics.some((d) => d.severity === "error")) {
+    notice.textContent = "Fix the errors first: exports need a design without errors.";
+    return null;
+  }
+  return result.model;
+}
+
+const button = (id: string, run: () => Promise<void> | void) =>
+  document.querySelector<HTMLButtonElement>(`#${id}`)!.addEventListener("click", () => {
+    notice.textContent = "";
+    shareLink.hidden = true;
+    void Promise.resolve(run()).catch((err: unknown) => {
+      notice.textContent = `Something went wrong: ${(err as Error).message}`;
+    });
+  });
+
+button("share", async () => {
+  const link = await shareFragment(editor.value);
+  if ("error" in link) {
+    notice.textContent = `${link.error.code}: ${link.error.message}`;
+    return;
+  }
+  shareLink.value = `${location.origin}/view/#${link.fragment}`;
+  shareLink.hidden = false;
+  shareLink.select();
+  try {
+    await navigator.clipboard.writeText(shareLink.value);
+    notice.textContent = "Link copied. The design travels in the link itself; no server sees it.";
+  } catch {
+    notice.textContent = "Copy the link below. The design travels in the link itself; no server sees it.";
+  }
+});
+
+const slugOf = () => validateText(editor.value).model?.meta.slug ?? "design";
+button("download-design", () => download(`${slugOf()}.rsd.json`, editor.value, "application/json"));
+button("download-mcfunction", async () => {
+  const model = validModel();
+  if (!model) return;
+  const { mcfunctionExporter } = await import("@dustwright/export");
+  const out = await mcfunctionExporter.export(model, {});
+  const file = out.files[0];
+  if (!file) {
+    notice.textContent = out.diagnostics.map((d) => `${d.code}: ${d.message}`).join(" ");
+    return;
+  }
+  download(`${model.meta.slug}.mcfunction`, file.bytes, "text/plain");
+});
+button("download-mcstructure", async () => {
+  const model = validModel();
+  if (!model) return;
+  const { mcstructureExporter } = await import("@dustwright/export");
+  const out = await mcstructureExporter.export(model, {});
+  const file = out.files[0];
+  if (!file) {
+    notice.textContent = out.diagnostics.map((d) => `${d.code}: ${d.message}`).join(" ");
+    return;
+  }
+  download(`${model.meta.slug}.mcstructure`, file.bytes);
+});
+button("download-mcpack", async () => {
+  const model = validModel();
+  if (!model) return;
+  const { buildMcpack } = await import("@dustwright/export");
+  const pack = await buildMcpack(model);
+  if (!pack.bytes) {
+    notice.textContent = pack.diagnostics.map((d) => `${d.code}: ${d.message}`).join(" ");
+    return;
+  }
+  download(pack.fileName, pack.bytes);
+  notice.textContent =
+    "Import the .mcpack by opening it, enable it on a world with cheats on, then run /function rsd/" +
+    model.meta.slug +
+    ".";
+});
+button("download-sheets", async () => {
+  const result = validateText(editor.value);
+  if (!result.model) {
+    notice.textContent = "Fix the errors first: the design does not parse.";
+    return;
+  }
+  const { renderLayerSheets, zipDeterministic } = await import("@dustwright/export");
+  const sheets = renderLayerSheets(result.model);
+  const zip = zipDeterministic(
+    Object.fromEntries(sheets.map((s) => [s.path, new TextEncoder().encode(s.svg)])),
+  );
+  download(`${result.model.meta.slug}-sheets.zip`, zip, "application/zip");
+});
+
+async function start(): Promise<void> {
+  // A share link (#d= or #json=) opens its design; otherwise ?example=, the last draft, or the NOT gate.
+  const fragment = await decodeFragment(location.hash);
+  if (fragment && "text" in fragment) {
+    editor.value = fragment.text;
+    picker.value = "";
+  } else {
+    if (fragment && "error" in fragment)
+      notice.textContent = `${fragment.error.code}: ${fragment.error.message}`;
+    // ?example= opens that example; otherwise the last draft in this browser, else the NOT gate.
+    const requested = new URLSearchParams(location.search).get("example");
+    const draft = requested ? null : loadDraft();
+    if (draft) {
+      editor.value = draft;
+      picker.value = "";
+      notice.textContent = "Your last draft in this browser. Pick an example to start again.";
+    } else {
+      const first = requested && EXAMPLES.has(requested) ? requested : "not-gate";
+      picker.value = first;
+      editor.value = EXAMPLES.get(first) ?? "";
+    }
+  }
+  update();
+}
+void start();

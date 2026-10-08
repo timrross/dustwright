@@ -22,13 +22,16 @@
   },
   "dependencies": {
     "@dustwright/core": "workspace:*",
-    "@dustwright/validator": "workspace:*",
-    "@dustwright/sim": "workspace:*",
     "@dustwright/export": "workspace:*",
-    "@dustwright/mcp": "workspace:*"
+    "@dustwright/mcp": "workspace:*",
+    "@dustwright/sim": "workspace:*",
+    "@dustwright/validator": "workspace:*"
   },
   "bin": {
     "dustwright": "./dist/bin.js",
     "rsd": "./dist/bin.js"
+  },
+  "devDependencies": {
+    "fflate": "0.8.3"
   }
 }

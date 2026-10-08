@@ -1,0 +1,6 @@
+# Response headers for Cloudflare Pages and Netlify. Keep in step with apps/site/csp.ts (tested).
+/*
+  Content-Security-Policy: default-src 'self'; connect-src 'self' https:; img-src 'self' data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()

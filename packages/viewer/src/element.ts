@@ -4,6 +4,7 @@ import { GAME_TICKS_PER_REDSTONE_TICK, SETTLE_TICKS, settle, Simulation } from "
 import { checkStatic } from "@dustwright/validator/static";
 import { THEMES, type ThemeName } from "./palette.js";
 import { type BlockInfo, type SnapView, type ViewerMode, ViewerScene } from "./scene.js";
+import { parseAllowedOrigins, parseCommand } from "./messages.js";
 import { VIEWER_CSS } from "./styles.js";
 
 /** The custom element name. */
@@ -85,12 +86,13 @@ async function readCapped(res: Response, limit: number): Promise<string> {
 /**
  * `<redstone-viewer>`: a read-only 3D view of a Dustwright design. Attributes: `src` (same-origin or https: URL)
  * or an inline `<script type="application/json">` child, `mode` (explore | instructions), `layer`, `step`, `height`,
- * `theme` (light | dark | auto). Diagnostics from the stage 1 and 2 rules (or from `setDiagnostics`) show as
- * markers on the blocks they blame. Events (DOM and, inside an iframe, postMessage to the parent): `ready`, `select`,
- * `step`.
+ * `theme` (light | dark | auto), `allowed-origins`. Diagnostics from the stage 1 and 2 rules (or from
+ * `setDiagnostics`) show as markers on the blocks they blame. Events (DOM and, inside an iframe, postMessage to the
+ * parent): `ready`, `select`, `step`, `power`, `error`. Inside an iframe, the parent may send `setStep`, `setLayer`
+ * and `setMode` commands from an origin in `allowed-origins` (see messages.ts and docs/embedding.md).
  */
 export class RedstoneViewer extends HTMLElement {
-  static readonly observedAttributes = ["src", "mode", "layer", "step", "height", "theme"];
+  static readonly observedAttributes = ["src", "mode", "layer", "step", "height", "theme", "allowed-origins"];
 
   private readonly root: HTMLDivElement;
   private readonly stage: HTMLDivElement;
@@ -278,6 +280,7 @@ export class RedstoneViewer extends HTMLElement {
   }
 
   connectedCallback(): void {
+    globalThis.addEventListener("message", this.onMessage);
     this.applyHeight();
     this.applyTheme();
     if (!this.scene) {
@@ -327,6 +330,7 @@ export class RedstoneViewer extends HTMLElement {
   }
 
   disconnectedCallback(): void {
+    globalThis.removeEventListener("message", this.onMessage);
     this.childWatcher?.disconnect();
     this.childWatcher = null;
     this.resizeObserver?.disconnect();
@@ -1055,16 +1059,43 @@ export class RedstoneViewer extends HTMLElement {
     this.scene?.setTheme(theme);
   }
 
+  /** The origins allowed to send commands, from the `allowed-origins` attribute. */
+  get allowedOrigins(): string[] {
+    return parseAllowedOrigins(this.getAttribute("allowed-origins"));
+  }
+
+  /**
+   * A command from the parent window: accepted only from the parent, only from an allowed origin, and only in a
+   * documented shape (parseCommand); everything else is dropped without a word.
+   */
+  private readonly onMessage = (ev: MessageEvent): void => {
+    if (globalThis.parent === globalThis.window || ev.source !== globalThis.parent) return;
+    if (!this.allowedOrigins.includes(ev.origin)) return;
+    const command = parseCommand(ev.data);
+    if (!command) return;
+    if (command.type === "setStep") this.setStep(command.step);
+    else if (command.type === "setLayer") this.setLayer(command.layer);
+    else this.setMode(command.mode);
+  };
+
+  /** The current build step (instructions mode). */
+  get step(): number {
+    return this.scene?.step ?? 0;
+  }
+
   private emit(type: string, detail: unknown): void {
     this.dispatchEvent(new CustomEvent(type, { detail, bubbles: true, composed: true }));
     if (globalThis.parent && globalThis.parent !== globalThis.window) {
-      try {
-        globalThis.parent.postMessage(
-          { source: MESSAGE_SOURCE, type, detail: JSON.parse(JSON.stringify(detail ?? null)) },
-          "*",
-        );
-      } catch {
-        // A parent that cannot receive messages is not our problem.
+      // With allowed-origins set, events go only to those origins; without, to any parent, as they carry nothing
+      // the embedding page could not read from the design itself.
+      const targets = this.allowedOrigins;
+      const message = { source: MESSAGE_SOURCE, type, detail: JSON.parse(JSON.stringify(detail ?? null)) };
+      for (const target of targets.length > 0 ? targets : ["*"]) {
+        try {
+          globalThis.parent.postMessage(message, target);
+        } catch {
+          // A parent that cannot receive messages is not our problem.
+        }
       }
     }
   }

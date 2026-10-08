@@ -149,6 +149,10 @@ simulator and the game disagree, the game wins and the simulator gets a regressi
 
 ## Exporters
 
+`.mcpack` (`buildMcpack`) zips the function and the structure with a manifest from the one builder every pack
+uses (`manifest.ts`; the committed test-pack manifest is tested against it); its UUIDs are UUIDv5 of the slug. Layer
+sheets (`sheets.ts`) are A4 SVGs, one per layer, with design text only as escaped SVG text.
+
 An exporter returns files (`{ path, bytes }`) relative to a pack root; it never touches the disk. The CLI's
 `writeIntoPack` is the one place that writes, and the one place path safety lives. The `.mcfunction` exporter
 emits only `setblock` and `fill` lines built from registry data and integers, plus one comment line carrying the
@@ -157,6 +161,22 @@ the model out as cells (z fastest, then y, then x; air as structure void) and en
 nbtify, which runs in Node and in the browser without generating code; exporters may return a Promise for
 this. The behavior pack in
 `packs/redstone-designs-bp/` is data only (one data module, no scripts) with UUIDs fixed in its manifest.
+
+## Public site
+
+`apps/site` is a static Vite build (`apps/site/dist`) of the same packages; there is no backend. Pages: `/` (landing
+with a live example), `/view` (a design from `#d=`, `#json=`, `?src=` or a dropped file), `/play` (editor, live
+diagnostics and viewer, Share and downloads), `/patterns`, `/docs` (the repo's Markdown rendered at build time),
+`viewer.html` (the iframe target) and `embed-example.html` (a host page driving it). Raw files for tools:
+`/schema/rsd-1.json`, `/schema/diagnostics.json`, `/AUTHORING.md`, `/llms.txt`, `/examples/*`, `/redstone-viewer.js`
+(copied in by `apps/site/scripts/sync-public.mjs`).
+
+Share links keep the design in the fragment (`fragment.ts`): `#d=` is deflate-raw and base64url, `#json=` is plain
+URI-encoded JSON; the fragment is capped at 64 KB and inflation at 2 MB. Downloads run the exporters in the page
+(nbtify loads only when a structure is written). The CSP lives in `apps/site/csp.ts`: the build writes it into every
+page as a meta tag, and `public/_headers` and `deploy/nginx/dustwright.conf` send it as a header (a test keeps the
+three equal). Embedding is documented in `docs/embedding.md`: inbound `postMessage` commands only from the parent,
+from an `allowed-origins` origin, in an exact shape (`packages/viewer/src/messages.ts`).
 
 ## Generated files
 

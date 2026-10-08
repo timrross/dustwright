@@ -1,7 +1,7 @@
 /**
  * @packageDocumentation
  * Exporters: the single-file viewer bundle (M2), `.mcfunction` (M3), `.mcstructure` (M4), `.mcpack` and layer
- * sheets (M7). Exporters return files; only the CLI writes them to disk.
+ * sheets (M7). Exporters return files; only the CLI (or the site, as a download) writes them.
  */
 
 /** Name of this package, exposed so consumers and tests can confirm the wiring. */
@@ -40,3 +40,17 @@ export {
   structureLayout,
 } from "./mcstructure.js";
 export type { PaletteEntry, StructureLayout } from "./mcstructure.js";
+export {
+  buildManifest,
+  designManifest,
+  PACK_NAMESPACE,
+  PACK_VERSION,
+  TEST_PACK_MANIFEST,
+  uuidV5,
+} from "./manifest.js";
+export type { ManifestInput } from "./manifest.js";
+export { buildMcpack } from "./mcpack.js";
+export type { McpackResult } from "./mcpack.js";
+export { escapeXml, renderLayerSheets } from "./sheets.js";
+export type { LayerSheet } from "./sheets.js";
+export { zipDeterministic } from "./zip.js";

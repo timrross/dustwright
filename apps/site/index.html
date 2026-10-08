@@ -6,10 +6,30 @@
     <title>Dustwright</title>
   </head>
   <body>
-    <header><strong>Dustwright</strong></header>
-    <main>
-      <p>Describe, check, view and export Minecraft redstone designs. The full site arrives in M7.</p>
-      <p><a href="play/">Open the playground</a></p>
+    <header>
+      <strong>Dustwright</strong>
+      <nav aria-label="Site">
+        <a href="/">Home</a>
+        <a href="/view/">View</a>
+        <a href="/play/">Playground</a>
+        <a href="/patterns/">Patterns</a>
+        <a href="/docs/">Docs</a>
+      </nav>
+    </header>
+    <main class="page">
+      <h1>Redstone designs you can check, see and build</h1>
+      <p>
+        Dustwright describes a Minecraft Bedrock redstone circuit as one JSON file. It checks the design,
+        simulates its truth table, shows it in 3D layer by layer, and exports it as a function, a structure or
+        a behavior pack you import with a double-click. Everything runs in your browser: nothing is uploaded.
+      </p>
+      <redstone-viewer src="/examples/not-gate.rsd.json" theme="auto" height="420"></redstone-viewer>
+      <ul class="links">
+        <li><a href="/play/">Playground</a>: edit a design and watch the diagnostics and the 3D view.</li>
+        <li><a href="/view/">Viewer</a>: open a share link, a design URL or a file.</li>
+        <li><a href="/patterns/">Patterns</a>: working designs to start from.</li>
+        <li><a href="/docs/">Docs</a>: how to write a design, the diagnostics and the Bedrock mapping.</li>
+      </ul>
     </main>
     <script type="module" src="/src/main.ts"></script>
   </body>

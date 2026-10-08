@@ -1,5 +1,6 @@
 import { parseArgs } from "node:util";
 import { bundleCommand } from "./commands/bundle.js";
+import { packCommand, sheetsCommand } from "./commands/pack.js";
 import { exportCommand, exportListCommand } from "./commands/export.js";
 import { registryDumpCommand } from "./commands/registry.js";
 import { validateCommand } from "./commands/validate.js";
@@ -20,8 +21,6 @@ export interface RunResult {
 
 /** Commands listed in the help that later milestones implement, with the milestone that brings each. */
 const PLANNED_COMMANDS: Readonly<Record<string, string>> = {
-  sheets: "M7",
-  pack: "M7",
   mcp: "M8",
 };
 
@@ -112,6 +111,15 @@ export async function run(argv: readonly string[], io: RunIO): Promise<RunResult
           },
           io,
         );
+      }
+      case "pack": {
+        if (args.length !== 1)
+          return usage(io, wantsJson, "pack takes exactly one file and -o <file.mcpack>");
+        return await packCommand(args[0] as string, values.output, io);
+      }
+      case "sheets": {
+        if (args.length !== 1) return usage(io, wantsJson, "sheets takes exactly one file and -o <dir>");
+        return await sheetsCommand(args[0] as string, values.output, io);
       }
       case "bundle": {
         if (args.length !== 1) return usage(io, wantsJson, "bundle takes exactly one file and -o <html>");

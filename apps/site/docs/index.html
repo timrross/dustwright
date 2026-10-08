@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dustwright docs</title>
+  </head>
+  <body>
+    <header>
+      <strong>Dustwright</strong>
+      <nav aria-label="Site">
+        <a href="/">Home</a>
+        <a href="/view/">View</a>
+        <a href="/play/">Playground</a>
+        <a href="/patterns/">Patterns</a>
+        <a href="/docs/">Docs</a>
+      </nav>
+    </header>
+    <main class="page">
+      <h1>Docs</h1>
+      <ul class="links">
+        <li>
+          <a href="/docs/authoring.html">Authoring designs</a> (<a href="/AUTHORING.md">raw AUTHORING.md</a>)
+        </li>
+        <li><a href="/docs/diagnostics.html">Diagnostics</a>: every code and its fix</li>
+        <li>
+          <a href="/docs/bedrock-mapping.html">Bedrock mapping</a>: every block type and state, and its
+          Bedrock ID
+        </li>
+        <li>
+          <a href="/docs/embedding.html">Embedding the viewer</a>: the web component, the iframe and its
+          messages
+        </li>
+        <li>
+          For tools and agents: <a href="/schema/rsd-1.json">rsd/1 JSON Schema</a>,
+          <a href="/schema/diagnostics.json">diagnostics JSON Schema</a>, <a href="/llms.txt">llms.txt</a>
+        </li>
+      </ul>
+    </main>
+    <script type="module" src="/src/docs.ts"></script>
+  </body>
+</html>

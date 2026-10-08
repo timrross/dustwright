@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="210mm" height="297mm" viewBox="0 0 210 297" font-family="Helvetica, Arial, sans-serif">
+<title>&lt;/script&gt;&lt;img src=x onerror=alert(1)&gt;: layer 1</title>
+<rect width="210" height="297" fill="#ffffff"/>
+<text x="14" y="19" font-size="6" font-weight="bold" fill="#111111">&lt;/script&gt;&lt;img src=x onerror=alert(1)&gt;</text>
+<text x="14" y="25" font-size="3.6" fill="#333333">Layer 1 of 1 (y = 1, layer 0 is the bottom). 3 × 1 blocks; north is up, x runs east, z runs south.</text>
+<polygon points="192,14 189.5,20 194.5,20" fill="#111111"/>
+<text x="192" y="24.5" font-size="3.6" text-anchor="middle" fill="#111111">N</text>
+<rect x="20" y="38" width="27" height="9" fill="#f7f7f5" stroke="#999999" stroke-width="0.2"/>
+<text x="24.5" y="36.8" font-size="3" text-anchor="middle" fill="#555555">0</text>
+<text x="42.5" y="36.8" font-size="3" text-anchor="middle" fill="#555555">2</text>
+<text x="18.8" y="43.55" font-size="3" text-anchor="end" fill="#555555">0</text>
+<line x1="29" y1="38" x2="29" y2="47" stroke="#dddddd" stroke-width="0.1"/>
+<line x1="38" y1="38" x2="38" y2="47" stroke="#dddddd" stroke-width="0.1"/>
+<rect x="20" y="38" width="9" height="9" fill="#9a7a52" stroke="#555555" stroke-width="0.15"/>
+<text x="24.5" y="43.58" font-size="4.05" text-anchor="middle" fill="#ffffff">1</text>
+<rect x="38" y="38" width="9" height="9" fill="#b07a3e" stroke="#555555" stroke-width="0.15"/>
+<text x="42.5" y="43.58" font-size="4.05" text-anchor="middle" fill="#ffffff">2</text>
+<text x="14" y="57" font-size="4" font-weight="bold" fill="#111111">Legend</text>
+<rect x="14" y="60" width="4" height="4" fill="#9a7a52" stroke="#555555" stroke-width="0.15"/>
+<text x="16" y="62.9" font-size="2.4" text-anchor="middle" fill="#ffffff">1</text>
+<text x="19.5" y="63" font-size="3" fill="#111111">lever mount=floor on=false</text>
+<rect x="105" y="60" width="4" height="4" fill="#b07a3e" stroke="#555555" stroke-width="0.15"/>
+<text x="107" y="62.9" font-size="2.4" text-anchor="middle" fill="#ffffff">2</text>
+<text x="110.5" y="63" font-size="3" fill="#111111">lamp lit=false</text>
+<text x="14" y="291" font-size="2.6" fill="#777777">Dustwright layer sheet. Arrows: facing, or the side a torch, lever or button hangs on; U and D: up and down.</text>
+</svg>

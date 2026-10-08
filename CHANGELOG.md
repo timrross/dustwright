@@ -7,6 +7,13 @@ All notable user-facing changes are recorded here. The format follows
 
 ### Added
 
+- M7: the public site, built and run locally: landing, `/view` (share links `#d=` and `#json=`, `?src=`, dropped
+  files), the playground with Share and downloads (design, `.mcfunction`, `.mcstructure`, `.mcpack`, layer sheets),
+  patterns, docs, `viewer.html` for iframes with origin-checked `postMessage` commands, an embedding example, and a
+  CSP in every page plus `_headers` and an nginx snippet. `rsd pack` (one-design `.mcpack`, UUIDv5 identity) and
+  `rsd sheets` (A4 layer SVGs). An `.mcpack` built this way installs on the test server and builds by `/function`
+  and `/structure load`.
+
 - M6: the simulator (`@dustwright/sim`). It runs every test case in `rsd validate` (stage 3: T001, T002, T003), in
   game ticks, with the observer timing measured in game. The viewer's power view shows any test case or a free run
   tick by tick. `deploy/test-world/measure-timing.mjs` cross-checks the simulator against the game.

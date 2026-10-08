@@ -8,14 +8,29 @@
   <body>
     <header>
       <strong>Dustwright</strong>
-      <span>Playground</span>
-      <a href="../">Home</a>
+      <nav aria-label="Site">
+        <a href="/">Home</a>
+        <a href="/view/">View</a>
+        <a href="/play/">Playground</a>
+        <a href="/patterns/">Patterns</a>
+        <a href="/docs/">Docs</a>
+      </nav>
     </header>
     <main class="play">
       <div class="bar">
         <label for="example">Example</label>
         <select id="example"></select>
         <span id="status" class="status" role="status" aria-live="polite"></span>
+        <span class="actions" role="group" aria-label="Share and download">
+          <button id="share" type="button">Share</button>
+          <button id="download-design" type="button">Download design</button>
+          <button id="download-mcfunction" type="button">.mcfunction</button>
+          <button id="download-mcstructure" type="button">.mcstructure</button>
+          <button id="download-mcpack" type="button">.mcpack</button>
+          <button id="download-sheets" type="button">Layer sheets</button>
+        </span>
+        <span id="notice" class="notice" role="status" aria-live="polite"></span>
+        <input id="share-link" class="share-link" type="text" readonly aria-label="Share link" hidden />
       </div>
       <textarea id="editor" spellcheck="false" aria-label="Design JSON"></textarea>
       <redstone-viewer id="viewer" theme="auto"></redstone-viewer>

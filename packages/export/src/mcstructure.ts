@@ -1,4 +1,3 @@
-import { Int32, Int8, write } from "nbtify";
 import { diag, isValidSlug, keyPos, LIMITS, PINS, toEditionBlocks } from "@dustwright/core";
 import type { ExportOptions, ExportResult, Exporter, Model, StateValue } from "@dustwright/core";
 
@@ -68,14 +67,15 @@ export function structureLayout(model: Model): StructureLayout {
   return { size, palette, indices };
 }
 
-const stateTag = (v: StateValue) =>
-  typeof v === "boolean" ? new Int8(v ? 1 : 0) : typeof v === "number" ? new Int32(v) : v;
-
 /** Encodes a layout as little-endian, uncompressed `.mcstructure` NBT (root name empty). */
 export async function encodeStructure(
   layout: StructureLayout,
   version: number = blockVersion(),
 ): Promise<Uint8Array> {
+  // Loaded on first use, so pages that never write a structure (the playground until a download) do not load it.
+  const { Int32, Int8, write } = await import("nbtify");
+  const stateTag = (v: StateValue) =>
+    typeof v === "boolean" ? new Int8(v ? 1 : 0) : typeof v === "number" ? new Int32(v) : v;
   const ints = (xs: readonly number[]) => xs.map((n) => new Int32(n));
   const root = {
     format_version: new Int32(1),

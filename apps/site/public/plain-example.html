@@ -1,0 +1,75 @@
+<!doctype html>
+<!-- A plain HTML page using the hosted viewer script: no build step, no modules. Served as-is from public/. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; connect-src 'self' https:; img-src 'self' data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Plain HTML example: Dustwright</title>
+    <script src="/redstone-viewer.js"></script>
+  </head>
+  <body>
+    <h1>The viewer in a plain HTML page</h1>
+    <p>Loaded by <code>src</code>:</p>
+    <redstone-viewer id="by-src" src="/examples/not-gate.rsd.json" height="360"></redstone-viewer>
+    <p>From inline JSON:</p>
+    <redstone-viewer id="inline" height="360">
+      <script type="application/json">
+        {
+          "format": "rsd/1",
+          "meta": {
+            "name": "NOT gate",
+            "description": "Lever input, torch inverter, lamp output",
+            "edition": "bedrock",
+            "gameVersion": "1.26.50"
+          },
+          "legend": {
+            "#": "stone",
+            "L": "lever mount=floor on=false",
+            "-": "dust",
+            "t": "torch mount=west",
+            "*": "lamp"
+          },
+          "layers": [["#####"], ["L-#t*"]],
+          "ports": {
+            "inputs": [
+              {
+                "name": "A",
+                "pos": [0, 1, 0]
+              }
+            ],
+            "outputs": [
+              {
+                "name": "out",
+                "pos": [4, 1, 0]
+              }
+            ]
+          },
+          "tests": [
+            {
+              "set": {
+                "A": 0
+              },
+              "afterTicks": 4,
+              "expect": {
+                "out": 1
+              }
+            },
+            {
+              "set": {
+                "A": 1
+              },
+              "afterTicks": 4,
+              "expect": {
+                "out": 0
+              }
+            }
+          ]
+        }
+      </script>
+    </redstone-viewer>
+  </body>
+</html>

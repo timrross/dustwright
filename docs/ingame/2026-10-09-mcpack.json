@@ -1,0 +1,32 @@
+{
+  "when": "2026-10-08T23:33:40.426Z",
+  "container": "dw-bds",
+  "pack": "mcpack-check.mcpack (rsd pack, identical to the site's download)",
+  "results": [
+    {
+      "name": "/function rsd/mcpack-check runs",
+      "ok": true,
+      "detail": "Successfully executed 10 function entries."
+    },
+    {
+      "name": "NOT gate built: lamp lit with the lever off",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "lever on: lamp goes out",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "/structure load rsd:mcpack-check",
+      "ok": true,
+      "detail": "Loaded a structure of name rsd:mcpack-check"
+    },
+    {
+      "name": "structure built: lamp lit with the lever off",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

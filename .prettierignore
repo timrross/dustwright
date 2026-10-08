@@ -15,3 +15,10 @@ e2e/__screenshots__/
 examples/orientation-test.rsd.json
 packages/validator/fixtures/
 .pnpm-store/
+# Copied into the site at build time (apps/site/scripts/sync-public.mjs)
+apps/site/public/schema/
+apps/site/public/examples/
+apps/site/public/AUTHORING.md
+apps/site/public/llms.txt
+apps/site/public/redstone-viewer.js
+packages/export/test/golden/sheets/

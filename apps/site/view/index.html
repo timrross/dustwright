@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dustwright viewer</title>
+  </head>
+  <body>
+    <header>
+      <strong>Dustwright</strong>
+      <nav aria-label="Site">
+        <a href="/">Home</a>
+        <a href="/view/">View</a>
+        <a href="/play/">Playground</a>
+        <a href="/patterns/">Patterns</a>
+        <a href="/docs/">Docs</a>
+      </nav>
+    </header>
+    <main class="page view">
+      <div class="bar">
+        <label class="file"
+          >Open a design file <input id="file" type="file" accept=".json,application/json"
+        /></label>
+        <a id="edit" href="/play/" hidden>Edit in the playground</a>
+        <span id="status" class="status" role="status" aria-live="polite"></span>
+      </div>
+      <ul id="problems" class="diagnostics" aria-label="Problems" hidden></ul>
+      <p id="intro">
+        Open a design: drop a <code>.rsd.json</code> file here, choose one above, or follow a share link.
+        Links look like <code>/view/#d=...</code> (made by Share in the playground),
+        <code>/view/#json=...</code> (plain JSON, for links written by hand) or
+        <code>/view/?src=https://...</code> (a design file on the web).
+      </p>
+      <redstone-viewer id="viewer" theme="auto"></redstone-viewer>
+    </main>
+    <script type="module" src="/src/view.ts"></script>
+  </body>
+</html>

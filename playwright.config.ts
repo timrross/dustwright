@@ -1,6 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const port = 4319;
+/** A second origin for the cross-origin embedding tests. */
+export const otherPort = 4320;
 
 // Viewer tests run against the built site (`pnpm build` first). Headless Chromium renders WebGL with SwiftShader;
 // screenshots differ per platform, so baselines are kept per OS and compared with a pixel tolerance.
@@ -26,9 +28,10 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1 },
     },
   ],
-  webServer: {
-    command: `pnpm --filter @dustwright/site exec vite preview --port ${port} --strictPort --host 127.0.0.1`,
-    url: `http://127.0.0.1:${port}/play/`,
+  // Two servers on the same build: another port is another origin, so the embedding tests run across origins.
+  webServer: [port, otherPort].map((p) => ({
+    command: `pnpm --filter @dustwright/site exec vite preview --port ${p} --strictPort --host 127.0.0.1`,
+    url: `http://127.0.0.1:${p}/play/`,
     reuseExistingServer: !process.env.CI,
-  },
+  })),
 });

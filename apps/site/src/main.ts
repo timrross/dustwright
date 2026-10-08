@@ -1,2 +1,5 @@
-// The landing page. The full site (view, patterns, docs) arrives in M7.
+// The landing page: one live example (loaded by `src`, like any embed) and links into the site.
+import { defineRedstoneViewer } from "@dustwright/viewer/browser";
 import "./site.css";
+
+defineRedstoneViewer();

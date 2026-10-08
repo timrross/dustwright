@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dustwright patterns</title>
+  </head>
+  <body>
+    <header>
+      <strong>Dustwright</strong>
+      <nav aria-label="Site">
+        <a href="/">Home</a>
+        <a href="/view/">View</a>
+        <a href="/play/">Playground</a>
+        <a href="/patterns/">Patterns</a>
+        <a href="/docs/">Docs</a>
+      </nav>
+    </header>
+    <main class="page">
+      <h1>Patterns</h1>
+      <p>
+        Working designs to start from. Each one passes its own truth-table tests in the simulator and was
+        built in a test world. The full pattern library arrives with the LLM authoring milestone (M8).
+      </p>
+      <ul id="patterns" class="patterns"></ul>
+    </main>
+    <script type="module" src="/src/patterns.ts"></script>
+  </body>
+</html>

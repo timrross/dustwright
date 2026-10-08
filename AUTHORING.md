@@ -167,7 +167,8 @@ steps. Exceeding a limit is E013.
    naming the edit. Apply it and go to 3. Stop after 6 rounds and report what still fails. **Never edit ports or
    tests to make a failure go away**; if the brief was wrong, say so.
 5. **Show:** `rsd bundle design.rsd.json -o design.html` writes one self-contained HTML viewer (publish it as an
-   artifact or open it offline).
+   artifact or open it offline). Once the site is deployed, a link works too: `https://dustwright.dev/view/#json=`
+   followed by the URI-encoded design JSON (at most 64 KB). `rsd sheets design.rsd.json -o sheets/` writes printable A4 layer SVGs.
 6. **Export:** `rsd export design.rsd.json --to mcfunction --pack <pack-dir> [--clear]` writes
    `functions/rsd/<slug>.mcfunction`. In game, stand at the build origin and run `/function rsd/<slug>`; the build
    lands one block east. `--clear` also writes `rsd/<slug>_clear`, which empties the bounding box. Run the clear
@@ -175,6 +176,9 @@ steps. Exceeding a limit is E013.
    extends at rest): building over it pushes its blocks a second time.
    `--to mcstructure` writes `structures/rsd/<slug>.mcstructure` instead; in game, `/structure load rsd:<slug> ~1 ~ ~`
    (add `90_degrees` and so on to turn it). Use it for builds over 10,000 blocks (E014).
+   `rsd pack design.rsd.json -o <slug>.mcpack` zips both into a one-design behavior pack: open it on any Bedrock
+   device to import, enable it on a world with cheats on, then use `/function` or `/structure load` as above. It
+   holds both files, so it is refused (E014) above 10,000 commands; use `--to mcstructure` for those.
 
 Common codes: E002 ragged grid, E003 character not in legend, E004 unknown type (hint has the closest names),
 E005 bad key or value (hint lists the allowed ones), E006 a component with nothing that holds it, E008 position

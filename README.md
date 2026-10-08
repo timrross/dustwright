@@ -44,7 +44,9 @@ pnpm rsd export examples/not-gate.rsd.json --to mcfunction --pack packs/redstone
 #   then in game: /function rsd/not-gate (see deploy/test-world/README.md)
 pnpm rsd export examples/not-gate.rsd.json --to mcstructure --pack packs/redstone-designs-bp
 #   then in game: /structure load rsd:not-gate ~1 ~ ~
-pnpm --filter @dustwright/site dev                    # the playground at http://localhost:5173/play/
+pnpm rsd pack examples/not-gate.rsd.json -o not-gate.mcpack        # one-design behavior pack, import with a double-click
+pnpm rsd sheets examples/not-gate.rsd.json -o sheets               # printable A4 layer SVGs
+pnpm --filter @dustwright/site dev                    # the site at http://localhost:5173/ (playground at /play/)
 ```
 
 A design is layers of character rows plus a legend; see [AUTHORING.md](AUTHORING.md) and `examples/`.

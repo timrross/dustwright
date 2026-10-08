@@ -6,11 +6,13 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "sync": "node scripts/sync-public.mjs",
+    "dev": "node scripts/sync-public.mjs && vite",
+    "build": "node scripts/sync-public.mjs && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
+    "marked": "18.0.14",
     "vite": "7.3.6"
   },
   "engines": {
@@ -18,6 +20,8 @@
   },
   "dependencies": {
     "@dustwright/core": "workspace:*",
+    "@dustwright/export": "workspace:*",
+    "@dustwright/sim": "workspace:*",
     "@dustwright/validator": "workspace:*",
     "@dustwright/viewer": "workspace:*"
   }

@@ -42,8 +42,8 @@ describe("version", () => {
   });
 
   it("names the milestone for commands that are not built yet", async () => {
-    const r = await rsd("sheets", "x.rsd.json", "-o", "out");
+    const r = await rsd("mcp");
     expect(r.exitCode).toBe(2);
-    expect(r.stderr).toContain("not implemented yet");
+    expect(r.stderr).toContain("not implemented yet (arrives in M8)");
   });
 });
