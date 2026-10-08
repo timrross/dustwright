@@ -1,0 +1,29 @@
+{
+  "type": "honey_block",
+  "category": "transparent",
+  "editions": ["bedrock", "java"],
+  "states": {},
+  "needsSupport": null,
+  "supportsTop": true,
+  "conductsPower": false,
+  "geometry": {
+    "builder": "cube",
+    "color": "honey"
+  },
+  "sim": {
+    "class": "solid",
+    "params": {
+      "sticky": true
+    }
+  },
+  "bedrock": {
+    "id": "minecraft:honey_block",
+    "states": {},
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

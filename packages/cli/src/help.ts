@@ -16,7 +16,7 @@ Commands:
   bundle <file> -o <html>                  Write a single-file viewer
   sheets <file> -o <dir>                   Write layer sheet SVGs
   pack <file> -o <mcpack>                  Zip a one-design behavior pack
-  registry dump                            Regenerate docs/bedrock-mapping.md
+  registry dump [-o <file>]                Print (or write) the Bedrock mapping table
   mcp                                      Serve the commands as MCP tools over stdio
 
 Options:

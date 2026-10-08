@@ -1,0 +1,49 @@
+{
+  "type": "sticky_piston",
+  "category": "consumer",
+  "editions": ["bedrock", "java"],
+  "states": {
+    "facing": {
+      "values": ["down", "up", "north", "south", "east", "west"],
+      "default": "up",
+      "directional": true
+    }
+  },
+  "needsSupport": null,
+  "supportsTop": false,
+  "conductsPower": false,
+  "geometry": {
+    "builder": "piston",
+    "color": "sticky_piston"
+  },
+  "sim": {
+    "class": "piston",
+    "params": {
+      "sticky": true,
+      "output": "binary"
+    }
+  },
+  "bedrock": {
+    "id": "minecraft:sticky_piston",
+    "states": {
+      "facing_direction": {
+        "from": "facing",
+        "map": {
+          "down": 0,
+          "up": 1,
+          "north": 3,
+          "south": 2,
+          "east": 4,
+          "west": 5
+        },
+        "verify": "VERIFY-IN-GAME: piston facing_direction numbers the push direction down 0, up 1, south 2, north 3, east 4, west 5 (per GeyserMC mappings-generator BlockMappers: mapFacingDirectionNorthThree)"
+      }
+    },
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

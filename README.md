@@ -32,6 +32,17 @@ pnpm rsd --help
 
 Exit codes: 0 ok, 1 validation errors, 2 usage or I/O error.
 
+## 60-second example
+
+```sh
+pnpm build
+pnpm rsd validate examples/not-gate.rsd.json          # human-readable diagnostics
+pnpm rsd validate examples/not-gate.rsd.json --json   # {"ok": true, "diagnostics": [...]}
+pnpm rsd registry dump | head                         # the Bedrock mapping table
+```
+
+A design is layers of character rows plus a legend; see [AUTHORING.md](AUTHORING.md) and `examples/`.
+
 ## Development
 
 ```sh
@@ -39,6 +50,9 @@ pnpm lint        # ESLint + Prettier
 pnpm typecheck   # tsc, strict
 pnpm test        # Vitest
 pnpm build       # every package and the site
+pnpm gen         # regenerate packages/core/src/generated from the registry and schema
+pnpm docs:gen    # regenerate docs/bedrock-mapping.md, docs/diagnostics.md, docs/verify-in-game.md
+pnpm fetch:bedrock-data  # cache the pinned Mojang block metadata used by the mapping tests
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), [ARCHITECTURE.md](ARCHITECTURE.md) and [SECURITY.md](SECURITY.md).

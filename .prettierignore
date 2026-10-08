@@ -4,3 +4,7 @@ coverage/
 *.mcfunction
 *.mcstructure
 **/__snapshots__/
+docs/bedrock-mapping.md
+docs/diagnostics.md
+packages/core/src/generated/
+docs/verify-in-game.md

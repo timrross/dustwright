@@ -1,0 +1,29 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Repeater line",
+    "description": "A lever drives 15 dust; a repeater refreshes the signal to full strength for a lamp further on.",
+    "edition": "bedrock",
+    "gameVersion": "1.26.50"
+  },
+  "legend": {
+    "#": "stone",
+    "L": "lever mount=floor on=false",
+    "-": "dust",
+    ">": "repeater facing=east delay=2",
+    "*": "lamp"
+  },
+  "layers": [["###################"], ["L--------------->-*"]],
+  "ports": {
+    "inputs": [{ "name": "A", "pos": [0, 1, 0] }],
+    "outputs": [{ "name": "out", "pos": [18, 1, 0] }]
+  },
+  "tests": [
+    { "set": { "A": 1 }, "afterTicks": 6, "expect": { "out": 1 } },
+    { "set": { "A": 0 }, "afterTicks": 6, "expect": { "out": 0 } }
+  ],
+  "annotations": [
+    { "pos": [15, 1, 0], "text": "Signal strength 1 here: the 15th dust from the lever." },
+    { "pos": [16, 1, 0], "text": "The repeater restores strength 15 after a 2-tick delay." }
+  ]
+}

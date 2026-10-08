@@ -1,0 +1,27 @@
+{
+  "type": "glass",
+  "category": "transparent",
+  "editions": ["bedrock", "java"],
+  "states": {},
+  "needsSupport": null,
+  "supportsTop": true,
+  "conductsPower": false,
+  "geometry": {
+    "builder": "cube",
+    "color": "glass"
+  },
+  "sim": {
+    "class": "solid",
+    "params": {}
+  },
+  "bedrock": {
+    "id": "minecraft:glass",
+    "states": {},
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

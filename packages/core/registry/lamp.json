@@ -1,0 +1,40 @@
+{
+  "type": "lamp",
+  "category": "consumer",
+  "editions": ["bedrock", "java"],
+  "states": {
+    "lit": {
+      "values": [false, true],
+      "default": false
+    }
+  },
+  "needsSupport": null,
+  "supportsTop": true,
+  "conductsPower": true,
+  "geometry": {
+    "builder": "cube",
+    "color": "lamp"
+  },
+  "sim": {
+    "class": "consumer",
+    "params": {
+      "output": "binary"
+    }
+  },
+  "bedrock": {
+    "id": {
+      "from": "lit",
+      "map": {
+        "false": "minecraft:redstone_lamp",
+        "true": "minecraft:lit_redstone_lamp"
+      }
+    },
+    "states": {},
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

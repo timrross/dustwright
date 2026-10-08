@@ -1,0 +1,1614 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`examples > not-gate.rsd.json parses and normalises > not-gate.rsd.json 1`] = `
+{
+  "annotations": [],
+  "blocks": [
+    "0,0,0 stone {}",
+    "0,1,0 lever {"mount":"floor","on":false}",
+    "1,0,0 stone {}",
+    "1,1,0 dust {"power":0}",
+    "2,0,0 stone {}",
+    "2,1,0 stone {}",
+    "3,0,0 stone {}",
+    "3,1,0 torch {"mount":"west","lit":true}",
+    "4,0,0 stone {}",
+    "4,1,0 lamp {"lit":false}",
+  ],
+  "format": "rsd/1",
+  "meta": {
+    "description": "Lever input, torch inverter, lamp output",
+    "edition": "bedrock",
+    "gameVersion": "1.26.50",
+    "name": "NOT gate",
+    "slug": "not-gate",
+  },
+  "ports": {
+    "inputs": [
+      {
+        "name": "A",
+        "pos": [
+          0,
+          1,
+          0,
+        ],
+      },
+    ],
+    "outputs": [
+      {
+        "name": "out",
+        "pos": [
+          4,
+          1,
+          0,
+        ],
+      },
+    ],
+  },
+  "registryVersion": "1.26.50",
+  "size": [
+    5,
+    2,
+    1,
+  ],
+  "steps": [
+    {
+      "positions": [
+        [
+          0,
+          0,
+          0,
+        ],
+        [
+          1,
+          0,
+          0,
+        ],
+        [
+          2,
+          0,
+          0,
+        ],
+        [
+          3,
+          0,
+          0,
+        ],
+        [
+          4,
+          0,
+          0,
+        ],
+      ],
+      "title": "Layer 0",
+    },
+    {
+      "positions": [
+        [
+          0,
+          1,
+          0,
+        ],
+        [
+          1,
+          1,
+          0,
+        ],
+        [
+          2,
+          1,
+          0,
+        ],
+        [
+          3,
+          1,
+          0,
+        ],
+        [
+          4,
+          1,
+          0,
+        ],
+      ],
+      "title": "Layer 1",
+    },
+  ],
+  "tests": [
+    {
+      "afterTicks": 4,
+      "expect": {
+        "out": 1,
+      },
+      "set": {
+        "A": 0,
+      },
+    },
+    {
+      "afterTicks": 4,
+      "expect": {
+        "out": 0,
+      },
+      "set": {
+        "A": 1,
+      },
+    },
+  ],
+}
+`;
+
+exports[`examples > observer-clock.rsd.json parses and normalises > observer-clock.rsd.json 1`] = `
+{
+  "annotations": [
+    {
+      "pos": [
+        1,
+        1,
+        0,
+      ],
+      "text": "Looks east at its partner; pulses out of its back (west).",
+    },
+    {
+      "pos": [
+        2,
+        1,
+        0,
+      ],
+      "text": "Looks west at its partner; pulses out of its back (east).",
+    },
+  ],
+  "blocks": [
+    "0,0,0 stone {}",
+    "0,1,0 lamp {"lit":false}",
+    "1,0,0 stone {}",
+    "1,1,0 observer {"facing":"east","powered":false}",
+    "2,0,0 stone {}",
+    "2,1,0 observer {"facing":"west","powered":false}",
+    "3,0,0 stone {}",
+    "3,1,0 lamp {"lit":false}",
+  ],
+  "format": "rsd/1",
+  "meta": {
+    "description": "Two observers watch each other, so each pulse triggers the other: a free-running fast clock that flashes two lamps. Placing the second observer starts it, so /function builds a running clock; /structure load may place it stopped (give it a block update to start).",
+    "edition": "bedrock",
+    "gameVersion": "1.26.50",
+    "name": "Observer clock",
+    "slug": "observer-clock",
+  },
+  "ports": {
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "tick",
+        "pos": [
+          3,
+          1,
+          0,
+        ],
+      },
+    ],
+  },
+  "registryVersion": "1.26.50",
+  "size": [
+    4,
+    2,
+    1,
+  ],
+  "steps": [
+    {
+      "positions": [
+        [
+          0,
+          0,
+          0,
+        ],
+        [
+          1,
+          0,
+          0,
+        ],
+        [
+          2,
+          0,
+          0,
+        ],
+        [
+          3,
+          0,
+          0,
+        ],
+      ],
+      "title": "Layer 0",
+    },
+    {
+      "positions": [
+        [
+          0,
+          1,
+          0,
+        ],
+        [
+          1,
+          1,
+          0,
+        ],
+        [
+          2,
+          1,
+          0,
+        ],
+        [
+          3,
+          1,
+          0,
+        ],
+      ],
+      "title": "Layer 1",
+    },
+  ],
+  "tests": [],
+}
+`;
+
+exports[`examples > piston-door-2x2.rsd.json parses and normalises > piston-door-2x2.rsd.json 1`] = `
+{
+  "annotations": [
+    {
+      "pos": [
+        0,
+        1,
+        1,
+      ],
+      "text": "Torch powers the lower piston beside it and strongly powers the stone above, which powers the upper piston.",
+    },
+    {
+      "pos": [
+        2,
+        1,
+        3,
+      ],
+      "text": "Lever on: the dust powers the stones the torches hang on, the torches go out and the door opens.",
+    },
+  ],
+  "blocks": [
+    "0,0,0 stone {}",
+    "0,0,1 stone {}",
+    "0,0,2 stone {}",
+    "0,0,3 stone {}",
+    "0,1,0 sticky_piston {"facing":"east"}",
+    "0,1,1 torch {"mount":"south","lit":true}",
+    "0,1,2 stone {}",
+    "0,2,0 sticky_piston {"facing":"east"}",
+    "0,2,1 stone {}",
+    "0,3,0 stone {}",
+    "1,0,0 stone {}",
+    "1,0,1 stone {}",
+    "1,0,2 stone {}",
+    "1,0,3 stone {}",
+    "1,1,0 wool {"color":"light_blue"}",
+    "1,1,2 dust {"power":0}",
+    "1,2,0 wool {"color":"light_blue"}",
+    "1,3,0 stone {}",
+    "2,0,0 stone {}",
+    "2,0,1 stone {}",
+    "2,0,2 stone {}",
+    "2,0,3 stone {}",
+    "2,1,2 dust {"power":0}",
+    "2,1,3 lever {"mount":"floor","on":false}",
+    "2,3,0 stone {}",
+    "3,0,0 stone {}",
+    "3,0,1 stone {}",
+    "3,0,2 stone {}",
+    "3,0,3 stone {}",
+    "3,1,2 dust {"power":0}",
+    "3,3,0 stone {}",
+    "4,0,0 stone {}",
+    "4,0,1 stone {}",
+    "4,0,2 stone {}",
+    "4,0,3 stone {}",
+    "4,1,0 wool {"color":"light_blue"}",
+    "4,1,2 dust {"power":0}",
+    "4,2,0 wool {"color":"light_blue"}",
+    "4,3,0 stone {}",
+    "5,0,0 stone {}",
+    "5,0,1 stone {}",
+    "5,0,2 stone {}",
+    "5,0,3 stone {}",
+    "5,1,0 sticky_piston {"facing":"west"}",
+    "5,1,1 torch {"mount":"south","lit":true}",
+    "5,1,2 stone {}",
+    "5,2,0 sticky_piston {"facing":"west"}",
+    "5,2,1 stone {}",
+    "5,3,0 stone {}",
+  ],
+  "format": "rsd/1",
+  "meta": {
+    "description": "Four sticky pistons close a 2x2 doorway. Two torches keep the door shut; the lever turns them off and the door opens. Bedrock has no quasi-connectivity, so each upper piston is powered through the block its torch strongly powers. The design shows the pistons retracted; the torches extend them on placement (with /function), closing the door.",
+    "edition": "bedrock",
+    "gameVersion": "1.26.50",
+    "name": "2x2 piston door",
+    "slug": "2x2-piston-door",
+  },
+  "ports": {
+    "inputs": [
+      {
+        "name": "open",
+        "pos": [
+          2,
+          1,
+          3,
+        ],
+      },
+    ],
+    "outputs": [
+      {
+        "name": "closed",
+        "pos": [
+          0,
+          1,
+          0,
+        ],
+      },
+    ],
+  },
+  "registryVersion": "1.26.50",
+  "size": [
+    6,
+    4,
+    4,
+  ],
+  "steps": [
+    {
+      "positions": [
+        [
+          0,
+          0,
+          0,
+        ],
+        [
+          1,
+          0,
+          0,
+        ],
+        [
+          2,
+          0,
+          0,
+        ],
+        [
+          3,
+          0,
+          0,
+        ],
+        [
+          4,
+          0,
+          0,
+        ],
+        [
+          5,
+          0,
+          0,
+        ],
+        [
+          0,
+          0,
+          1,
+        ],
+        [
+          1,
+          0,
+          1,
+        ],
+        [
+          2,
+          0,
+          1,
+        ],
+        [
+          3,
+          0,
+          1,
+        ],
+        [
+          4,
+          0,
+          1,
+        ],
+        [
+          5,
+          0,
+          1,
+        ],
+        [
+          0,
+          0,
+          2,
+        ],
+        [
+          1,
+          0,
+          2,
+        ],
+        [
+          2,
+          0,
+          2,
+        ],
+        [
+          3,
+          0,
+          2,
+        ],
+        [
+          4,
+          0,
+          2,
+        ],
+        [
+          5,
+          0,
+          2,
+        ],
+        [
+          0,
+          0,
+          3,
+        ],
+        [
+          1,
+          0,
+          3,
+        ],
+        [
+          2,
+          0,
+          3,
+        ],
+        [
+          3,
+          0,
+          3,
+        ],
+        [
+          4,
+          0,
+          3,
+        ],
+        [
+          5,
+          0,
+          3,
+        ],
+      ],
+      "title": "Layer 0",
+    },
+    {
+      "positions": [
+        [
+          0,
+          1,
+          0,
+        ],
+        [
+          1,
+          1,
+          0,
+        ],
+        [
+          4,
+          1,
+          0,
+        ],
+        [
+          5,
+          1,
+          0,
+        ],
+        [
+          0,
+          1,
+          1,
+        ],
+        [
+          5,
+          1,
+          1,
+        ],
+        [
+          0,
+          1,
+          2,
+        ],
+        [
+          1,
+          1,
+          2,
+        ],
+        [
+          2,
+          1,
+          2,
+        ],
+        [
+          3,
+          1,
+          2,
+        ],
+        [
+          4,
+          1,
+          2,
+        ],
+        [
+          5,
+          1,
+          2,
+        ],
+        [
+          2,
+          1,
+          3,
+        ],
+      ],
+      "title": "Layer 1",
+    },
+    {
+      "positions": [
+        [
+          0,
+          2,
+          0,
+        ],
+        [
+          1,
+          2,
+          0,
+        ],
+        [
+          4,
+          2,
+          0,
+        ],
+        [
+          5,
+          2,
+          0,
+        ],
+        [
+          0,
+          2,
+          1,
+        ],
+        [
+          5,
+          2,
+          1,
+        ],
+      ],
+      "title": "Layer 2",
+    },
+    {
+      "positions": [
+        [
+          0,
+          3,
+          0,
+        ],
+        [
+          1,
+          3,
+          0,
+        ],
+        [
+          2,
+          3,
+          0,
+        ],
+        [
+          3,
+          3,
+          0,
+        ],
+        [
+          4,
+          3,
+          0,
+        ],
+        [
+          5,
+          3,
+          0,
+        ],
+      ],
+      "title": "Layer 3",
+    },
+  ],
+  "tests": [
+    {
+      "afterTicks": 6,
+      "expect": {
+        "closed": 1,
+      },
+      "set": {
+        "open": 0,
+      },
+    },
+    {
+      "afterTicks": 6,
+      "expect": {
+        "closed": 0,
+      },
+      "set": {
+        "open": 1,
+      },
+    },
+  ],
+}
+`;
+
+exports[`examples > repeater-line.rsd.json parses and normalises > repeater-line.rsd.json 1`] = `
+{
+  "annotations": [
+    {
+      "pos": [
+        15,
+        1,
+        0,
+      ],
+      "text": "Signal strength 1 here: the 15th dust from the lever.",
+    },
+    {
+      "pos": [
+        16,
+        1,
+        0,
+      ],
+      "text": "The repeater restores strength 15 after a 2-tick delay.",
+    },
+  ],
+  "blocks": [
+    "0,0,0 stone {}",
+    "0,1,0 lever {"mount":"floor","on":false}",
+    "1,0,0 stone {}",
+    "1,1,0 dust {"power":0}",
+    "10,0,0 stone {}",
+    "10,1,0 dust {"power":0}",
+    "11,0,0 stone {}",
+    "11,1,0 dust {"power":0}",
+    "12,0,0 stone {}",
+    "12,1,0 dust {"power":0}",
+    "13,0,0 stone {}",
+    "13,1,0 dust {"power":0}",
+    "14,0,0 stone {}",
+    "14,1,0 dust {"power":0}",
+    "15,0,0 stone {}",
+    "15,1,0 dust {"power":0}",
+    "16,0,0 stone {}",
+    "16,1,0 repeater {"facing":"east","delay":2,"powered":false}",
+    "17,0,0 stone {}",
+    "17,1,0 dust {"power":0}",
+    "18,0,0 stone {}",
+    "18,1,0 lamp {"lit":false}",
+    "2,0,0 stone {}",
+    "2,1,0 dust {"power":0}",
+    "3,0,0 stone {}",
+    "3,1,0 dust {"power":0}",
+    "4,0,0 stone {}",
+    "4,1,0 dust {"power":0}",
+    "5,0,0 stone {}",
+    "5,1,0 dust {"power":0}",
+    "6,0,0 stone {}",
+    "6,1,0 dust {"power":0}",
+    "7,0,0 stone {}",
+    "7,1,0 dust {"power":0}",
+    "8,0,0 stone {}",
+    "8,1,0 dust {"power":0}",
+    "9,0,0 stone {}",
+    "9,1,0 dust {"power":0}",
+  ],
+  "format": "rsd/1",
+  "meta": {
+    "description": "A lever drives 15 dust; a repeater refreshes the signal to full strength for a lamp further on.",
+    "edition": "bedrock",
+    "gameVersion": "1.26.50",
+    "name": "Repeater line",
+    "slug": "repeater-line",
+  },
+  "ports": {
+    "inputs": [
+      {
+        "name": "A",
+        "pos": [
+          0,
+          1,
+          0,
+        ],
+      },
+    ],
+    "outputs": [
+      {
+        "name": "out",
+        "pos": [
+          18,
+          1,
+          0,
+        ],
+      },
+    ],
+  },
+  "registryVersion": "1.26.50",
+  "size": [
+    19,
+    2,
+    1,
+  ],
+  "steps": [
+    {
+      "positions": [
+        [
+          0,
+          0,
+          0,
+        ],
+        [
+          1,
+          0,
+          0,
+        ],
+        [
+          2,
+          0,
+          0,
+        ],
+        [
+          3,
+          0,
+          0,
+        ],
+        [
+          4,
+          0,
+          0,
+        ],
+        [
+          5,
+          0,
+          0,
+        ],
+        [
+          6,
+          0,
+          0,
+        ],
+        [
+          7,
+          0,
+          0,
+        ],
+        [
+          8,
+          0,
+          0,
+        ],
+        [
+          9,
+          0,
+          0,
+        ],
+        [
+          10,
+          0,
+          0,
+        ],
+        [
+          11,
+          0,
+          0,
+        ],
+        [
+          12,
+          0,
+          0,
+        ],
+        [
+          13,
+          0,
+          0,
+        ],
+        [
+          14,
+          0,
+          0,
+        ],
+        [
+          15,
+          0,
+          0,
+        ],
+        [
+          16,
+          0,
+          0,
+        ],
+        [
+          17,
+          0,
+          0,
+        ],
+        [
+          18,
+          0,
+          0,
+        ],
+      ],
+      "title": "Layer 0",
+    },
+    {
+      "positions": [
+        [
+          0,
+          1,
+          0,
+        ],
+        [
+          1,
+          1,
+          0,
+        ],
+        [
+          2,
+          1,
+          0,
+        ],
+        [
+          3,
+          1,
+          0,
+        ],
+        [
+          4,
+          1,
+          0,
+        ],
+        [
+          5,
+          1,
+          0,
+        ],
+        [
+          6,
+          1,
+          0,
+        ],
+        [
+          7,
+          1,
+          0,
+        ],
+        [
+          8,
+          1,
+          0,
+        ],
+        [
+          9,
+          1,
+          0,
+        ],
+        [
+          10,
+          1,
+          0,
+        ],
+        [
+          11,
+          1,
+          0,
+        ],
+        [
+          12,
+          1,
+          0,
+        ],
+        [
+          13,
+          1,
+          0,
+        ],
+        [
+          14,
+          1,
+          0,
+        ],
+        [
+          15,
+          1,
+          0,
+        ],
+        [
+          16,
+          1,
+          0,
+        ],
+        [
+          17,
+          1,
+          0,
+        ],
+        [
+          18,
+          1,
+          0,
+        ],
+      ],
+      "title": "Layer 1",
+    },
+  ],
+  "tests": [
+    {
+      "afterTicks": 6,
+      "expect": {
+        "out": 1,
+      },
+      "set": {
+        "A": 1,
+      },
+    },
+    {
+      "afterTicks": 6,
+      "expect": {
+        "out": 0,
+      },
+      "set": {
+        "A": 0,
+      },
+    },
+  ],
+}
+`;
+
+exports[`examples > t-flip-flop.rsd.json parses and normalises > t-flip-flop.rsd.json 1`] = `
+{
+  "annotations": [
+    {
+      "pos": [
+        0,
+        1,
+        2,
+      ],
+      "text": "Pulse limiter: when the input rises it lifts the block feeding the first repeater, so each press sends one short pulse.",
+    },
+    {
+      "pos": [
+        4,
+        2,
+        2,
+      ],
+      "text": "The redstone block shuttles between z=2 and z=3; at z=3 it lights the lamp.",
+    },
+    {
+      "pos": [
+        4,
+        1,
+        1,
+      ],
+      "text": "Dust under the stack: powered only when a block sits above it, so only the piston facing the stack fires.",
+    },
+    {
+      "pos": [
+        1,
+        2,
+        2,
+      ],
+      "text": "Timing: this repeater's pulse must end before the stack lands at z=4, or the other piston fires straight back. Build this example first at M3.",
+    },
+  ],
+  "blocks": [
+    "0,0,0 stone {}",
+    "0,0,1 stone {}",
+    "0,0,2 stone {}",
+    "0,0,3 stone {}",
+    "0,0,4 stone {}",
+    "0,0,5 stone {}",
+    "0,1,0 stone {}",
+    "0,1,1 stone {}",
+    "0,1,2 sticky_piston {"facing":"up"}",
+    "0,1,3 stone {}",
+    "0,1,4 stone {}",
+    "0,1,5 stone {}",
+    "0,2,2 stone {}",
+    "0,2,3 dust {"power":0}",
+    "0,2,4 lever {"mount":"floor","on":false}",
+    "1,0,0 stone {}",
+    "1,0,1 stone {}",
+    "1,0,2 stone {}",
+    "1,0,3 stone {}",
+    "1,0,4 stone {}",
+    "1,0,5 stone {}",
+    "1,1,0 stone {}",
+    "1,1,1 stone {}",
+    "1,1,2 stone {}",
+    "1,1,3 stone {}",
+    "1,1,4 stone {}",
+    "1,1,5 stone {}",
+    "1,2,2 repeater {"facing":"east","delay":1,"powered":false}",
+    "2,0,0 stone {}",
+    "2,0,1 stone {}",
+    "2,0,2 stone {}",
+    "2,0,3 stone {}",
+    "2,0,4 stone {}",
+    "2,0,5 stone {}",
+    "2,1,0 stone {}",
+    "2,1,1 stone {}",
+    "2,1,2 stone {}",
+    "2,1,3 stone {}",
+    "2,1,4 stone {}",
+    "2,1,5 stone {}",
+    "2,2,1 dust {"power":0}",
+    "2,2,2 dust {"power":0}",
+    "2,2,3 dust {"power":0}",
+    "2,2,4 dust {"power":0}",
+    "3,0,0 stone {}",
+    "3,0,1 stone {}",
+    "3,0,2 stone {}",
+    "3,0,3 stone {}",
+    "3,0,4 stone {}",
+    "3,0,5 stone {}",
+    "3,1,0 stone {}",
+    "3,1,1 stone {}",
+    "3,1,2 stone {}",
+    "3,1,3 stone {}",
+    "3,1,4 stone {}",
+    "3,1,5 stone {}",
+    "3,2,1 repeater {"facing":"east","delay":1,"powered":false}",
+    "3,2,4 repeater {"facing":"east","delay":1,"powered":false}",
+    "4,0,0 stone {}",
+    "4,0,1 stone {}",
+    "4,0,2 stone {}",
+    "4,0,3 stone {}",
+    "4,0,4 stone {}",
+    "4,0,5 stone {}",
+    "4,1,0 stone {}",
+    "4,1,1 dust {"power":0}",
+    "4,1,2 stone {}",
+    "4,1,3 stone {}",
+    "4,1,4 dust {"power":0}",
+    "4,1,5 stone {}",
+    "4,2,0 piston {"facing":"south"}",
+    "4,2,1 stone {}",
+    "4,2,2 redstone_block {}",
+    "4,2,3 stone {}",
+    "4,2,5 piston {"facing":"north"}",
+    "5,0,0 stone {}",
+    "5,0,1 stone {}",
+    "5,0,2 stone {}",
+    "5,0,3 stone {}",
+    "5,0,4 stone {}",
+    "5,0,5 stone {}",
+    "5,1,0 stone {}",
+    "5,1,1 stone {}",
+    "5,1,2 stone {}",
+    "5,1,3 stone {}",
+    "5,1,4 stone {}",
+    "5,1,5 stone {}",
+    "5,2,3 lamp {"lit":false}",
+  ],
+  "format": "rsd/1",
+  "meta": {
+    "description": "Each rising edge of the input moves a redstone block one step between two pistons, toggling the lamp. The sticky piston under the input block cuts each input to a short pulse. After the Bedrock piston T flip-flop on minecraft.wiki (Redstone circuits/Memory/TFF Piston Bedrock), with a lever and a lamp added.",
+    "edition": "bedrock",
+    "gameVersion": "1.26.50",
+    "name": "T flip-flop",
+    "slug": "t-flip-flop",
+  },
+  "ports": {
+    "inputs": [
+      {
+        "name": "T",
+        "pos": [
+          0,
+          2,
+          4,
+        ],
+      },
+    ],
+    "outputs": [
+      {
+        "name": "Q",
+        "pos": [
+          5,
+          2,
+          3,
+        ],
+      },
+    ],
+  },
+  "registryVersion": "1.26.50",
+  "size": [
+    6,
+    4,
+    6,
+  ],
+  "steps": [
+    {
+      "positions": [
+        [
+          0,
+          0,
+          0,
+        ],
+        [
+          1,
+          0,
+          0,
+        ],
+        [
+          2,
+          0,
+          0,
+        ],
+        [
+          3,
+          0,
+          0,
+        ],
+        [
+          4,
+          0,
+          0,
+        ],
+        [
+          5,
+          0,
+          0,
+        ],
+        [
+          0,
+          0,
+          1,
+        ],
+        [
+          1,
+          0,
+          1,
+        ],
+        [
+          2,
+          0,
+          1,
+        ],
+        [
+          3,
+          0,
+          1,
+        ],
+        [
+          4,
+          0,
+          1,
+        ],
+        [
+          5,
+          0,
+          1,
+        ],
+        [
+          0,
+          0,
+          2,
+        ],
+        [
+          1,
+          0,
+          2,
+        ],
+        [
+          2,
+          0,
+          2,
+        ],
+        [
+          3,
+          0,
+          2,
+        ],
+        [
+          4,
+          0,
+          2,
+        ],
+        [
+          5,
+          0,
+          2,
+        ],
+        [
+          0,
+          0,
+          3,
+        ],
+        [
+          1,
+          0,
+          3,
+        ],
+        [
+          2,
+          0,
+          3,
+        ],
+        [
+          3,
+          0,
+          3,
+        ],
+        [
+          4,
+          0,
+          3,
+        ],
+        [
+          5,
+          0,
+          3,
+        ],
+        [
+          0,
+          0,
+          4,
+        ],
+        [
+          1,
+          0,
+          4,
+        ],
+        [
+          2,
+          0,
+          4,
+        ],
+        [
+          3,
+          0,
+          4,
+        ],
+        [
+          4,
+          0,
+          4,
+        ],
+        [
+          5,
+          0,
+          4,
+        ],
+        [
+          0,
+          0,
+          5,
+        ],
+        [
+          1,
+          0,
+          5,
+        ],
+        [
+          2,
+          0,
+          5,
+        ],
+        [
+          3,
+          0,
+          5,
+        ],
+        [
+          4,
+          0,
+          5,
+        ],
+        [
+          5,
+          0,
+          5,
+        ],
+      ],
+      "title": "Layer 0",
+    },
+    {
+      "positions": [
+        [
+          0,
+          1,
+          0,
+        ],
+        [
+          1,
+          1,
+          0,
+        ],
+        [
+          2,
+          1,
+          0,
+        ],
+        [
+          3,
+          1,
+          0,
+        ],
+        [
+          4,
+          1,
+          0,
+        ],
+        [
+          5,
+          1,
+          0,
+        ],
+        [
+          0,
+          1,
+          1,
+        ],
+        [
+          1,
+          1,
+          1,
+        ],
+        [
+          2,
+          1,
+          1,
+        ],
+        [
+          3,
+          1,
+          1,
+        ],
+        [
+          4,
+          1,
+          1,
+        ],
+        [
+          5,
+          1,
+          1,
+        ],
+        [
+          0,
+          1,
+          2,
+        ],
+        [
+          1,
+          1,
+          2,
+        ],
+        [
+          2,
+          1,
+          2,
+        ],
+        [
+          3,
+          1,
+          2,
+        ],
+        [
+          4,
+          1,
+          2,
+        ],
+        [
+          5,
+          1,
+          2,
+        ],
+        [
+          0,
+          1,
+          3,
+        ],
+        [
+          1,
+          1,
+          3,
+        ],
+        [
+          2,
+          1,
+          3,
+        ],
+        [
+          3,
+          1,
+          3,
+        ],
+        [
+          4,
+          1,
+          3,
+        ],
+        [
+          5,
+          1,
+          3,
+        ],
+        [
+          0,
+          1,
+          4,
+        ],
+        [
+          1,
+          1,
+          4,
+        ],
+        [
+          2,
+          1,
+          4,
+        ],
+        [
+          3,
+          1,
+          4,
+        ],
+        [
+          4,
+          1,
+          4,
+        ],
+        [
+          5,
+          1,
+          4,
+        ],
+        [
+          0,
+          1,
+          5,
+        ],
+        [
+          1,
+          1,
+          5,
+        ],
+        [
+          2,
+          1,
+          5,
+        ],
+        [
+          3,
+          1,
+          5,
+        ],
+        [
+          4,
+          1,
+          5,
+        ],
+        [
+          5,
+          1,
+          5,
+        ],
+      ],
+      "title": "Layer 1",
+    },
+    {
+      "positions": [
+        [
+          4,
+          2,
+          0,
+        ],
+        [
+          2,
+          2,
+          1,
+        ],
+        [
+          3,
+          2,
+          1,
+        ],
+        [
+          4,
+          2,
+          1,
+        ],
+        [
+          0,
+          2,
+          2,
+        ],
+        [
+          1,
+          2,
+          2,
+        ],
+        [
+          2,
+          2,
+          2,
+        ],
+        [
+          4,
+          2,
+          2,
+        ],
+        [
+          0,
+          2,
+          3,
+        ],
+        [
+          2,
+          2,
+          3,
+        ],
+        [
+          4,
+          2,
+          3,
+        ],
+        [
+          5,
+          2,
+          3,
+        ],
+        [
+          0,
+          2,
+          4,
+        ],
+        [
+          2,
+          2,
+          4,
+        ],
+        [
+          3,
+          2,
+          4,
+        ],
+        [
+          4,
+          2,
+          5,
+        ],
+      ],
+      "title": "Layer 2",
+    },
+    {
+      "positions": [],
+      "title": "Layer 3",
+    },
+  ],
+  "tests": [
+    {
+      "afterTicks": 10,
+      "expect": {
+        "Q": 0,
+      },
+      "set": {
+        "T": 0,
+      },
+    },
+    {
+      "afterTicks": 10,
+      "expect": {
+        "Q": 1,
+      },
+      "set": {
+        "T": 1,
+      },
+    },
+  ],
+}
+`;

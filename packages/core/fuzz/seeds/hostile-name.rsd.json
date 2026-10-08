@@ -1,0 +1,7 @@
+{
+  "format": "rsd/1",
+  "meta": { "name": "</script><img src=x onerror=alert(1)>" },
+  "legend": { "#": "stone" },
+  "layers": [["#"]],
+  "annotations": [{ "pos": [0, 0, 0], "text": "</script><img src=x onerror=alert(1)>" }]
+}

@@ -1,0 +1,69 @@
+{
+  "type": "wool",
+  "category": "solid",
+  "editions": ["bedrock", "java"],
+  "states": {
+    "color": {
+      "values": [
+        "white",
+        "orange",
+        "magenta",
+        "light_blue",
+        "yellow",
+        "lime",
+        "pink",
+        "gray",
+        "light_gray",
+        "cyan",
+        "purple",
+        "blue",
+        "brown",
+        "green",
+        "red",
+        "black"
+      ],
+      "default": "white"
+    }
+  },
+  "needsSupport": null,
+  "supportsTop": true,
+  "conductsPower": true,
+  "geometry": {
+    "builder": "cube",
+    "color": "by_color"
+  },
+  "sim": {
+    "class": "solid",
+    "params": {}
+  },
+  "bedrock": {
+    "id": {
+      "from": "color",
+      "map": {
+        "white": "minecraft:white_wool",
+        "orange": "minecraft:orange_wool",
+        "magenta": "minecraft:magenta_wool",
+        "light_blue": "minecraft:light_blue_wool",
+        "yellow": "minecraft:yellow_wool",
+        "lime": "minecraft:lime_wool",
+        "pink": "minecraft:pink_wool",
+        "gray": "minecraft:gray_wool",
+        "light_gray": "minecraft:light_gray_wool",
+        "cyan": "minecraft:cyan_wool",
+        "purple": "minecraft:purple_wool",
+        "blue": "minecraft:blue_wool",
+        "brown": "minecraft:brown_wool",
+        "green": "minecraft:green_wool",
+        "red": "minecraft:red_wool",
+        "black": "minecraft:black_wool"
+      }
+    },
+    "states": {},
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

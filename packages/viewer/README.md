@@ -4,7 +4,7 @@ Read-only Three.js viewer, shipped as a web component.
 
 ## Public API
 
-Exported from `src/index.ts`. Scaffold only (M0); the API arrives with its milestone.
+`GEOMETRY_BUILDERS`, the geometry builders registry entries may name. The viewer itself arrives in M2.
 
 ## Test
 

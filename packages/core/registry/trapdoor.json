@@ -1,0 +1,78 @@
+{
+  "type": "trapdoor",
+  "category": "consumer",
+  "editions": ["bedrock", "java"],
+  "states": {
+    "facing": {
+      "values": ["north", "south", "east", "west"],
+      "default": "north",
+      "directional": true
+    },
+    "half": {
+      "values": ["bottom", "top"],
+      "default": "bottom"
+    },
+    "open": {
+      "values": [false, true],
+      "default": false
+    },
+    "material": {
+      "values": ["wood", "iron"],
+      "default": "wood"
+    }
+  },
+  "needsSupport": null,
+  "supportsTop": false,
+  "conductsPower": false,
+  "geometry": {
+    "builder": "trapdoor",
+    "color": "by_material"
+  },
+  "sim": {
+    "class": "consumer",
+    "params": {
+      "output": "binary"
+    }
+  },
+  "bedrock": {
+    "id": {
+      "from": "material",
+      "map": {
+        "wood": "minecraft:trapdoor",
+        "iron": "minecraft:iron_trapdoor"
+      }
+    },
+    "states": {
+      "direction": {
+        "from": "facing",
+        "map": {
+          "east": 0,
+          "west": 1,
+          "south": 2,
+          "north": 3
+        },
+        "verify": "VERIFY-IN-GAME: direction is east 0, west 1, south 2, north 3 for Java facing (per GeyserMC mappings-generator BlockMappers)"
+      },
+      "upside_down_bit": {
+        "from": "half",
+        "map": {
+          "bottom": false,
+          "top": true
+        }
+      },
+      "open_bit": {
+        "from": "open",
+        "map": {
+          "false": false,
+          "true": true
+        }
+      }
+    },
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

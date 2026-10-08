@@ -1,0 +1,55 @@
+{
+  "type": "pressure_plate",
+  "category": "power_source",
+  "editions": ["bedrock", "java"],
+  "states": {
+    "material": {
+      "values": ["stone", "wood"],
+      "default": "stone"
+    },
+    "on": {
+      "values": [false, true],
+      "default": false
+    }
+  },
+  "needsSupport": {
+    "face": "down"
+  },
+  "supportsTop": false,
+  "conductsPower": false,
+  "geometry": {
+    "builder": "plate",
+    "color": "by_material"
+  },
+  "sim": {
+    "class": "source",
+    "params": {
+      "input": "hold"
+    }
+  },
+  "bedrock": {
+    "id": {
+      "from": "material",
+      "map": {
+        "stone": "minecraft:stone_pressure_plate",
+        "wood": "minecraft:wooden_pressure_plate"
+      }
+    },
+    "states": {
+      "redstone_signal": {
+        "from": "on",
+        "map": {
+          "false": 0,
+          "true": 15
+        },
+        "verify": "VERIFY-IN-GAME: a pressed pressure plate has redstone_signal 15 (per GeyserMC mappings-generator BlockMappers)"
+      }
+    },
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

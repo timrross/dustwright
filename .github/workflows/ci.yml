@@ -23,5 +23,12 @@ jobs:
       - run: pnpm check:licenses
       - run: pnpm lint
       - run: pnpm typecheck
+      # Generated code and docs must match their sources (registry, schema, rule registry).
+      - run: pnpm gen:check
+      - run: pnpm docs:check
       - run: pnpm build
+      # Mojang's block metadata is not committed (not MIT); fetch the pinned, checksummed copy for the mapping tests.
+      - run: pnpm fetch:bedrock-data
       - run: pnpm test
+        env:
+          RSD_REQUIRE_BEDROCK_DATA: "1"

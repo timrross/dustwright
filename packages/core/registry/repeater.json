@@ -1,0 +1,70 @@
+{
+  "type": "repeater",
+  "category": "component",
+  "editions": ["bedrock", "java"],
+  "states": {
+    "facing": {
+      "values": ["north", "south", "east", "west"],
+      "default": "north",
+      "directional": true
+    },
+    "delay": {
+      "values": [1, 2, 3, 4],
+      "default": 1
+    },
+    "powered": {
+      "values": [false, true],
+      "default": false
+    }
+  },
+  "needsSupport": {
+    "face": "down"
+  },
+  "supportsTop": false,
+  "conductsPower": false,
+  "geometry": {
+    "builder": "repeater",
+    "color": "redstone"
+  },
+  "sim": {
+    "class": "repeater",
+    "params": {}
+  },
+  "bedrock": {
+    "id": {
+      "from": "powered",
+      "map": {
+        "false": "minecraft:unpowered_repeater",
+        "true": "minecraft:powered_repeater"
+      }
+    },
+    "states": {
+      "minecraft:cardinal_direction": {
+        "from": "facing",
+        "map": {
+          "north": "south",
+          "south": "north",
+          "east": "west",
+          "west": "east"
+        },
+        "verify": "VERIFY-IN-GAME: minecraft:cardinal_direction names the input side, the opposite of the direction the signal exits (it equals Java facing, per GeyserMC mappings-generator BlockMappers)"
+      },
+      "repeater_delay": {
+        "from": "delay",
+        "map": {
+          "1": 0,
+          "2": 1,
+          "3": 2,
+          "4": 3
+        },
+        "verify": "VERIFY-IN-GAME: repeater_delay is the delay minus one (per GeyserMC mappings-generator BlockMappers)"
+      }
+    },
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

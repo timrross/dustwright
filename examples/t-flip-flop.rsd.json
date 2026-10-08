@@ -1,0 +1,78 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "T flip-flop",
+    "description": "Each rising edge of the input moves a redstone block one step between two pistons, toggling the lamp. The sticky piston under the input block cuts each input to a short pulse. After the Bedrock piston T flip-flop on minecraft.wiki (Redstone circuits/Memory/TFF Piston Bedrock), with a lever and a lamp added.",
+    "edition": "bedrock",
+    "gameVersion": "1.26.50"
+  },
+  "legend": {
+    "#": "stone",
+    "-": "dust",
+    "U": "sticky_piston facing=up",
+    "S": "piston facing=south",
+    "N": "piston facing=north",
+    ">": "repeater facing=east delay=1",
+    "B": "redstone_block",
+    "L": "lever mount=floor on=false",
+    "*": "lamp"
+  },
+  "layers": [
+    ["######", "######", "######", "######", "######", "######"],
+    ["######", "####-#", "U#####", "######", "####-#", "######"],
+    ["....S.", "..->#.", "#>-.B.", "-.-.#*", "L.->..", "....N."],
+    ["......", "......", "......", "......", "......", "......"]
+  ],
+  "ports": {
+    "inputs": [
+      {
+        "name": "T",
+        "pos": [0, 2, 4]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "Q",
+        "pos": [5, 2, 3]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "set": {
+        "T": 0
+      },
+      "afterTicks": 10,
+      "expect": {
+        "Q": 0
+      }
+    },
+    {
+      "set": {
+        "T": 1
+      },
+      "afterTicks": 10,
+      "expect": {
+        "Q": 1
+      }
+    }
+  ],
+  "annotations": [
+    {
+      "pos": [0, 1, 2],
+      "text": "Pulse limiter: when the input rises it lifts the block feeding the first repeater, so each press sends one short pulse."
+    },
+    {
+      "pos": [4, 2, 2],
+      "text": "The redstone block shuttles between z=2 and z=3; at z=3 it lights the lamp."
+    },
+    {
+      "pos": [4, 1, 1],
+      "text": "Dust under the stack: powered only when a block sits above it, so only the piston facing the stack fires."
+    },
+    {
+      "pos": [1, 2, 2],
+      "text": "Timing: this repeater's pulse must end before the stack lands at z=4, or the other piston fires straight back. Build this example first at M3."
+    }
+  ]
+}

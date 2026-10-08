@@ -30,7 +30,10 @@ exact versions.
 1. Add `packages/core/registry/<type>.json` (validated against `packages/core/schema/registry.json`).
 2. Add a geometry builder in `packages/viewer`.
 3. Add or reuse a sim behaviour class in `packages/sim`.
-4. Run `pnpm rsd registry dump` and commit the regenerated `docs/bedrock-mapping.md`.
+4. Run `pnpm gen` (the parser reads the generated registry module) and `pnpm docs:gen`, and commit the
+   regenerated `packages/core/src/generated/registry.ts`, `docs/bedrock-mapping.md` and
+   `docs/verify-in-game.md`. Mark every state meaning you could not read from the pinned data with a
+   `"verify": "VERIFY-IN-GAME: ..."` note.
 
 A test asserts all three parts exist for every registry type, so a half-added block fails CI.
 

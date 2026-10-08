@@ -1,0 +1,27 @@
+{
+  "type": "stone",
+  "category": "solid",
+  "editions": ["bedrock", "java"],
+  "states": {},
+  "needsSupport": null,
+  "supportsTop": true,
+  "conductsPower": true,
+  "geometry": {
+    "builder": "cube",
+    "color": "stone"
+  },
+  "sim": {
+    "class": "solid",
+    "params": {}
+  },
+  "bedrock": {
+    "id": "minecraft:stone",
+    "states": {},
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

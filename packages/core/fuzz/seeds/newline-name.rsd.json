@@ -1,0 +1,6 @@
+{
+  "format": "rsd/1",
+  "meta": { "name": "gate\nsay pwned" },
+  "legend": { "#": "stone" },
+  "layers": [["#"]]
+}

@@ -1,0 +1,64 @@
+{
+  "type": "torch",
+  "category": "power_source",
+  "editions": ["bedrock", "java"],
+  "states": {
+    "mount": {
+      "values": ["floor", "north", "south", "east", "west"],
+      "default": "floor",
+      "directional": true
+    },
+    "lit": {
+      "values": [false, true],
+      "default": true
+    }
+  },
+  "needsSupport": {
+    "byState": "mount",
+    "map": {
+      "floor": "down",
+      "north": "north",
+      "south": "south",
+      "east": "east",
+      "west": "west"
+    }
+  },
+  "supportsTop": false,
+  "conductsPower": false,
+  "geometry": {
+    "builder": "torch",
+    "color": "redstone"
+  },
+  "sim": {
+    "class": "torch",
+    "params": {}
+  },
+  "bedrock": {
+    "id": {
+      "from": "lit",
+      "map": {
+        "true": "minecraft:redstone_torch",
+        "false": "minecraft:unlit_redstone_torch"
+      }
+    },
+    "states": {
+      "torch_facing_direction": {
+        "from": "mount",
+        "map": {
+          "floor": "top",
+          "north": "north",
+          "south": "south",
+          "east": "east",
+          "west": "west"
+        },
+        "verify": "VERIFY-IN-GAME: torch_facing_direction names the side the supporting block is on (Java wall_torch facing=north maps to south, per GeyserMC mappings-generator BlockMappers)"
+      }
+    },
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

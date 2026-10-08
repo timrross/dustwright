@@ -4,7 +4,8 @@ Approximate tick-based Bedrock redstone simulator.
 
 ## Public API
 
-Exported from `src/index.ts`. Scaffold only (M0); the API arrives with its milestone.
+`BEDROCK_MECHANICS`, `JAVA_MECHANICS_STUB` (used by the edition profiles) and `SIM_CLASSES`, the behaviour
+classes registry entries may name. The simulator itself arrives in M6.
 
 ## Test
 

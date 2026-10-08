@@ -1,0 +1,44 @@
+{
+  "type": "daylight_sensor",
+  "category": "power_source",
+  "editions": ["bedrock", "java"],
+  "states": {
+    "inverted": {
+      "values": [false, true],
+      "default": false
+    }
+  },
+  "needsSupport": null,
+  "supportsTop": false,
+  "conductsPower": false,
+  "geometry": {
+    "builder": "daylight_sensor",
+    "color": "wood"
+  },
+  "sim": {
+    "class": "source",
+    "params": {
+      "input": "none"
+    }
+  },
+  "bedrock": {
+    "id": {
+      "from": "inverted",
+      "map": {
+        "false": "minecraft:daylight_detector",
+        "true": "minecraft:daylight_detector_inverted"
+      }
+    },
+    "states": {
+      "redstone_signal": {
+        "value": 0
+      }
+    },
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

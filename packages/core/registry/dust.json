@@ -1,0 +1,58 @@
+{
+  "type": "dust",
+  "category": "component",
+  "editions": ["bedrock", "java"],
+  "states": {
+    "power": {
+      "values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+      "default": 0
+    }
+  },
+  "needsSupport": {
+    "face": "down"
+  },
+  "supportsTop": false,
+  "conductsPower": false,
+  "geometry": {
+    "builder": "dust",
+    "color": "redstone"
+  },
+  "sim": {
+    "class": "dust",
+    "params": {
+      "output": "level"
+    }
+  },
+  "bedrock": {
+    "id": "minecraft:redstone_wire",
+    "states": {
+      "redstone_signal": {
+        "from": "power",
+        "map": {
+          "0": 0,
+          "1": 1,
+          "2": 2,
+          "3": 3,
+          "4": 4,
+          "5": 5,
+          "6": 6,
+          "7": 7,
+          "8": 8,
+          "9": 9,
+          "10": 10,
+          "11": 11,
+          "12": 12,
+          "13": 13,
+          "14": 14,
+          "15": 15
+        }
+      }
+    },
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

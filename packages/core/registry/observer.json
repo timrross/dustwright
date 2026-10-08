@@ -1,0 +1,57 @@
+{
+  "type": "observer",
+  "category": "component",
+  "editions": ["bedrock", "java"],
+  "states": {
+    "facing": {
+      "values": ["down", "up", "north", "south", "east", "west"],
+      "default": "north",
+      "directional": true
+    },
+    "powered": {
+      "values": [false, true],
+      "default": false
+    }
+  },
+  "needsSupport": null,
+  "supportsTop": true,
+  "conductsPower": false,
+  "geometry": {
+    "builder": "observer",
+    "color": "observer"
+  },
+  "sim": {
+    "class": "observer",
+    "params": {}
+  },
+  "bedrock": {
+    "id": "minecraft:observer",
+    "states": {
+      "minecraft:facing_direction": {
+        "from": "facing",
+        "map": {
+          "down": "down",
+          "up": "up",
+          "north": "north",
+          "south": "south",
+          "east": "east",
+          "west": "west"
+        },
+        "verify": "VERIFY-IN-GAME: minecraft:facing_direction is the side the face looks at (equals Java facing, per GeyserMC mappings-generator BlockMappers)"
+      },
+      "powered_bit": {
+        "from": "powered",
+        "map": {
+          "false": false,
+          "true": true
+        }
+      }
+    },
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

@@ -42,7 +42,7 @@ describe("version", () => {
   });
 
   it("names the milestone for commands that are not built yet", async () => {
-    const r = await rsd("validate", "x.rsd.json");
+    const r = await rsd("bundle", "x.rsd.json", "-o", "x.html");
     expect(r.exitCode).toBe(2);
     expect(r.stderr).toContain("not implemented yet");
   });

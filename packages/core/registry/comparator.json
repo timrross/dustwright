@@ -1,0 +1,78 @@
+{
+  "type": "comparator",
+  "category": "component",
+  "editions": ["bedrock", "java"],
+  "states": {
+    "facing": {
+      "values": ["north", "south", "east", "west"],
+      "default": "north",
+      "directional": true
+    },
+    "mode": {
+      "values": ["compare", "subtract"],
+      "default": "compare"
+    },
+    "powered": {
+      "values": [false, true],
+      "default": false
+    }
+  },
+  "needsSupport": {
+    "face": "down"
+  },
+  "supportsTop": false,
+  "conductsPower": false,
+  "geometry": {
+    "builder": "comparator",
+    "color": "redstone"
+  },
+  "sim": {
+    "class": "comparator",
+    "params": {
+      "output": "level"
+    }
+  },
+  "bedrock": {
+    "id": {
+      "from": "powered",
+      "map": {
+        "false": "minecraft:unpowered_comparator",
+        "true": "minecraft:powered_comparator"
+      }
+    },
+    "states": {
+      "minecraft:cardinal_direction": {
+        "from": "facing",
+        "map": {
+          "north": "south",
+          "south": "north",
+          "east": "west",
+          "west": "east"
+        },
+        "verify": "VERIFY-IN-GAME: minecraft:cardinal_direction names the input side, the opposite of the direction the signal exits (it equals Java facing, per GeyserMC mappings-generator BlockMappers)"
+      },
+      "output_subtract_bit": {
+        "from": "mode",
+        "map": {
+          "compare": false,
+          "subtract": true
+        },
+        "verify": "VERIFY-IN-GAME: output_subtract_bit true is subtract mode (per GeyserMC mappings-generator BlockMappers)"
+      },
+      "output_lit_bit": {
+        "from": "powered",
+        "map": {
+          "false": false,
+          "true": true
+        },
+        "verify": "VERIFY-IN-GAME: output_lit_bit is the powered state (per GeyserMC mappings-generator BlockMappers)"
+      }
+    },
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

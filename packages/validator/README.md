@@ -1,10 +1,13 @@
 # @dustwright/validator
 
-Validator: stage 1 to 3 rules that turn a design into diagnostics.
+Runs a design through the stages of its edition profile and returns diagnostics an LLM can act on.
 
 ## Public API
 
-Exported from `src/index.ts`. Scaffold only (M0); the API arrives with its milestone.
+- `validate(design, { strict })`, `validateText(text, { strict })`: `{ ok, diagnostics, model? }`. Stage 1 is the
+  parser plus rules W107, W108 and (Java) E015; stages 2 and 3 arrive in M5 and M6.
+- `RULES`: every rule, in one array. `BEDROCK_PROFILE`, `JAVA_PROFILE`, `PROFILES`, `profileFor(edition)`.
+- `renderDiagnosticsDoc()`: the text of `docs/diagnostics.md`.
 
 ## Test
 

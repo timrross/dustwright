@@ -15,6 +15,7 @@
     }
   },
   "include": [
+    "packages/core/fuzz",
     "packages/*/src",
     "packages/*/test",
     "apps/*/src",

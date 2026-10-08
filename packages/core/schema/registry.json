@@ -1,0 +1,324 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dustwright.dev/schema/registry.json",
+  "title": "Dustwright block registry entry",
+  "type": "object",
+  "required": [
+    "type",
+    "category",
+    "editions",
+    "states",
+    "needsSupport",
+    "supportsTop",
+    "conductsPower",
+    "geometry",
+    "sim",
+    "bedrock",
+    "verified",
+    "java"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]{1,32}$"
+    },
+    "category": {
+      "enum": ["solid", "transparent", "component", "power_source", "consumer"]
+    },
+    "editions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": ["bedrock", "java"]
+      }
+    },
+    "states": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9_]{1,32}$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["values", "default"],
+        "additionalProperties": false,
+        "properties": {
+          "values": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": ["string", "integer", "boolean"]
+            }
+          },
+          "default": {
+            "type": ["string", "integer", "boolean"]
+          },
+          "directional": {
+            "const": true
+          }
+        }
+      }
+    },
+    "needsSupport": {
+      "description": "Which neighbouring face must hold a supporting block: always the same face, or chosen by a state.",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "required": ["face"],
+          "additionalProperties": false,
+          "properties": {
+            "face": {
+              "$ref": "#/$defs/face"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["byState", "map"],
+          "additionalProperties": false,
+          "properties": {
+            "byState": {
+              "type": "string"
+            },
+            "map": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/face"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "supportsTop": {
+      "type": "boolean",
+      "description": "Whether the top face can hold a floor component."
+    },
+    "supportsTopWhen": {
+      "type": "object",
+      "description": "State values under which the top face can hold a floor component (overrides supportsTop).",
+      "additionalProperties": {
+        "type": ["string", "integer", "boolean"]
+      }
+    },
+    "occupies": {
+      "type": "array",
+      "description": "Extra cells the block fills, as offsets (e.g. a door's upper half). They must be air in the design.",
+      "items": {
+        "$ref": "#/$defs/offset"
+      }
+    },
+    "conductsPower": {
+      "type": "boolean"
+    },
+    "geometry": {
+      "type": "object",
+      "required": ["builder", "color"],
+      "additionalProperties": false,
+      "properties": {
+        "builder": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        }
+      }
+    },
+    "sim": {
+      "type": "object",
+      "required": ["class", "params"],
+      "additionalProperties": false,
+      "properties": {
+        "class": {
+          "enum": [
+            "solid",
+            "dust",
+            "repeater",
+            "comparator",
+            "torch",
+            "source",
+            "consumer",
+            "piston",
+            "observer"
+          ]
+        },
+        "params": {
+          "type": "object"
+        }
+      }
+    },
+    "bedrock": {
+      "$ref": "#/$defs/mapping"
+    },
+    "verified": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "required": ["gameVersion", "date", "by"],
+          "additionalProperties": false,
+          "properties": {
+            "gameVersion": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+            },
+            "by": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "java": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/mapping"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "face": {
+      "enum": ["down", "up", "north", "south", "east", "west"]
+    },
+    "offset": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "integer",
+        "minimum": -1,
+        "maximum": 1
+      }
+    },
+    "value": {
+      "type": ["string", "integer", "boolean"]
+    },
+    "valueMap": {
+      "type": "object",
+      "description": "Abstract value (as text) to target value.",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "#/$defs/value"
+      }
+    },
+    "stateMapping": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["from", "map"],
+          "additionalProperties": false,
+          "properties": {
+            "from": {
+              "type": "string"
+            },
+            "map": {
+              "$ref": "#/$defs/valueMap"
+            },
+            "verify": {
+              "type": "string",
+              "pattern": "^VERIFY-IN-GAME: "
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["value"],
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "$ref": "#/$defs/value"
+            },
+            "verify": {
+              "type": "string",
+              "pattern": "^VERIFY-IN-GAME: "
+            }
+          }
+        }
+      ]
+    },
+    "mapping": {
+      "type": "object",
+      "required": ["id", "states", "checkedAgainst"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^minecraft:[a-z0-9_]+$"
+            },
+            {
+              "type": "object",
+              "required": ["from", "map"],
+              "additionalProperties": false,
+              "properties": {
+                "from": {
+                  "type": "string"
+                },
+                "map": {
+                  "type": "object",
+                  "minProperties": 1,
+                  "additionalProperties": {
+                    "type": "string",
+                    "pattern": "^minecraft:[a-z0-9_]+$"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "states": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/stateMapping"
+          }
+        },
+        "upper": {
+          "type": "object",
+          "description": "A second block placed at an offset (a door's upper half): same id and states, with these overrides.",
+          "required": ["offset", "states"],
+          "additionalProperties": false,
+          "properties": {
+            "offset": {
+              "$ref": "#/$defs/offset"
+            },
+            "states": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/stateMapping"
+              }
+            }
+          }
+        },
+        "checkedAgainst": {
+          "type": "object",
+          "required": ["vanillaData", "bedrockSamples"],
+          "additionalProperties": false,
+          "description": "The pinned @minecraft/vanilla-data version and Mojang bedrock-samples tag this mapping was checked against.",
+          "properties": {
+            "vanillaData": {
+              "type": "string"
+            },
+            "bedrockSamples": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

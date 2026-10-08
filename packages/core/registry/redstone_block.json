@@ -1,0 +1,29 @@
+{
+  "type": "redstone_block",
+  "category": "power_source",
+  "editions": ["bedrock", "java"],
+  "states": {},
+  "needsSupport": null,
+  "supportsTop": true,
+  "conductsPower": false,
+  "geometry": {
+    "builder": "cube",
+    "color": "redstone_block"
+  },
+  "sim": {
+    "class": "source",
+    "params": {
+      "constant": 15
+    }
+  },
+  "bedrock": {
+    "id": "minecraft:redstone_block",
+    "states": {},
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

@@ -1,0 +1,61 @@
+{
+  "type": "stairs",
+  "category": "transparent",
+  "editions": ["bedrock", "java"],
+  "states": {
+    "facing": {
+      "values": ["north", "south", "east", "west"],
+      "default": "north",
+      "directional": true
+    },
+    "half": {
+      "values": ["bottom", "top"],
+      "default": "bottom"
+    }
+  },
+  "needsSupport": null,
+  "supportsTop": false,
+  "supportsTopWhen": {
+    "half": "top"
+  },
+  "conductsPower": false,
+  "geometry": {
+    "builder": "stairs",
+    "color": "stone"
+  },
+  "sim": {
+    "class": "solid",
+    "params": {}
+  },
+  "bedrock": {
+    "id": "minecraft:normal_stone_stairs",
+    "states": {
+      "weirdo_direction": {
+        "from": "facing",
+        "map": {
+          "east": 0,
+          "west": 1,
+          "south": 2,
+          "north": 3
+        },
+        "verify": "VERIFY-IN-GAME: weirdo_direction is east 0, west 1, south 2, north 3 for the climbing direction (Java facing, per GeyserMC mappings-generator BlockMappers)"
+      },
+      "upside_down_bit": {
+        "from": "half",
+        "map": {
+          "bottom": false,
+          "top": true
+        }
+      },
+      "minecraft:corner": {
+        "value": "none"
+      }
+    },
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

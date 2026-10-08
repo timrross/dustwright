@@ -1,0 +1,94 @@
+{
+  "type": "door",
+  "category": "consumer",
+  "editions": ["bedrock", "java"],
+  "states": {
+    "facing": {
+      "values": ["north", "south", "east", "west"],
+      "default": "north",
+      "directional": true
+    },
+    "hinge": {
+      "values": ["left", "right"],
+      "default": "left"
+    },
+    "open": {
+      "values": [false, true],
+      "default": false
+    },
+    "material": {
+      "values": ["wood", "iron"],
+      "default": "wood"
+    }
+  },
+  "needsSupport": {
+    "face": "down"
+  },
+  "supportsTop": false,
+  "occupies": [[0, 1, 0]],
+  "conductsPower": false,
+  "geometry": {
+    "builder": "door",
+    "color": "by_material"
+  },
+  "sim": {
+    "class": "consumer",
+    "params": {
+      "output": "binary"
+    }
+  },
+  "bedrock": {
+    "id": {
+      "from": "material",
+      "map": {
+        "wood": "minecraft:wooden_door",
+        "iron": "minecraft:iron_door"
+      }
+    },
+    "states": {
+      "minecraft:cardinal_direction": {
+        "from": "facing",
+        "map": {
+          "north": "east",
+          "south": "west",
+          "west": "north",
+          "east": "south"
+        },
+        "verify": "VERIFY-IN-GAME: door minecraft:cardinal_direction is Java facing turned a quarter clockwise (north to east, per GeyserMC mappings-generator BlockMappers)"
+      },
+      "door_hinge_bit": {
+        "from": "hinge",
+        "map": {
+          "left": false,
+          "right": true
+        },
+        "verify": "VERIFY-IN-GAME: door_hinge_bit true is the right hinge (per GeyserMC mappings-generator BlockMappers)"
+      },
+      "open_bit": {
+        "from": "open",
+        "map": {
+          "false": false,
+          "true": true
+        }
+      },
+      "upper_block_bit": {
+        "value": false
+      }
+    },
+    "upper": {
+      "offset": [0, 1, 0],
+      "states": {
+        "upper_block_bit": {
+          "value": true,
+          "verify": "VERIFY-IN-GAME: the upper half is the same block one above, with upper_block_bit true"
+        }
+      }
+    },
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

@@ -9,3 +9,8 @@ waits.
   design needs the old pack removed before re-import.
 - **Usage numbers.** No analytics in v1. If wanted later, a cookie-free counter is proposed here first.
 - **`expectTrace` in tests.** A list of (tick, values) pairs for testing clock periods and pulse widths.
+- **Lever axis on floors and ceilings.** A floor lever has a north-south or east-west axis in game; v1 places
+  every floor and ceiling lever on the north-south axis. An `axis` key would need a spec change.
+- **Copper bulb and other post-1.21 components.** Outside the v1 block set.
+- **Container contents.** Items in hoppers and droppers would enable the classic Bedrock dropper T flip-flop, but
+  containers with items are a v1 non-goal.

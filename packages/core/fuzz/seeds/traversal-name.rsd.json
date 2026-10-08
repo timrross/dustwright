@@ -1,0 +1,6 @@
+{
+  "format": "rsd/1",
+  "meta": { "name": "../../evil" },
+  "legend": { "#": "stone" },
+  "layers": [["#"]]
+}

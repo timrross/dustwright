@@ -1,0 +1,70 @@
+{
+  "type": "lever",
+  "category": "power_source",
+  "editions": ["bedrock", "java"],
+  "states": {
+    "mount": {
+      "values": ["floor", "ceiling", "north", "south", "east", "west"],
+      "default": "floor",
+      "directional": true
+    },
+    "on": {
+      "values": [false, true],
+      "default": false
+    }
+  },
+  "needsSupport": {
+    "byState": "mount",
+    "map": {
+      "floor": "down",
+      "ceiling": "up",
+      "north": "north",
+      "south": "south",
+      "east": "east",
+      "west": "west"
+    }
+  },
+  "supportsTop": false,
+  "conductsPower": false,
+  "geometry": {
+    "builder": "lever",
+    "color": "wood"
+  },
+  "sim": {
+    "class": "source",
+    "params": {
+      "input": "hold"
+    }
+  },
+  "bedrock": {
+    "id": "minecraft:lever",
+    "states": {
+      "lever_direction": {
+        "from": "mount",
+        "map": {
+          "floor": "up_north_south",
+          "ceiling": "down_north_south",
+          "north": "south",
+          "south": "north",
+          "east": "west",
+          "west": "east"
+        },
+        "verify": "VERIFY-IN-GAME: wall levers name the direction they point (away from the support); floor and ceiling levers use the north-south axis (per GeyserMC mappings-generator BlockMappers)"
+      },
+      "open_bit": {
+        "from": "on",
+        "map": {
+          "false": false,
+          "true": true
+        },
+        "verify": "VERIFY-IN-GAME: open_bit is the on state for walls and north-south floor and ceiling levers (per GeyserMC mappings-generator BlockMappers)"
+      }
+    },
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

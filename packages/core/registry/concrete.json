@@ -1,0 +1,69 @@
+{
+  "type": "concrete",
+  "category": "solid",
+  "editions": ["bedrock", "java"],
+  "states": {
+    "color": {
+      "values": [
+        "white",
+        "orange",
+        "magenta",
+        "light_blue",
+        "yellow",
+        "lime",
+        "pink",
+        "gray",
+        "light_gray",
+        "cyan",
+        "purple",
+        "blue",
+        "brown",
+        "green",
+        "red",
+        "black"
+      ],
+      "default": "white"
+    }
+  },
+  "needsSupport": null,
+  "supportsTop": true,
+  "conductsPower": true,
+  "geometry": {
+    "builder": "cube",
+    "color": "by_color"
+  },
+  "sim": {
+    "class": "solid",
+    "params": {}
+  },
+  "bedrock": {
+    "id": {
+      "from": "color",
+      "map": {
+        "white": "minecraft:white_concrete",
+        "orange": "minecraft:orange_concrete",
+        "magenta": "minecraft:magenta_concrete",
+        "light_blue": "minecraft:light_blue_concrete",
+        "yellow": "minecraft:yellow_concrete",
+        "lime": "minecraft:lime_concrete",
+        "pink": "minecraft:pink_concrete",
+        "gray": "minecraft:gray_concrete",
+        "light_gray": "minecraft:light_gray_concrete",
+        "cyan": "minecraft:cyan_concrete",
+        "purple": "minecraft:purple_concrete",
+        "blue": "minecraft:blue_concrete",
+        "brown": "minecraft:brown_concrete",
+        "green": "minecraft:green_concrete",
+        "red": "minecraft:red_concrete",
+        "black": "minecraft:black_concrete"
+      }
+    },
+    "states": {},
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

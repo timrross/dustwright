@@ -1,0 +1,62 @@
+import type { Edition, StateValue } from "./types.js";
+
+/** A face of a block, as a direction from its centre. */
+export type Face = "down" | "up" | "north" | "south" | "east" | "west";
+
+/** A block's category, used by the validator and the viewer. */
+export type Category = "solid" | "transparent" | "component" | "power_source" | "consumer";
+
+/** The simulator behaviour classes. */
+export type SimClass =
+  "solid" | "dust" | "repeater" | "comparator" | "torch" | "source" | "consumer" | "piston" | "observer";
+
+/** One abstract state key: its allowed values and default. */
+export interface StateDef {
+  values: readonly StateValue[];
+  default: StateValue;
+  /** True for orientation keys (`facing`, `mount`), which the direction overlay and inspector show. */
+  directional?: true;
+}
+
+/** How one target-edition state is derived: from an abstract state through a value map, or a fixed value. */
+export type StateMapping =
+  | { from: string; map: Readonly<Record<string, StateValue>>; verify?: string }
+  | { value: StateValue; verify?: string };
+
+/** How an abstract block maps to one edition's block ID and states. */
+export interface EditionMapping {
+  /** A fixed ID, or an ID chosen by one abstract state (e.g. powered and unpowered repeaters). */
+  id: string | { from: string; map: Readonly<Record<string, string>> };
+  states: Readonly<Record<string, StateMapping>>;
+  /** A second block placed at an offset (a door's upper half), with these state overrides. */
+  upper?: { offset: readonly [number, number, number]; states: Readonly<Record<string, StateMapping>> };
+  checkedAgainst: { vanillaData: string; bedrockSamples: string };
+}
+
+/** Who proved a mapping in game, and when. */
+export interface Verification {
+  gameVersion: string;
+  date: string;
+  by: string;
+}
+
+/** Where a component needs a supporting block: a fixed face, or a face chosen by a state (a torch's `mount`). */
+export type SupportRule = { face: Face } | { byState: string; map: Readonly<Record<string, Face>> } | null;
+
+/** One registry entry, as stored in `packages/core/registry/<type>.json`. */
+export interface RegistryEntry {
+  type: string;
+  category: Category;
+  editions: readonly Edition[];
+  states: Readonly<Record<string, StateDef>>;
+  needsSupport: SupportRule;
+  supportsTop: boolean;
+  supportsTopWhen?: Readonly<Record<string, StateValue>>;
+  occupies?: readonly (readonly [number, number, number])[];
+  conductsPower: boolean;
+  geometry: { builder: string; color: string };
+  sim: { class: SimClass; params: Readonly<Record<string, unknown>> };
+  bedrock: EditionMapping;
+  verified: Verification | null;
+  java: EditionMapping | null;
+}

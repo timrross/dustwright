@@ -1,0 +1,52 @@
+{
+  "type": "dispenser",
+  "category": "consumer",
+  "editions": ["bedrock", "java"],
+  "states": {
+    "facing": {
+      "values": ["down", "up", "north", "south", "east", "west"],
+      "default": "north",
+      "directional": true
+    }
+  },
+  "needsSupport": null,
+  "supportsTop": true,
+  "conductsPower": true,
+  "geometry": {
+    "builder": "cube_faced",
+    "color": "dispenser"
+  },
+  "sim": {
+    "class": "consumer",
+    "params": {
+      "container": false,
+      "output": "none"
+    }
+  },
+  "bedrock": {
+    "id": "minecraft:dispenser",
+    "states": {
+      "facing_direction": {
+        "from": "facing",
+        "map": {
+          "down": 0,
+          "up": 1,
+          "north": 2,
+          "south": 3,
+          "east": 5,
+          "west": 4
+        },
+        "verify": "VERIFY-IN-GAME: facing_direction is the direction items leave, numbered down 0, up 1, north 2, south 3, west 4, east 5 (per GeyserMC mappings-generator BlockMappers)"
+      },
+      "triggered_bit": {
+        "value": false
+      }
+    },
+    "checkedAgainst": {
+      "vanillaData": "1.26.50",
+      "bedrockSamples": "v1.26.50.4"
+    }
+  },
+  "verified": null,
+  "java": null
+}

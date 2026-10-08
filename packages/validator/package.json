@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@dustwright/core": "workspace:*",
-    "@dustwright/sim": "workspace:*"
+    "@dustwright/sim": "workspace:*",
+    "@dustwright/export": "workspace:*"
   }
 }
