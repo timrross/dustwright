@@ -60,7 +60,13 @@ export async function exportCommand(file: string, opts: ExportCommandOptions, io
   if (opts.clear) exportOpts.clear = true;
   if (opts.origin) exportOpts.origin = opts.origin;
   if (opts.commandLimit !== undefined) exportOpts.commandLimit = opts.commandLimit;
-  const out = exporter.export(model, exportOpts);
+  // --clear, --origin and --command-limit belong to the function exporter; say so rather than drop them silently.
+  if (exporter.id !== "mcfunction" && (opts.clear || opts.origin || opts.commandLimit !== undefined)) {
+    io.stderr(
+      `rsd: --clear, --origin and --command-limit apply to --to mcfunction only; ignored for ${exporter.id}\n`,
+    );
+  }
+  const out = await exporter.export(model, exportOpts);
   if (out.diagnostics.some((d) => d.severity === "error")) {
     if (opts.json) io.stdout(`${JSON.stringify({ ok: false, files: [], diagnostics: out.diagnostics })}\n`);
     else for (const d of out.diagnostics) io.stderr(`${formatDiagnostic(file, d)}\n`);

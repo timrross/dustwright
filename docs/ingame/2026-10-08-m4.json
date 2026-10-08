@@ -1,0 +1,739 @@
+{
+  "when": "2026-10-08T20:36:11.308Z",
+  "container": "dw-bds",
+  "results": [
+    {
+      "area": "torch support (VIG-20)",
+      "name": "torch mount=floor lit=true",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "torch support (VIG-20)",
+      "name": "torch mount=north lit=true",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "torch support (VIG-20)",
+      "name": "torch mount=south lit=true",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "torch support (VIG-20)",
+      "name": "torch mount=east lit=true",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "torch support (VIG-20)",
+      "name": "torch mount=west lit=true",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "lever support (VIG-11)",
+      "name": "lever mount=floor on=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "lever support (VIG-11)",
+      "name": "lever mount=ceiling on=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "lever support (VIG-11)",
+      "name": "lever mount=north on=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "lever support (VIG-11)",
+      "name": "lever mount=south on=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "lever support (VIG-11)",
+      "name": "lever mount=east on=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "lever support (VIG-11)",
+      "name": "lever mount=west on=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "button support (VIG-01)",
+      "name": "button mount=floor material=stone pressed=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "button support (VIG-01)",
+      "name": "button mount=floor material=wood pressed=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "button support (VIG-01)",
+      "name": "button mount=ceiling material=stone pressed=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "button support (VIG-01)",
+      "name": "button mount=ceiling material=wood pressed=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "button support (VIG-01)",
+      "name": "button mount=north material=stone pressed=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "button support (VIG-01)",
+      "name": "button mount=north material=wood pressed=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "button support (VIG-01)",
+      "name": "button mount=south material=stone pressed=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "button support (VIG-01)",
+      "name": "button mount=south material=wood pressed=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "button support (VIG-01)",
+      "name": "button mount=east material=stone pressed=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "button support (VIG-01)",
+      "name": "button mount=east material=wood pressed=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "button support (VIG-01)",
+      "name": "button mount=west material=stone pressed=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "button support (VIG-01)",
+      "name": "button mount=west material=wood pressed=false",
+      "status": "pass",
+      "detail": "survived update: true, broke without support: true"
+    },
+    {
+      "area": "torch lit state (VIG-20)",
+      "name": "unlit_redstone_torch places",
+      "status": "pass",
+      "detail": "now lit"
+    },
+    {
+      "area": "repeater direction (VIG-16)",
+      "name": "repeater facing=north",
+      "status": "pass",
+      "detail": "lamp in front lit: true"
+    },
+    {
+      "area": "repeater direction (VIG-16)",
+      "name": "repeater facing=south",
+      "status": "pass",
+      "detail": "lamp in front lit: true"
+    },
+    {
+      "area": "repeater direction (VIG-16)",
+      "name": "repeater facing=east",
+      "status": "pass",
+      "detail": "lamp in front lit: true"
+    },
+    {
+      "area": "repeater direction (VIG-16)",
+      "name": "repeater facing=west",
+      "status": "pass",
+      "detail": "lamp in front lit: true"
+    },
+    {
+      "area": "comparator direction (VIG-02)",
+      "name": "comparator facing=north",
+      "status": "pass",
+      "detail": "lamp in front lit: true"
+    },
+    {
+      "area": "comparator direction (VIG-02)",
+      "name": "comparator facing=south",
+      "status": "pass",
+      "detail": "lamp in front lit: true"
+    },
+    {
+      "area": "comparator direction (VIG-02)",
+      "name": "comparator facing=east",
+      "status": "pass",
+      "detail": "lamp in front lit: true"
+    },
+    {
+      "area": "comparator direction (VIG-02)",
+      "name": "comparator facing=west",
+      "status": "pass",
+      "detail": "lamp in front lit: true"
+    },
+    {
+      "area": "lever on state (VIG-12)",
+      "name": "lever mount=floor on=true lights a lamp",
+      "status": "pass",
+      "detail": "lamp lit: true"
+    },
+    {
+      "area": "lever on state (VIG-12)",
+      "name": "lever mount=ceiling on=true lights a lamp",
+      "status": "pass",
+      "detail": "lamp lit: true"
+    },
+    {
+      "area": "lever on state (VIG-12)",
+      "name": "lever mount=north on=true lights a lamp",
+      "status": "pass",
+      "detail": "lamp lit: true"
+    },
+    {
+      "area": "lever on state (VIG-12)",
+      "name": "lever mount=south on=true lights a lamp",
+      "status": "pass",
+      "detail": "lamp lit: true"
+    },
+    {
+      "area": "lever on state (VIG-12)",
+      "name": "lever mount=east on=true lights a lamp",
+      "status": "pass",
+      "detail": "lamp lit: true"
+    },
+    {
+      "area": "lever on state (VIG-12)",
+      "name": "lever mount=west on=true lights a lamp",
+      "status": "pass",
+      "detail": "lamp lit: true"
+    },
+    {
+      "area": "button pressed state (VIG-01)",
+      "name": "button pressed=true lights a lamp",
+      "status": "pass",
+      "detail": "lamp lit: true"
+    },
+    {
+      "area": "control (VIG-20)",
+      "name": "torch_facing_direction=south does not hold on a north support",
+      "status": "pass",
+      "detail": "placed, then broke after a neighbour update"
+    },
+    {
+      "area": "control (VIG-16)",
+      "name": "cardinal_direction=east does not carry a signal west to east",
+      "status": "pass",
+      "detail": "lamp lit: false"
+    },
+    {
+      "area": "control (VIG-14)",
+      "name": "facing_direction=2 does not push north",
+      "status": "pass",
+      "detail": "arm north: false, arm south: true"
+    },
+    {
+      "area": "piston direction (VIG-14)",
+      "name": "piston facing=north",
+      "status": "pass",
+      "detail": "arm on the north side: true"
+    },
+    {
+      "area": "piston direction (VIG-14)",
+      "name": "piston facing=south",
+      "status": "pass",
+      "detail": "arm on the south side: true"
+    },
+    {
+      "area": "piston direction (VIG-14)",
+      "name": "piston facing=east",
+      "status": "pass",
+      "detail": "arm on the east side: true"
+    },
+    {
+      "area": "piston direction (VIG-14)",
+      "name": "piston facing=west",
+      "status": "pass",
+      "detail": "arm on the west side: true"
+    },
+    {
+      "area": "piston direction (VIG-14)",
+      "name": "piston facing=up",
+      "status": "pass",
+      "detail": "arm on the up side: true"
+    },
+    {
+      "area": "piston direction (VIG-14)",
+      "name": "piston facing=down",
+      "status": "pass",
+      "detail": "arm on the down side: true"
+    },
+    {
+      "area": "sticky_piston direction (VIG-19)",
+      "name": "sticky_piston facing=north",
+      "status": "pass",
+      "detail": "arm on the north side: true"
+    },
+    {
+      "area": "sticky_piston direction (VIG-19)",
+      "name": "sticky_piston facing=south",
+      "status": "pass",
+      "detail": "arm on the south side: true"
+    },
+    {
+      "area": "sticky_piston direction (VIG-19)",
+      "name": "sticky_piston facing=east",
+      "status": "pass",
+      "detail": "arm on the east side: true"
+    },
+    {
+      "area": "sticky_piston direction (VIG-19)",
+      "name": "sticky_piston facing=west",
+      "status": "pass",
+      "detail": "arm on the west side: true"
+    },
+    {
+      "area": "sticky_piston direction (VIG-19)",
+      "name": "sticky_piston facing=up",
+      "status": "pass",
+      "detail": "arm on the up side: true"
+    },
+    {
+      "area": "sticky_piston direction (VIG-19)",
+      "name": "sticky_piston facing=down",
+      "status": "pass",
+      "detail": "arm on the down side: true"
+    },
+    {
+      "area": "example not-gate",
+      "name": "builds without dropping items",
+      "status": "pass",
+      "detail": "no items"
+    },
+    {
+      "area": "example not-gate",
+      "name": "test 0: set {\"A\":0} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "example not-gate",
+      "name": "test 1: set {\"A\":1} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "example not-gate",
+      "name": "clear, build, build equals clear, build",
+      "status": "pass",
+      "detail": "10 blocks compared"
+    },
+    {
+      "area": "example not-gate",
+      "name": "the build alone never removes a block",
+      "status": "pass",
+      "detail": "53 cells kept, 0 lost"
+    },
+    {
+      "area": "example observer-clock",
+      "name": "builds without dropping items",
+      "status": "pass",
+      "detail": "no items"
+    },
+    {
+      "area": "example observer-clock",
+      "name": "output changes over time (clock)",
+      "status": "pass",
+      "detail": "samples 001001010001"
+    },
+    {
+      "area": "example 2x2-piston-door",
+      "name": "builds without dropping items",
+      "status": "pass",
+      "detail": "no items"
+    },
+    {
+      "area": "example 2x2-piston-door",
+      "name": "test 0: set {\"open\":0} expect closed=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "example 2x2-piston-door",
+      "name": "test 1: set {\"open\":1} expect closed=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "example 2x2-piston-door",
+      "name": "clear, build, build equals clear, build",
+      "status": "skipped",
+      "detail": "moves at rest: rebuild only after the clear function"
+    },
+    {
+      "area": "example repeater-line",
+      "name": "builds without dropping items",
+      "status": "pass",
+      "detail": "no items"
+    },
+    {
+      "area": "example repeater-line",
+      "name": "test 0: set {\"A\":1} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "example repeater-line",
+      "name": "test 1: set {\"A\":0} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "example repeater-line",
+      "name": "clear, build, build equals clear, build",
+      "status": "pass",
+      "detail": "38 blocks compared"
+    },
+    {
+      "area": "example repeater-line",
+      "name": "the build alone never removes a block",
+      "status": "pass",
+      "detail": "151 cells kept, 0 lost"
+    },
+    {
+      "area": "example t-flip-flop",
+      "name": "builds without dropping items",
+      "status": "pass",
+      "detail": "no items"
+    },
+    {
+      "area": "example t-flip-flop",
+      "name": "test 0: set {\"T\":0} expect Q=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "example t-flip-flop",
+      "name": "test 1: set {\"T\":1} expect Q=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "example t-flip-flop",
+      "name": "sequence {\"T\":1}->{\"Q\":1} {\"T\":0}->{\"Q\":1} {\"T\":1}->{\"Q\":0} {\"T\":0}->{\"Q\":0}",
+      "status": "pass",
+      "detail": "steps ok: true,true,true,true"
+    },
+    {
+      "area": "example t-flip-flop",
+      "name": "clear, build, build equals clear, build",
+      "status": "pass",
+      "detail": "144 blocks compared"
+    },
+    {
+      "area": "orientation test",
+      "name": "builds without dropping items",
+      "status": "pass",
+      "detail": "no items"
+    },
+    {
+      "area": "orientation test",
+      "name": "all 100 blocks under test stand, with the right IDs",
+      "status": "pass",
+      "detail": "100 checked"
+    },
+    {
+      "area": "structure not-gate",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "10 blocks"
+    },
+    {
+      "area": "structure not-gate",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure not-gate",
+      "name": "air cells leave existing blocks alone",
+      "status": "skipped",
+      "detail": "the design has no air cells"
+    },
+    {
+      "area": "structure not-gate",
+      "name": "test 0: set {\"A\":0} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure not-gate",
+      "name": "test 1: set {\"A\":1} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure not-gate (90 degrees)",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "10 blocks"
+    },
+    {
+      "area": "structure not-gate (90 degrees)",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure not-gate (90 degrees)",
+      "name": "test 0: set {\"A\":0} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure not-gate (90 degrees)",
+      "name": "test 1: set {\"A\":1} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure observer-clock",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "8 blocks"
+    },
+    {
+      "area": "structure observer-clock",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure observer-clock",
+      "name": "air cells leave existing blocks alone",
+      "status": "skipped",
+      "detail": "the design has no air cells"
+    },
+    {
+      "area": "structure observer-clock (90 degrees)",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "8 blocks"
+    },
+    {
+      "area": "structure observer-clock (90 degrees)",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure orientation-test",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "214 blocks"
+    },
+    {
+      "area": "structure orientation-test",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure orientation-test",
+      "name": "air cells leave existing blocks alone",
+      "status": "pass",
+      "detail": "5818 of 5818 air cells still glass"
+    },
+    {
+      "area": "structure 2x2-piston-door",
+      "name": "loads with every block in place, by ID and state",
+      "status": "skipped",
+      "detail": "moves at rest: its pistons push blocks as soon as it loads; its tests below check it"
+    },
+    {
+      "area": "structure 2x2-piston-door",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure 2x2-piston-door",
+      "name": "air cells leave existing blocks alone",
+      "status": "pass",
+      "detail": "47 of 47 air cells still glass"
+    },
+    {
+      "area": "structure 2x2-piston-door",
+      "name": "test 0: set {\"open\":0} expect closed=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure 2x2-piston-door",
+      "name": "test 1: set {\"open\":1} expect closed=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure 2x2-piston-door (90 degrees)",
+      "name": "loads with every block in place, by ID and state",
+      "status": "skipped",
+      "detail": "moves at rest: its pistons push blocks as soon as it loads; its tests below check it"
+    },
+    {
+      "area": "structure 2x2-piston-door (90 degrees)",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure 2x2-piston-door (90 degrees)",
+      "name": "test 0: set {\"open\":0} expect closed=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure 2x2-piston-door (90 degrees)",
+      "name": "test 1: set {\"open\":1} expect closed=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure repeater-line",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "38 blocks"
+    },
+    {
+      "area": "structure repeater-line",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure repeater-line",
+      "name": "air cells leave existing blocks alone",
+      "status": "skipped",
+      "detail": "the design has no air cells"
+    },
+    {
+      "area": "structure repeater-line",
+      "name": "test 0: set {\"A\":1} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure repeater-line",
+      "name": "test 1: set {\"A\":0} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure repeater-line (90 degrees)",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "38 blocks"
+    },
+    {
+      "area": "structure repeater-line (90 degrees)",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure repeater-line (90 degrees)",
+      "name": "test 0: set {\"A\":1} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure repeater-line (90 degrees)",
+      "name": "test 1: set {\"A\":0} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure t-flip-flop",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "88 blocks"
+    },
+    {
+      "area": "structure t-flip-flop",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure t-flip-flop",
+      "name": "air cells leave existing blocks alone",
+      "status": "pass",
+      "detail": "56 of 56 air cells still glass"
+    },
+    {
+      "area": "structure t-flip-flop",
+      "name": "test 0: set {\"T\":0} expect Q=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure t-flip-flop",
+      "name": "test 1: set {\"T\":1} expect Q=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure t-flip-flop (90 degrees)",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "88 blocks"
+    },
+    {
+      "area": "structure t-flip-flop (90 degrees)",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure t-flip-flop (90 degrees)",
+      "name": "test 0: set {\"T\":0} expect Q=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure t-flip-flop (90 degrees)",
+      "name": "test 1: set {\"T\":1} expect Q=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure orientation-test (90 degrees)",
+      "name": "loads with every block turned, by ID and state",
+      "status": "pass",
+      "detail": "214 blocks"
+    }
+  ],
+  "server": "Bedrock Dedicated Server 1.26.52.3 (itzg/minecraft-bedrock-server 2026.9.0, flat creative test world, console only)"
+}

@@ -1,5 +1,5 @@
 // In-game checks against a running test-world container, through the server console (no client needed).
-//   node deploy/test-world/ingame-check.mjs [container] [--only probes|examples|orientation]
+//   node deploy/test-world/ingame-check.mjs [container] [--only probes|examples|orientation|structures]
 // Needs `pnpm build` (it imports the built core and export packages) and every example exported into the pack the
 // container mounts, with the server restarted after a new file appears (a reload picks up edits to existing
 // functions but does not discover new ones). It only touches an 80 x 64 area at the world origin.
@@ -23,9 +23,13 @@ const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null;
 const root = fileURLToPath(new URL("../..", import.meta.url));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-/** The server log's non-empty lines. */
+/** The last 400 non-empty lines of the server log (each starts with a millisecond timestamp). */
 const logLines = () =>
-  execFileSync("docker", ["logs", container], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] })
+  execFileSync("docker", ["logs", "--tail", "400", container], {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+    maxBuffer: 16 * 1024 * 1024,
+  })
     .split("\n")
     .filter((l) => l.trim() !== "");
 const send = (command) =>
@@ -42,13 +46,15 @@ async function cmd(command, settleMs = 120) {
 
 /** Sends a query and returns the first new log line `match` recognises; throws NoAnswer after 3 seconds. */
 async function query(command, match) {
-  const start = logLines().length;
+  // Anchor on the last line logged before the command; only lines after it can be its answer.
+  const before = logLines();
+  const anchor = before[before.length - 1];
   send(command);
   for (let i = 0; i < 40; i++) {
     await sleep(75);
-    const line = logLines()
-      .slice(start)
-      .find((l) => match.test(l));
+    const lines = logLines();
+    const from = anchor === undefined ? 0 : lines.lastIndexOf(anchor) + 1;
+    const line = lines.slice(from).find((l) => match.test(l));
     if (line) return line;
   }
   throw new NoAnswer(`no answer to: ${command}`);
@@ -73,6 +79,31 @@ async function isBlock(p, id) {
 /** Whether any item entity exists (something popped off). Throws NoAnswer when the game does not say. */
 async function itemsExist() {
   return /Found /.test(await query("testfor @e[type=item]", /Found |No targets matched/));
+}
+
+/**
+ * Counts the glass blocks in a region by turning them into tinted glass (the server reports how many it changed).
+ * Throws NoAnswer when the game does not say.
+ */
+async function countGlass(a, b) {
+  const line = await query(
+    `fill ${at(a)} ${at(b)} minecraft:tinted_glass replace minecraft:glass`,
+    /\d+ blocks filled|outside|Unable/,
+  );
+  const n = /(\d+) blocks filled/.exec(line);
+  if (!n) throw new NoAnswer(`fill count: ${line}`);
+  return Number(n[1]);
+}
+
+/** Cells (relative "x,y,z") a design fills, its blocks' extra cells (a door's upper half) included. */
+function filledCells(model) {
+  const cells = new Set();
+  for (const [key, b] of model.blocks) {
+    const [x, y, z] = key.split(",").map(Number);
+    for (const e of toEditionBlocks(b, "bedrock"))
+      cells.add(`${x + e.offset[0]},${y + e.offset[1]},${z + e.offset[2]}`);
+  }
+  return cells;
 }
 
 /** A Bedrock block for an abstract type, with registry defaults for any state not given. */
@@ -340,6 +371,22 @@ async function readOutput(model, port, o) {
   throw new Error(`cannot read ${b.type}`);
 }
 
+/**
+ * Reads an output until it shows `expected` or the deadline passes, and returns the last value read. Console
+ * commands land at no exact tick, so the read is a window from `afterTicks` to `afterTicks` plus 3 seconds rather
+ * than one instant; a circuit that never reaches the value still fails.
+ */
+async function readOutputUntil(model, port, o, expected, afterTicks) {
+  await sleep(afterTicks * 100 + 500);
+  const deadline = Date.now() + 3000;
+  let actual = await readOutput(model, port, o);
+  while (actual !== expected && Date.now() < deadline) {
+    await sleep(250);
+    actual = await readOutput(model, port, o);
+  }
+  return actual;
+}
+
 /** Input sequences for designs with memory: each step sets inputs and the outputs that must follow, in order. */
 const SEQUENCES = {
   "t-flip-flop": [
@@ -392,11 +439,12 @@ async function examples() {
               ),
             );
           }
-          await sleep(t.afterTicks * 100 + 1500);
-          const actual = await readOutput(
+          const actual = await readOutputUntil(
             model,
             model.ports.outputs.find((p) => p.name === name),
             o,
+            expected,
+            t.afterTicks,
           );
           return [actual === expected, `actual ${actual}`];
         });
@@ -465,17 +513,10 @@ async function examples() {
         const to = [c[0] + model.size[0] + 1, c[1] + model.size[1], c[2] + model.size[2]];
         await cmd(`fill ${at(from)} ${at(to)} minecraft:glass`);
         await cmd(`execute positioned ${at(c)} run function rsd/${slug}`, 1500);
-        let kept = 0;
-        let lost = 0;
-        for (let y = from[1]; y <= to[1]; y++) {
-          for (let zz = from[2]; zz <= to[2]; zz++) {
-            for (let x = from[0]; x <= to[0]; x++) {
-              if (model.blocks.has(`${x - c[0] - 1},${y - c[1]},${zz - c[2]}`)) continue;
-              if (await isBlock([x, y, zz], "minecraft:glass")) kept++;
-              else lost++;
-            }
-          }
-        }
+        const cellsInRegion = (to[0] - from[0] + 1) * (to[1] - from[1] + 1) * (to[2] - from[2] + 1);
+        const expected = cellsInRegion - filledCells(model).size;
+        const kept = await countGlass(from, to);
+        const lost = expected - kept;
         return [kept > 0 && lost === 0, `${kept} cells kept, ${lost} lost`];
       });
     }
@@ -528,11 +569,268 @@ async function orientation() {
   );
 }
 
+/** IDs that count as the same block for a placement check: every lit/unlit, powered/unpowered variant. */
+function idFamily(b) {
+  const ids = new Set([toEditionBlocks(b, "bedrock")[0].id]);
+  for (const [k, d] of Object.entries(registryEntry(b.type).states)) {
+    if (typeof d.default === "boolean")
+      for (const v of d.values)
+        ids.add(toEditionBlocks({ ...b, states: { ...b.states, [k]: v } }, "bedrock")[0].id);
+  }
+  return ids;
+}
+
+/** Directions turned 90 degrees clockwise, seen from above. */
+const CW = {
+  north: "east",
+  east: "south",
+  south: "west",
+  west: "north",
+  up: "up",
+  down: "down",
+  floor: "floor",
+  ceiling: "ceiling",
+};
+
+/** A block's abstract states after a quarter turn clockwise: horizontal facing and wall mounts turn. */
+function rotateBlock(b) {
+  const states = { ...b.states };
+  for (const key of ["facing", "mount"]) if (typeof states[key] === "string") states[key] = CW[states[key]];
+  return { ...b, states };
+}
+
+/** Checks that every block of `model` stands at `place(pos)` as `expect(block)` (IDs and, when `exact`, states). */
+async function checkPlaced(model, placeAt, expectBlock, exact) {
+  const wrong = [];
+  for (const [key, b] of model.blocks) {
+    const pos = key.split(",").map(Number);
+    const want = expectBlock(b);
+    const p = placeAt(pos);
+    let ok = false;
+    if (exact) {
+      const e = toEditionBlocks(want, "bedrock")[0];
+      // Dynamic states (power, lit, open, pressed) are left out: the circuit may already have changed them.
+      // A floor or ceiling lever's axis is left out too: designs do not model it, and a rotation turns it.
+      const axisFree =
+        want.type === "lever" && (want.states.mount === "floor" || want.states.mount === "ceiling");
+      const fixed = Object.fromEntries(
+        Object.entries(e.states).filter(
+          ([k]) =>
+            !/signal|powered|lit|open_bit|pressed|toggle|triggered|output_lit/.test(k) &&
+            !(axisFree && k === "lever_direction"),
+        ),
+      );
+      for (const id of idFamily(want))
+        if (!ok && (await isBlock(p, `${id}${formatStates(fixed)}`))) ok = true;
+    } else {
+      for (const id of idFamily(want)) if (!ok && (await isBlock(p, id))) ok = true;
+    }
+    if (!ok) wrong.push(`${b.type} at [${pos}]`);
+  }
+  return wrong;
+}
+
+/**
+ * The model turned a quarter clockwise (seen from above), as `/structure load ... 90_degrees` places it: cell
+ * (x, y, z) moves to (sizeZ - 1 - z, y, x), and horizontal facings and wall mounts turn with it.
+ */
+function rotatedModel(model) {
+  const [sx, sy, sz] = model.size;
+  const turn = ([x, y, z]) => [sz - 1 - z, y, x];
+  const blocks = new Map();
+  for (const [key, b] of model.blocks) blocks.set(turn(key.split(",").map(Number)).join(","), rotateBlock(b));
+  const ports = {
+    inputs: model.ports.inputs.map((p) => ({ ...p, pos: turn(p.pos) })),
+    outputs: model.ports.outputs.map((p) => ({ ...p, pos: turn(p.pos) })),
+  };
+  return { ...model, size: [sz, sy, sx], blocks, ports };
+}
+
+async function structures() {
+  const files = readdirSync(`${root}/examples`)
+    .filter((f) => f.endsWith(".rsd.json"))
+    .sort();
+  // Each design gets its own band: unturned at x 2, turned at x 52, one 8-block layer band per design from y 70.
+  for (const [k, file] of files.entries()) {
+    const original = parseText(readFileSync(`${root}/examples/${file}`, "utf8")).model;
+    const slug = original.meta.slug;
+    for (const turned of [false, true]) {
+      const model = turned ? rotatedModel(original) : original;
+      const rotation = turned ? "90_degrees" : "0_degrees";
+      const area = `structure ${slug}${turned ? " (90 degrees)" : ""}`;
+      const o = [turned ? 52 : 2, 70 + 8 * k, 2];
+      if (turned && slug === "orientation-test") continue; // checked separately below, at full size
+      const box = (base) => [
+        base,
+        [base[0] + model.size[0] - 1, base[1] + model.size[1] - 1, base[2] + model.size[2] - 1],
+      ];
+      const load = async (base) => {
+        const [a, b] = box(base);
+        await cmd(`fill ${at(a)} ${at(b)} minecraft:air`);
+        await cmd("kill @e[type=item]");
+        const reply = await query(
+          `structure load rsd:${slug} ${at(base)} ${rotation}`,
+          /Loaded a structure|can.t be found|Unable|[Ss]yntax|invalid/,
+        );
+        if (!/Loaded a structure/.test(reply)) throw new Error(reply);
+        await sleep(2500);
+      };
+      if (MOVES_AT_REST.has(slug)) {
+        skip(
+          area,
+          "loads with every block in place, by ID and state",
+          "moves at rest: its pistons push blocks as soon as it loads; its tests below check it",
+        );
+      } else {
+        await check(area, "loads with every block in place, by ID and state", async () => {
+          await load(o);
+          const wrong = await checkPlaced(
+            model,
+            (p) => [o[0] + p[0], o[1] + p[1], o[2] + p[2]],
+            (b) => b,
+            true,
+          );
+          return [
+            wrong.length === 0,
+            wrong.length
+              ? `wrong or missing: ${wrong.slice(0, 8).join("; ")}${wrong.length > 8 ? " ..." : ""}`
+              : `${model.blocks.size} blocks`,
+          ];
+        });
+      }
+      await check(area, "loads without dropping items", async () => {
+        await load(o);
+        return [!(await itemsExist()), ""];
+      });
+      if (!turned) {
+        const designGlass = [...model.blocks.values()].filter((b) => b.type === "glass").length;
+        const air = model.size[0] * model.size[1] * model.size[2] - filledCells(model).size;
+        if (air === 0) {
+          skip(area, "air cells leave existing blocks alone", "the design has no air cells");
+        } else {
+          await check(area, "air cells leave existing blocks alone", async () => {
+            // Four layers up, inside this design's 8-layer band (every design is at most 4 tall).
+            const g = [o[0], o[1] + 4, o[2]];
+            const [a, b] = box(g);
+            await cmd(`fill ${at(a)} ${at(b)} minecraft:glass`);
+            const reply = await query(
+              `structure load rsd:${slug} ${at(g)}`,
+              /Loaded a structure|can.t be found|Unable/,
+            );
+            if (!/Loaded a structure/.test(reply)) throw new Error(reply);
+            await sleep(1500);
+            const kept = (await countGlass(a, b)) - designGlass;
+            return [kept === air, `${kept} of ${air} air cells still glass`];
+          });
+        }
+      }
+      for (const [i, t] of model.tests.entries()) {
+        for (const [name, expected] of Object.entries(t.expect)) {
+          await check(
+            area,
+            `test ${i}: set ${JSON.stringify(t.set)} expect ${name}=${expected}`,
+            async () => {
+              await load(o);
+              const base = [o[0] - 1, o[1], o[2]];
+              for (const [input, value] of Object.entries(t.set))
+                await cmd(
+                  inputCommand(
+                    model,
+                    model.ports.inputs.find((p) => p.name === input),
+                    value,
+                    base,
+                  ),
+                );
+              const actual = await readOutputUntil(
+                model,
+                model.ports.outputs.find((p) => p.name === name),
+                base,
+                expected,
+                t.afterTicks,
+              );
+              return [actual === expected, `actual ${actual}`];
+            },
+          );
+        }
+      }
+    }
+  }
+  // The orientation test turned: every block at its turned position with its turned facing and mount.
+  const model = parseText(readFileSync(`${root}/examples/orientation-test.rsd.json`, "utf8")).model;
+  const r = [2, 130, 2];
+  await check(
+    "structure orientation-test (90 degrees)",
+    "loads with every block turned, by ID and state",
+    async () => {
+      const turned = rotatedModel(model);
+      await cmd(
+        `fill ${at(r)} ${at([r[0] + turned.size[0] - 1, r[1] + turned.size[1] - 1, r[2] + turned.size[2] - 1])} minecraft:air`,
+      );
+      const reply = await query(
+        `structure load rsd:orientation-test ${at(r)} 90_degrees`,
+        /Loaded a structure|can.t be found|Unable/,
+      );
+      if (!/Loaded a structure/.test(reply)) throw new Error(reply);
+      await sleep(3000);
+      const wrong = await checkPlaced(
+        turned,
+        (p) => [r[0] + p[0], r[1] + p[1], r[2] + p[2]],
+        (b) => b,
+        true,
+      );
+      return [
+        wrong.length === 0,
+        wrong.length
+          ? `wrong or missing: ${wrong.slice(0, 8).join("; ")}${wrong.length > 8 ? " ..." : ""}`
+          : `${turned.blocks.size} blocks`,
+      ];
+    },
+  );
+}
+
 await cmd("reload", 3000);
 await cmd("tickingarea add 0 0 0 79 0 63 dustwright-check");
-if (!only || only === "probes") await probes();
-if (!only || only === "examples") await examples();
-if (!only || only === "orientation") await orientation();
+
+/**
+ * Readiness: a server can accept commands while its chunks do not tick (after a warm restart, or mid-run), and then
+ * no circuit reacts. Checks that a redstone block lights a canary lamp; `wait` retries for up to a minute.
+ */
+async function worldTicks(wait) {
+  const lamp = [78, 2, 62];
+  for (let attempt = 0; attempt < (wait ? 30 : 2); attempt++) {
+    await cmd(`setblock ${at(lamp)} minecraft:redstone_lamp`);
+    await cmd(`setblock ${at(add(lamp, OFF.west))} minecraft:air`);
+    await cmd(`setblock ${at(add(lamp, OFF.west))} minecraft:redstone_block`, 600);
+    const lit = await isBlock(lamp, "minecraft:lit_redstone_lamp").catch(() => false);
+    await cmd(`fill ${at(add(lamp, OFF.west))} ${at(lamp)} minecraft:air`);
+    if (lit) return true;
+    await sleep(1400);
+  }
+  return false;
+}
+const stalled = (when) => {
+  console.error(
+    `the world stopped ticking (${when}): this run is invalid. Stop and start the server (a cold start, not a restart) and run again.`,
+  );
+  process.exit(2);
+};
+if (!(await worldTicks(true))) stalled("before the first check");
+if (!only || only === "probes") {
+  await probes();
+  if (!(await worldTicks(false))) stalled("after probes");
+}
+if (!only || only === "examples") {
+  await examples();
+  if (!(await worldTicks(false))) stalled("after examples");
+}
+if (!only || only === "orientation") {
+  await orientation();
+  if (!(await worldTicks(false))) stalled("after orientation");
+}
+if (!only || only === "structures") {
+  await structures();
+  if (!(await worldTicks(false))) stalled("after structures");
+}
 const count = (s) => results.filter((r) => r.status === s).length;
 console.log(`\n${count("pass")} passed, ${count("fail")} failed, ${count("skipped")} skipped`);
 console.log(JSON.stringify({ when: new Date().toISOString(), container, results }));

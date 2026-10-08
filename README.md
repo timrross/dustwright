@@ -42,6 +42,8 @@ pnpm rsd registry dump | head                         # the Bedrock mapping tabl
 pnpm rsd bundle examples/not-gate.rsd.json -o not-gate.html   # one self-contained HTML viewer
 pnpm rsd export examples/not-gate.rsd.json --to mcfunction --pack packs/redstone-designs-bp --clear
 #   then in game: /function rsd/not-gate (see deploy/test-world/README.md)
+pnpm rsd export examples/not-gate.rsd.json --to mcstructure --pack packs/redstone-designs-bp
+#   then in game: /structure load rsd:not-gate ~1 ~ ~
 pnpm --filter @dustwright/site dev                    # the playground at http://localhost:5173/play/
 ```
 

@@ -38,6 +38,10 @@ pnpm rsd export examples/not-gate.rsd.json --to mcfunction --clear
 
 ## Automated in-game check
 
+Start the server cold (`docker compose stop` then `docker compose up -d`) before a run: after a warm restart a
+server can accept commands while its chunks do not tick. The check verifies that the world ticks before it starts,
+between sections and at the end, and exits 2 (the run is invalid) if it stops.
+
 ```sh
 pnpm build
 for f in examples/*.rsd.json; do pnpm rsd export "$f" --to mcfunction --clear; done
@@ -50,6 +54,13 @@ controls that the pre-review mappings must fail; builds every example with its o
 truth-table tests; checks that the T flip-flop toggles through a sequence, that clear-then-build twice equals one
 build, that a build never removes a block around it, and that the orientation test builds with nothing dropped.
 It works only inside an 80 × 64 area at the world origin, and prints a JSON summary last.
+
+## Structure round trip
+
+Save a build with `/structure save <name> <from> <to> false disk true`, stop the server (the world database must
+be closed, or copy it), extract it with `deploy/test-world/extract-structure.py` (needs `pip install
+amulet-leveldb` in a virtualenv) and compare it with an export using `deploy/test-world/compare-structure.mjs`.
+The same comparison re-measures `PINS.blockStateVersion` after a game update.
 
 ## Play
 

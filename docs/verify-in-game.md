@@ -34,6 +34,9 @@ proven in game: by a `verified` record on the block's registry entry (which also
 | VIG-24 | mcfunction | `/function rsd/<slug>` | A file at `functions/rsd/<slug>.mcfunction` in a behavior pack runs as `/function rsd/<slug>`; `#` lines are comments | verified 1.26.52 (2026-10-08) |
 | VIG-25 | mcfunction | door halves | Setting the lower half and then the upper half (upper_block_bit true) with two setblocks gives a working door | open |
 | VIG-26 | pack | `manifest.json` | A data-only pack (format_version 2, one data module, min_engine_version 1.26.50) loads without content-log errors | verified 1.26.52 (2026-10-08) |
+| VIG-27 | mcstructure | cell order and palette | `block_indices` run z fastest, then y, then x; palette entries are `name`, `states` (booleans as bytes) and the block-state `version`; air as -1 leaves existing blocks alone | verified 1.26.52 (2026-10-08) |
+| VIG-28 | mcstructure | `/structure load rsd:<slug>` | A file at `structures/rsd/<slug>.mcstructure` in a behavior pack loads as `rsd:<slug>`, also rotated by 90 degrees | verified 1.26.52 (2026-10-08) |
+| VIG-29 | mcstructure | size cap | A structure holds at most 64 × 384 × 64 blocks (the bounding-box limit, E007); re-check on each game update | open |
 
 Blocks without orientation (stone, glass, wool, lamp, ...) have no rows here but still show W108 until the first
 in-game build confirms their IDs.

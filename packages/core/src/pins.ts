@@ -9,6 +9,12 @@ export const PINS = {
   vanillaData: "1.26.50",
   /** Mojang `bedrock-samples` tag: `metadata/vanilladata_modules/mojang-blocks.json` for state value domains. */
   bedrockSamples: "v1.26.50.4",
+  /**
+   * The block-state version Bedrock stamps on structure palette entries, as `major.minor.patch.revision`. Not
+   * derivable from the pinned data: measured from a structure saved with `/structure save` by BDS 1.26.52.3
+   * (`docs/ingame/2026-10-08-m4-roundtrip.txt`). Re-measure on a game update.
+   */
+  blockStateVersion: "1.21.60.33",
   /** SHA-256 of that `mojang-blocks.json`, so the cached copy is the pinned one. */
   mojangBlocksSha256: "044d494af33347eb1f0e76bab64ce04f44261ec3dac7d1938549a41cf0a770ba",
 } as const;

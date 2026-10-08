@@ -72,6 +72,13 @@ const M3_RUN = {
   by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
 };
 
+/** The in-game run that proved the structure assumptions (M4). */
+const M4_RUN = {
+  gameVersion: "1.26.52",
+  date: "2026-10-08",
+  by: "automated in-game check and round trip (docs/ingame/2026-10-08-m4.json, docs/ingame/2026-10-08-m4-roundtrip.txt)",
+};
+
 export const EXPORTER_ASSUMPTIONS: readonly {
   area: string;
   item: string;
@@ -109,6 +116,27 @@ export const EXPORTER_ASSUMPTIONS: readonly {
     assumption:
       "A data-only pack (format_version 2, one data module, min_engine_version 1.26.50) loads without content-log errors",
     proven: M3_RUN,
+  },
+  // Rows are numbered by position in docs/verify-in-game.md: append new rows at the end, never insert.
+  {
+    area: "mcstructure",
+    item: "cell order and palette",
+    assumption:
+      "`block_indices` run z fastest, then y, then x; palette entries are `name`, `states` (booleans as bytes) and the block-state `version`; air as -1 leaves existing blocks alone",
+    proven: M4_RUN,
+  },
+  {
+    area: "mcstructure",
+    item: "`/structure load rsd:<slug>`",
+    assumption:
+      "A file at `structures/rsd/<slug>.mcstructure` in a behavior pack loads as `rsd:<slug>`, also rotated by 90 degrees",
+    proven: M4_RUN,
+  },
+  {
+    area: "mcstructure",
+    item: "size cap",
+    assumption:
+      "A structure holds at most 64 × 384 × 64 blocks (the bounding-box limit, E007); re-check on each game update",
   },
 ];
 
@@ -194,9 +222,9 @@ export function clearLines(
 const encoder = new TextEncoder();
 
 /** The `.mcfunction` exporter (M3). */
-export const mcfunctionExporter: Exporter = {
-  id: "mcfunction",
-  target: "bedrock",
+export const mcfunctionExporter = {
+  id: "mcfunction" as const,
+  target: "bedrock" as const,
   export(model: Model, opts: ExportOptions): ExportResult {
     const diagnostics: Diagnostic[] = [];
     if (!isValidSlug(model.meta.slug)) {
@@ -233,4 +261,4 @@ export const mcfunctionExporter: Exporter = {
     }
     return { files, diagnostics };
   },
-};
+} satisfies Exporter;

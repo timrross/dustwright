@@ -1,0 +1,26 @@
+VIG-01|button|`facing_direction`
+VIG-02|comparator|`minecraft:cardinal_direction`
+VIG-03|comparator|`output_subtract_bit`
+VIG-04|comparator|`output_lit_bit`
+VIG-05|dispenser|`facing_direction`
+VIG-06|door|`minecraft:cardinal_direction`
+VIG-07|door|`door_hinge_bit`
+VIG-08|door|`upper_block_bit`
+VIG-09|dropper|`facing_direction`
+VIG-10|hopper|`facing_direction`
+VIG-11|lever|`lever_direction`
+VIG-12|lever|`open_bit`
+VIG-13|observer|`minecraft:facing_direction`
+VIG-14|piston|`facing_direction`
+VIG-15|pressure_plate|`redstone_signal`
+VIG-16|repeater|`minecraft:cardinal_direction`
+VIG-17|repeater|`repeater_delay`
+VIG-18|stairs|`weirdo_direction`
+VIG-19|sticky_piston|`facing_direction`
+VIG-20|torch|`torch_facing_direction`
+VIG-21|trapdoor|`direction`
+VIG-22|mcfunction|`setblock` states
+VIG-23|mcfunction|`fill ... minecraft:air`
+VIG-24|mcfunction|`/function rsd/<slug>`
+VIG-25|mcfunction|door halves
+VIG-26|pack|`manifest.json`

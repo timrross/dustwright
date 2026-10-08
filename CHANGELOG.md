@@ -7,6 +7,11 @@ All notable user-facing changes are recorded here. The format follows
 
 ### Added
 
+- M4: `rsd export --to mcstructure`, proven in game: every example loads, also turned 90 degrees, and passes its
+  tests (the 2x2 door's exact placement is not checked, as it moves at rest); structures saved by the game match the
+  exports block for block (the container encoding differs).
+  `deploy/test-world/compare-structure.mjs` diffs a structure saved in game against an export.
+
 - M3: `rsd export --to mcfunction` with a fixed placement order, a separate `--clear` function, `--origin` and
   `--command-limit`; safe writes into a pack (no symlinks, two directories only); the data-only behavior pack
   `packs/redstone-designs-bp`; the orientation test design; a Docker Compose test world; and an automated in-game

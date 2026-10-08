@@ -1,0 +1,19 @@
+# Round trip: orientation test (saved by BDS 1.26.52.3 vs rsd export --to mcstructure)
+
+size [48,3,42] [48,3,42]
+format_version 2 1
+block_indices container list<intArray> x 1 layer(s) | list<list> x 2 layer(s)
+palette versions [ 18168865 ] [ 18168865 ]
+entities 0 0
+block_position_data entries (block entities) 33 0
+230 blocks identical (name, states, tag types); container fields as listed above
+
+# Round trip: T flip-flop (contains dust)
+
+size [6,4,6] [6,4,6]
+format_version 2 1
+block_indices container list<intArray> x 1 layer(s) | list<list> x 2 layer(s)
+palette versions [ 18168865 ] [ 18168865 ]
+entities 0 0
+block_position_data entries (block entities) 3 0
+88 blocks identical (name, states, tag types); container fields as listed above

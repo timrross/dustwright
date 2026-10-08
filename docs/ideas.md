@@ -14,3 +14,9 @@ waits.
 - **Copper bulb and other post-1.21 components.** Outside the v1 block set.
 - **Container contents.** Items in hoppers and droppers would enable the classic Bedrock dropper T flip-flop, but
   containers with items are a v1 non-goal.
+- **NBT writer risk.** nbtify (the `.mcstructure` writer) last released 2.2.0 in October 2024 and has one
+  maintainer. If it stalls or breaks, the fallback is vendoring it (MIT, small, no dependencies but mutf-8) or a
+  small reviewed little-endian writer, checked against prismarine-nbt decoding as the tests already do.
+- **Byte-identical structures to the game's.** Palette state keys follow the registry's order and the container is
+  `format_version` 1; the game's own saves use format 2 and its own key order. Both load the same; matching the
+  bytes exactly would need the format 2 layout.

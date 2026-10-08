@@ -267,3 +267,14 @@ describe("export JSON and warnings", () => {
     expect(JSON.parse(r.stdout).diagnostics[0].code).toBe("E012");
   });
 });
+
+describe("rsd export --to mcstructure", () => {
+  it("writes structures/rsd/<slug>.mcstructure and lists both exporters", async () => {
+    const pack = fresh();
+    const r = await rsd(["export", example, "--to", "mcstructure", "--pack", pack]);
+    expect(r.exitCode).toBe(0);
+    expect(r.stdout.trim()).toMatch(/structures\/rsd\/not-gate\.mcstructure$/);
+    expect(readFileSync(join(pack, "structures/rsd/not-gate.mcstructure")).length).toBeGreaterThan(100);
+    expect((await rsd(["export", "--list"])).stdout).toBe("mcfunction\tbedrock\nmcstructure\tbedrock\n");
+  });
+});

@@ -162,6 +162,8 @@ steps. Exceeding a limit is E013.
    lands one block east. `--clear` also writes `rsd/<slug>_clear`, which empties the bounding box. Run the clear
    function before rebuilding in the same place if the design moves on its own once built (pistons that a torch
    extends at rest): building over it pushes its blocks a second time.
+   `--to mcstructure` writes `structures/rsd/<slug>.mcstructure` instead; in game, `/structure load rsd:<slug> ~1 ~ ~`
+   (add `90_degrees` and so on to turn it). Use it for builds over 10,000 blocks (E014).
 
 Common codes: E002 ragged grid, E003 character not in legend, E004 unknown type (hint has the closest names),
 E005 bad key or value (hint lists the allowed ones), E008 position outside the grid or on air, E011 port or test

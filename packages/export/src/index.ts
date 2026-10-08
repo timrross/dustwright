@@ -9,6 +9,7 @@ export const PACKAGE_NAME = "@dustwright/export";
 
 import type { Exporter } from "@dustwright/core";
 import { mcfunctionExporter } from "./mcfunction.js";
+import { mcstructureExporter } from "./mcstructure.js";
 
 export { buildBundleHtml, escapeJsonForScript, UnsafeScriptError } from "./bundle-html.js";
 export {
@@ -28,4 +29,14 @@ export {
 } from "./mcfunction.js";
 
 /** Every exporter, in the order `rsd export --list` shows them. Edition profiles pick theirs from here. */
-export const EXPORTERS: readonly Exporter[] = [mcfunctionExporter];
+export const EXPORTERS: readonly Exporter[] = [mcfunctionExporter, mcstructureExporter];
+
+export {
+  blockVersion,
+  cellIndex,
+  encodeStructure,
+  mcstructureExporter,
+  STRUCTURE_DIR,
+  structureLayout,
+} from "./mcstructure.js";
+export type { PaletteEntry, StructureLayout } from "./mcstructure.js";

@@ -20,6 +20,7 @@
     "build": "tsc -b tsconfig.build.json"
   },
   "dependencies": {
-    "@dustwright/core": "workspace:*"
+    "@dustwright/core": "workspace:*",
+    "nbtify": "2.2.0"
   }
 }

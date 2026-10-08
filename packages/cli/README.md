@@ -9,7 +9,7 @@ the file named and writes only where told.
   I/O. With `--json`, stdout is exactly one JSON document `{ "ok", "diagnostics" }`.
 - `rsd registry dump [-o <file>]`: prints the Bedrock mapping table (the text of `docs/bedrock-mapping.md`).
 - `rsd bundle <file> -o <html>`: one self-contained offline HTML viewer.
-- `rsd export <file> --to mcfunction --pack <dir> [--clear] [--origin x y z] [--command-limit n] [--json]`: writes
+- `rsd export <file> --to mcfunction|mcstructure --pack <dir> [--clear] [--origin x y z] [--command-limit n] [--json]`: writes
   `functions/rsd/<slug>.mcfunction` (and `<slug>_clear`) into the pack and prints every path written. The pack root
   comes from `--pack` or `RSD_PACK_DIR`; there is no default. `rsd export --list` lists exporters.
 

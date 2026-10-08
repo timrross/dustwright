@@ -25,8 +25,11 @@ Each control is a hard rule with a test behind it. The milestone column says whe
 | Runtime network    | Telemetry or fetches leak data                                         | None. The CLI never opens a socket; the viewer fetches only `src`                                                                                               | M2           |
 | Secrets and worlds | Server paths or credentials in the repo; an export hits a live world | No secrets in the repo; the pack root is explicit on every run; only the test world container mounts the pack                                                   | M3           |
 
-Runtime dependencies are limited to three.js, prismarine-nbt, ajv, a zip writer and the CLI argument parser
-(the CLI uses Node's built-in `util.parseArgs`).
+Runtime dependencies are limited to three.js, nbtify (NBT for `.mcstructure`, with its one dependency mutf-8), a zip
+writer (M7) and the CLI argument parser (Node's built-in `util.parseArgs`). The spec names prismarine-nbt for NBT;
+it compiles code with `eval` at import, which the site's CSP forbids, so nbtify replaces it at runtime (a pending
+spec amendment, see VERIFY.md M4) and prismarine-nbt is a dev dependency used only to decode files independently in
+tests. ajv is a dev dependency too: the schema validator is precompiled.
 
 ## Reporting a vulnerability
 

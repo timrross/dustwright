@@ -86,7 +86,8 @@ slug (E012).
 - **Validator rule:** a pure `Rule` (`code`, `stage`, `severity`, `editions`, `run`) added to the one `RULES`
   array in `packages/validator/src/rules/`. Codes are unique (tested) and documented in the catalogue
   `DIAGNOSTIC_CODES` (core), from which `docs/diagnostics.md` is generated.
-- **Exporter:** `Exporter { id, target, export(model, opts): { files, diagnostics } }`. Exporters return files;
+- **Exporter:** `Exporter { id, target, export(model, opts): ExportResult | Promise<ExportResult> }`, where
+  `ExportResult` is `{ files, diagnostics }`; callers always await. Exporters return files;
   only the CLI writes them (M3).
 - **Edition:** one `EditionProfile` per edition (below).
 - **Format:** a new major version adds `migrations/rsd-N-to-M.ts`. Additive optional keys stay in `rsd/1`.
@@ -118,7 +119,10 @@ pages. `rsd bundle` inlines that IIFE into one HTML file: `packages/cli/scripts/
 An exporter returns files (`{ path, bytes }`) relative to a pack root; it never touches the disk. The CLI's
 `writeIntoPack` is the one place that writes, and the one place path safety lives. The `.mcfunction` exporter
 emits only `setblock` and `fill` lines built from registry data and integers, plus one comment line carrying the
-slug and the registry version; a golden allowlist test checks every line of every example. The behavior pack in
+slug and the registry version; a golden allowlist test checks every line of every example. The `.mcstructure` exporter lays
+the model out as cells (z fastest, then y, then x; air as structure void) and encodes little-endian NBT with
+nbtify, which runs in Node and in the browser without generating code; exporters may return a Promise for
+this. The behavior pack in
 `packs/redstone-designs-bp/` is data only (one data module, no scripts) with UUIDs fixed in its manifest.
 
 ## Generated files

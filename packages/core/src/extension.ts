@@ -31,11 +31,14 @@ export interface ExportResult {
   diagnostics: Diagnostic[];
 }
 
-/** An exporter: turns a model into files for one edition. */
+/**
+ * An exporter: turns a model into files for one edition. It may finish asynchronously (the NBT writer for
+ * structures is async); callers always await the result.
+ */
 export interface Exporter {
   id: string;
   target: Edition;
-  export(model: Model, opts: ExportOptions): ExportResult;
+  export(model: Model, opts: ExportOptions): ExportResult | Promise<ExportResult>;
 }
 
 /** The edition-specific mechanics the simulator runs with. Filled in at M6. */
