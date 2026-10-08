@@ -1,0 +1,21 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Fixture",
+    "gameVersion": "1.26.50"
+  },
+  "legend": {
+    "#": "stone",
+    "t": "torch mount=west",
+    "-": "dust",
+    "*": "lamp"
+  },
+  "layers": [
+    [
+      "####"
+    ],
+    [
+      "#t-*"
+    ]
+  ]
+}

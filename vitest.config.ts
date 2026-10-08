@@ -6,6 +6,10 @@ const pkg = (name: string) => fileURLToPath(new URL(`./packages/${name}/src/inde
 export default defineConfig({
   resolve: {
     alias: [
+      {
+        find: "@dustwright/validator/static",
+        replacement: fileURLToPath(new URL("./packages/validator/src/static.ts", import.meta.url)),
+      },
       { find: /^@dustwright\/(core|validator|sim|viewer|export|mcp)$/, replacement: pkg("$1") },
       { find: /^dustwright$/, replacement: pkg("cli") },
     ],

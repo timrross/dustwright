@@ -101,3 +101,18 @@ export function toEditionBlocks(block: Block, edition: Edition): EditionBlock[] 
   }
   return result;
 }
+
+/** The three kinds of face a component can attach to. */
+export type FaceKind = "top" | "side" | "bottom";
+
+/**
+ * Whether `block` can hold a component on its `kind` face in `edition`, from the faces measured in game. Unknown
+ * types and editions without measurements hold nothing.
+ */
+export function holdsOnFace(block: Block, kind: FaceKind, edition: Edition = "bedrock"): boolean {
+  const entry = BY_TYPE.get(block.type);
+  const faces = edition === "bedrock" ? entry?.faces.bedrock : entry?.faces.java;
+  if (!faces) return false;
+  const match = faces.when?.find((w) => Object.entries(w.states).every(([k, v]) => block.states[k] === v));
+  return (match ?? faces)[kind];
+}

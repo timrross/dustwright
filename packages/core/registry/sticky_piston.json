@@ -10,7 +10,14 @@
     }
   },
   "needsSupport": null,
-  "supportsTop": false,
+  "faces": {
+    "bedrock": {
+      "top": true,
+      "side": true,
+      "bottom": true
+    },
+    "java": null
+  },
   "conductsPower": false,
   "geometry": {
     "builder": "piston",

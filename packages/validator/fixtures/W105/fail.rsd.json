@@ -1,0 +1,26 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Fixture",
+    "gameVersion": "1.26.50"
+  },
+  "legend": {
+    "#": "stone",
+    "P": "piston facing=east",
+    "L": "lever mount=floor"
+  },
+  "layers": [
+    [
+      "#."
+    ],
+    [
+      ".P"
+    ],
+    [
+      "#."
+    ],
+    [
+      "L."
+    ]
+  ]
+}

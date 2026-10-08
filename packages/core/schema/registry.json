@@ -9,13 +9,13 @@
     "editions",
     "states",
     "needsSupport",
-    "supportsTop",
     "conductsPower",
     "geometry",
     "sim",
     "bedrock",
     "verified",
-    "java"
+    "java",
+    "faces"
   ],
   "additionalProperties": false,
   "properties": {
@@ -90,21 +90,14 @@
               "additionalProperties": {
                 "$ref": "#/$defs/face"
               }
+            },
+            "anyBlock": {
+              "const": true,
+              "description": "Any block holds it (levers), not only a sturdy face."
             }
           }
         }
       ]
-    },
-    "supportsTop": {
-      "type": "boolean",
-      "description": "Whether the top face can hold a floor component."
-    },
-    "supportsTopWhen": {
-      "type": "object",
-      "description": "State values under which the top face can hold a floor component (overrides supportsTop).",
-      "additionalProperties": {
-        "type": ["string", "integer", "boolean"]
-      }
     },
     "occupies": {
       "type": "array",
@@ -188,6 +181,27 @@
           "$ref": "#/$defs/mapping"
         }
       ]
+    },
+    "faces": {
+      "type": "object",
+      "description": "Which faces can hold a component, per edition, as measured in game (deploy/test-world/measure-supports.mjs).",
+      "required": ["bedrock", "java"],
+      "additionalProperties": false,
+      "properties": {
+        "bedrock": {
+          "$ref": "#/$defs/editionFaces"
+        },
+        "java": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/editionFaces"
+            }
+          ]
+        }
+      }
     }
   },
   "$defs": {
@@ -340,6 +354,67 @@
         },
         "by": {
           "type": "string"
+        }
+      }
+    },
+    "faceSet": {
+      "type": "object",
+      "required": ["top", "side", "bottom"],
+      "additionalProperties": false,
+      "properties": {
+        "top": {
+          "type": "boolean"
+        },
+        "side": {
+          "type": "boolean"
+        },
+        "bottom": {
+          "type": "boolean"
+        }
+      }
+    },
+    "editionFaces": {
+      "type": "object",
+      "required": ["top", "side", "bottom"],
+      "additionalProperties": false,
+      "properties": {
+        "top": {
+          "type": "boolean",
+          "description": "Can hold floor components (dust, repeaters, comparators, floor torches and buttons, pressure plates, doors) on its top face."
+        },
+        "side": {
+          "type": "boolean",
+          "description": "Can hold wall torches and wall buttons on its side faces."
+        },
+        "bottom": {
+          "type": "boolean",
+          "description": "Can hold ceiling buttons on its bottom face."
+        },
+        "when": {
+          "type": "array",
+          "description": "Overrides for state combinations (the first match wins).",
+          "items": {
+            "type": "object",
+            "required": ["states", "top", "side", "bottom"],
+            "additionalProperties": false,
+            "properties": {
+              "states": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": ["string", "integer", "boolean"]
+                }
+              },
+              "top": {
+                "type": "boolean"
+              },
+              "side": {
+                "type": "boolean"
+              },
+              "bottom": {
+                "type": "boolean"
+              }
+            }
+          }
         }
       }
     }

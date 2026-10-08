@@ -12,7 +12,8 @@
       "@dustwright/export": ["./packages/export/src/index.ts"],
       "@dustwright/mcp": ["./packages/mcp/src/index.ts"],
       "dustwright": ["./packages/cli/src/index.ts"],
-      "@dustwright/viewer/browser": ["./packages/viewer/src/browser.ts"]
+      "@dustwright/viewer/browser": ["./packages/viewer/src/browser.ts"],
+      "@dustwright/validator/static": ["./packages/validator/src/static.ts"]
     }
   },
   "include": [

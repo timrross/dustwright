@@ -17,6 +17,13 @@ input[type="range"] { width: 90px; accent-color: var(--rv-accent); }
 .label.input { border-color: var(--rv-input); }
 .label.output { border-color: var(--rv-accent); }
 .pin { position: absolute; transform: translate(35%, -50%); pointer-events: auto; width: 22px; height: 22px; min-width: 0; min-height: 0; padding: 0; border-radius: 50%; background: var(--rv-accent); color: var(--rv-panel); border: 2px solid var(--rv-panel); font-weight: 700; font-size: 12px; line-height: 1; }
+.marker { position: absolute; transform: translate(40%, -60%); pointer-events: auto; width: 20px; height: 20px; min-width: 0; min-height: 0; padding: 0; border-radius: 50%; color: var(--rv-panel); border: 2px solid var(--rv-panel); font-weight: 700; font-size: 12px; line-height: 1; }
+.marker.error { background: var(--rv-error); }
+.marker.warning, .marker.info { background: var(--rv-warning); }
+.problems { margin: 0 0 8px; padding-left: 18px; }
+.problems li { margin: 0 0 4px; overflow-wrap: anywhere; }
+.problems li.error .code { color: var(--rv-error); }
+.problems li.warning .code { color: var(--rv-warning); }
 .note { position: absolute; max-width: 260px; padding: 6px 8px; background: var(--rv-panel); border: 1px solid var(--rv-border); border-radius: 6px; white-space: pre-wrap; overflow-wrap: anywhere; pointer-events: auto; }
 .inspector { width: 260px; padding: 8px 10px; background: var(--rv-panel); border-left: 1px solid var(--rv-border); overflow: auto; min-height: 0; }
 .inspector h2 { font-size: 14px; margin: 0 0 6px; }

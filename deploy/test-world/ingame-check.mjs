@@ -10,119 +10,34 @@
 // Probes test what the VERIFY-IN-GAME mappings mean, in controlled set-ups, with negative controls (the mappings
 // used before the M1 review must fail the same probes). Examples are built with their own functions and their
 // truth-table tests run on fresh builds. The orientation test is built and every block checked by ID.
-import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { parseText, registryEntry, toEditionBlocks } from "../../packages/core/dist/index.js";
 import { formatStates } from "../../packages/export/dist/index.js";
+import {
+  add,
+  at,
+  block,
+  cmd,
+  countGlass,
+  filledCells,
+  isBlock,
+  itemsExist,
+  OFF,
+  query,
+  sleep,
+  spec,
+  stalled,
+  useContainer,
+  worldTicks,
+} from "./console.mjs";
 
 const args = process.argv.slice(2);
 const container =
   args.find((a) => !a.startsWith("--") && args[args.indexOf(a) - 1] !== "--only") ?? "dustwright-test";
 const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null;
 const root = fileURLToPath(new URL("../..", import.meta.url));
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-/** The last 400 non-empty lines of the server log (each starts with a millisecond timestamp). */
-const logLines = () =>
-  execFileSync("docker", ["logs", "--tail", "400", container], {
-    encoding: "utf8",
-    stdio: ["ignore", "pipe", "pipe"],
-    maxBuffer: 16 * 1024 * 1024,
-  })
-    .split("\n")
-    .filter((l) => l.trim() !== "");
-const send = (command) =>
-  execFileSync("docker", ["exec", container, "send-command", command], { stdio: "ignore" });
-
-/** A query the server never answered, or answered with an error. */
-class NoAnswer extends Error {}
-
-/** Sends a command that needs no answer, then waits for the game to act on it. */
-async function cmd(command, settleMs = 120) {
-  send(command);
-  await sleep(settleMs);
-}
-
-/** Sends a query and returns the first new log line `match` recognises; throws NoAnswer after 3 seconds. */
-async function query(command, match) {
-  // Anchor on the last line logged before the command; only lines after it can be its answer.
-  const before = logLines();
-  const anchor = before[before.length - 1];
-  send(command);
-  for (let i = 0; i < 40; i++) {
-    await sleep(75);
-    const lines = logLines();
-    const from = anchor === undefined ? 0 : lines.lastIndexOf(anchor) + 1;
-    const line = lines.slice(from).find((l) => match.test(l));
-    if (line) return line;
-  }
-  throw new NoAnswer(`no answer to: ${command}`);
-}
-
-const at = (p) => p.join(" ");
-
-/** Whether the block at `p` is `id` (states optional). Throws NoAnswer when the game neither confirms nor denies. */
-async function isBlock(p, id) {
-  const coords = p.join(",");
-  const line = await query(
-    `testforblock ${at(p)} ${id}`,
-    new RegExp(
-      `(Successfully found the block at|The block at) ${coords}\\b|Cannot test|is invalid|[Ss]yntax error`,
-    ),
-  );
-  if (/Successfully found/.test(line)) return true;
-  if (new RegExp(`The block at ${coords}\\b`).test(line)) return false;
-  throw new NoAnswer(`testforblock ${at(p)} ${id}: ${line}`);
-}
-
-/** Whether any item entity exists (something popped off). Throws NoAnswer when the game does not say. */
-async function itemsExist() {
-  return /Found /.test(await query("testfor @e[type=item]", /Found |No targets matched/));
-}
-
-/**
- * Counts the glass blocks in a region by turning them into tinted glass (the server reports how many it changed).
- * Throws NoAnswer when the game does not say.
- */
-async function countGlass(a, b) {
-  const line = await query(
-    `fill ${at(a)} ${at(b)} minecraft:tinted_glass replace minecraft:glass`,
-    /\d+ blocks filled|outside|Unable/,
-  );
-  const n = /(\d+) blocks filled/.exec(line);
-  if (!n) throw new NoAnswer(`fill count: ${line}`);
-  return Number(n[1]);
-}
-
-/** Cells (relative "x,y,z") a design fills, its blocks' extra cells (a door's upper half) included. */
-function filledCells(model) {
-  const cells = new Set();
-  for (const [key, b] of model.blocks) {
-    const [x, y, z] = key.split(",").map(Number);
-    for (const e of toEditionBlocks(b, "bedrock"))
-      cells.add(`${x + e.offset[0]},${y + e.offset[1]},${z + e.offset[2]}`);
-  }
-  return cells;
-}
-
-/** A Bedrock block for an abstract type, with registry defaults for any state not given. */
-const block = (type, states) => {
-  const defaults = Object.fromEntries(
-    Object.entries(registryEntry(type).states).map(([k, d]) => [k, d.default]),
-  );
-  return toEditionBlocks({ type, states: { ...defaults, ...states } }, "bedrock")[0];
-};
-const spec = (b) => `${b.id}${formatStates(b.states)}`;
-const OFF = {
-  north: [0, 0, -1],
-  south: [0, 0, 1],
-  east: [1, 0, 0],
-  west: [-1, 0, 0],
-  up: [0, 1, 0],
-  down: [0, -1, 0],
-};
-const add = (p, d, k = 1) => [p[0] + d[0] * k, p[1] + d[1] * k, p[2] + d[2] * k];
+useContainer(container);
 
 const results = [];
 function record(area, name, pass, detail = "") {
@@ -791,29 +706,6 @@ async function structures() {
 await cmd("reload", 3000);
 await cmd("tickingarea add 0 0 0 79 0 63 dustwright-check");
 
-/**
- * Readiness: a server can accept commands while its chunks do not tick (after a warm restart, or mid-run), and then
- * no circuit reacts. Checks that a redstone block lights a canary lamp; `wait` retries for up to a minute.
- */
-async function worldTicks(wait) {
-  const lamp = [78, 2, 62];
-  for (let attempt = 0; attempt < (wait ? 30 : 2); attempt++) {
-    await cmd(`setblock ${at(lamp)} minecraft:redstone_lamp`);
-    await cmd(`setblock ${at(add(lamp, OFF.west))} minecraft:air`);
-    await cmd(`setblock ${at(add(lamp, OFF.west))} minecraft:redstone_block`, 600);
-    const lit = await isBlock(lamp, "minecraft:lit_redstone_lamp").catch(() => false);
-    await cmd(`fill ${at(add(lamp, OFF.west))} ${at(lamp)} minecraft:air`);
-    if (lit) return true;
-    await sleep(1400);
-  }
-  return false;
-}
-const stalled = (when) => {
-  console.error(
-    `the world stopped ticking (${when}): this run is invalid. Stop and start the server (a cold start, not a restart) and run again.`,
-  );
-  process.exit(2);
-};
 if (!(await worldTicks(true))) stalled("before the first check");
 if (!only || only === "probes") {
   await probes();

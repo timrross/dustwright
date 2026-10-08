@@ -10,8 +10,8 @@ sign-off) are listed under "Waiting on Tim" and logged in `VERIFY.md`.
 | M1        | Format, parser, registry, five examples, validator stage 1 | Done: review approved; mapping review and in-game checks pending Tim                                     | 38fcf19   |
 | M2        | Viewer MVP, playground, first single-file build            | Done: review approved; optional fps check by eye pending Tim                                             | 9935384   |
 | M3        | `.mcfunction` export, behavior pack, in-game proof         | Done: review approved; automated in-game check passes; Tim's visual sign-off pending                     | 8824fa0   |
-| M4        | `.mcstructure` export                                      | Done: review approved; automated in-game proof incl. rotation and round trip; Tim's visual check pending | M4 commit |
-| M5        | Validator stages 1 and 2                                   | In progress                                                                                              |           |
+| M4        | `.mcstructure` export                                      | Done: review approved; automated in-game proof incl. rotation and round trip; Tim's visual check pending | 13365cb   |
+| M5        | Validator stages 1 and 2                                   | Done: review approved; in-game suite re-run (116 passed, 0 failed, 6 skipped)                            | M5 commit |
 | M6        | Simulator                                                  | Not started                                                                                              |           |
 | M7        | Public site, embedding, bundle, layer sheets               | Not started                                                                                              |           |
 | M8        | LLM authoring: AUTHORING.md, patterns, eval, MCP           | Not started                                                                                              |           |
@@ -41,7 +41,11 @@ sign-off) are listed under "Waiting on Tim" and logged in `VERIFY.md`.
 
 ## Notes for later milestones (from reviews)
 
-- M5: diagnostic markers on blocks can reuse the viewer's label overlay (`labelNodes`).
+- M6: measure support faces of stairs in every facing (only the default was measured; other faces are treated as
+  not holding), and cross-check the stage 2 mechanics noted in `packages/validator/src/rules/power.ts`.
+- M7 (before publishing packages): `@dustwright/viewer` depends on the whole validator package, so installing it
+  pulls in sim, export and nbtify even though the bundle stays clean; move the static rules into core or a small
+  package.
 - M6: the power view needs a hook that overrides block states per tick and rebuilds the affected blocks' parts
   (the geometry builders are pure, so this is cheap).
 - M4: new structure files, like new function files, need a server restart before `/structure load` finds them.

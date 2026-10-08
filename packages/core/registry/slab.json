@@ -9,9 +9,23 @@
     }
   },
   "needsSupport": null,
-  "supportsTop": false,
-  "supportsTopWhen": {
-    "half": "top"
+  "faces": {
+    "bedrock": {
+      "top": false,
+      "side": false,
+      "bottom": true,
+      "when": [
+        {
+          "states": {
+            "half": "top"
+          },
+          "top": true,
+          "side": false,
+          "bottom": false
+        }
+      ]
+    },
+    "java": null
   },
   "conductsPower": false,
   "geometry": {

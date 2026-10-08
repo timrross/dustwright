@@ -4,7 +4,14 @@
   "editions": ["bedrock", "java"],
   "states": {},
   "needsSupport": null,
-  "supportsTop": true,
+  "faces": {
+    "bedrock": {
+      "top": true,
+      "side": true,
+      "bottom": true
+    },
+    "java": null
+  },
   "conductsPower": true,
   "geometry": {
     "builder": "cube",

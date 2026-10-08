@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
@@ -136,6 +136,61 @@ test("a design with stage 1 errors shows its diagnostics instead of the canvas",
   const viewer = page.locator("redstone-viewer");
   await expect(viewer.locator(".errors")).toContainText("E003");
   await expect(viewer.locator(".stage")).toBeHidden();
+});
+
+test.describe("diagnostic markers", () => {
+  const fixture = (code: string) =>
+    readFileSync(join(ROOT, "packages/validator/fixtures", code, "fail.rsd.json"), "utf8");
+
+  test("a stage 2 warning marks its block, and the marker opens the block with the finding", async ({
+    page,
+  }) => {
+    await loadDesign(page, fixture("W102"));
+    const viewer = page.locator("redstone-viewer");
+    // The repeater at [2,1,0] outputs into air.
+    expect(await viewer.evaluate((v: RV) => v.markedCells())).toEqual(["2,1,0"]);
+    const marker = viewer.locator(".marker.warning");
+    await expect(marker).toHaveAttribute("aria-label", /W102/);
+    await expect(page.locator("#diagnostics")).toContainText("W102 warning [2,1,0]");
+    await marker.click();
+    await expect(viewer.locator(".inspector")).toContainText("repeater");
+    await expect(viewer.locator(".inspector .problems")).toContainText("W102");
+  });
+
+  test("a stage 2 error still renders, with an error marker on each block it blames", async ({ page }) => {
+    await loadDesign(page, fixture("E006"));
+    const viewer = page.locator("redstone-viewer");
+    await expect(viewer.locator(".stage")).toBeVisible();
+    const cells = await viewer.evaluate((v: RV) => v.markedCells());
+    const blamed = await viewer.evaluate((v: RV) =>
+      v.diagnostics.filter((d) => d.code === "E006").map((d) => d.pos!.join(",")),
+    );
+    expect(blamed.length).toBeGreaterThan(0);
+    expect(cells.sort()).toEqual([...new Set(blamed)].sort());
+    await expect(viewer.locator(".marker.error")).toHaveCount(cells.length);
+  });
+
+  test("the markers match the playground's list, and a clean design has none", async ({ page }) => {
+    await openExample(page, "t-flip-flop");
+    const viewer = page.locator("redstone-viewer");
+    expect(await viewer.evaluate((v: RV) => v.markedCells().sort())).toEqual(["3,2,1", "3,2,4"]);
+    // W108 on the first repeater (not verified in game yet) and W102 on the one that outputs into air.
+    await expect(page.locator("#diagnostics")).toContainText("W108 warning [3,2,1]");
+    await expect(page.locator("#diagnostics")).toContainText("W102 warning [3,2,4]");
+    await openExample(page, "not-gate");
+    await expect(viewer.locator(".marker")).toHaveCount(0);
+  });
+
+  test("setDiagnostics replaces the markers", async ({ page }) => {
+    await openExample(page, "not-gate");
+    const viewer = page.locator("redstone-viewer");
+    await viewer.evaluate((v: RV) =>
+      v.setDiagnostics([{ code: "W101", severity: "warning", pos: [1, 1, 0], message: "from the host" }]),
+    );
+    expect(await viewer.evaluate((v: RV) => v.markedCells())).toEqual(["1,1,0"]);
+    await viewer.evaluate((v: RV) => v.setDiagnostics([]));
+    await expect(viewer.locator(".marker")).toHaveCount(0);
+  });
 });
 
 test("keyboard: [ and ] change the layer; the stage is focusable", async ({ page }) => {
@@ -282,6 +337,17 @@ test.describe("single-file bundle", () => {
     const m = await measure(page);
     expect(m.share).toBeGreaterThanOrEqual(0.35);
     expect(m.outside).toEqual({ iso: 0, top: 0 });
+  });
+
+  test("shows the static rules' markers without the playground", async ({ page }) => {
+    await page.goto(`file://${bundle("t-flip-flop", "tff")}`);
+    await page.waitForFunction(
+      () => (document.querySelector("redstone-viewer")?.visibleBlockCount() ?? 0) > 0,
+    );
+    expect(await page.locator("redstone-viewer").evaluate((v: RV) => v.markedCells().sort())).toEqual([
+      "3,2,1",
+      "3,2,4",
+    ]);
   });
 
   test("opens with networking disabled and renders the NOT gate", async ({ page, context }) => {

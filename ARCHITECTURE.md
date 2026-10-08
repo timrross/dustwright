@@ -25,7 +25,7 @@ design is clean.
 | `@dustwright/core`      | Schema, parser, normaliser, registry, editions    | nothing                        |
 | `@dustwright/sim`       | Tick-based Bedrock redstone simulator             | core                           |
 | `@dustwright/validator` | Stage 1 to 3 rules, diagnostics, edition profiles | core, sim, export              |
-| `@dustwright/viewer`    | Three.js viewer web component                     | core                           |
+| `@dustwright/viewer`    | Three.js viewer web component                     | core, validator (static rules) |
 | `@dustwright/export`    | `.mcfunction`, `.mcstructure`, `.mcpack`, sheets  | core                           |
 | `@dustwright/mcp`       | MCP server over stdio                             | core, validator, sim, export   |
 | `dustwright` (cli)      | The `dustwright` / `rsd` binary                   | everything except viewer, site |
@@ -82,7 +82,8 @@ slug (E012).
 - **Block:** one registry JSON file in `packages/core/registry/` (validated against
   `packages/core/schema/registry.json`), one viewer geometry builder (named in `GEOMETRY_BUILDERS`), one sim
   behaviour class (named in `SIM_CLASSES`). `test/registry.test.ts` asserts all three for every type and checks
-  every Bedrock ID and state against the pinned Mojang data.
+  every Bedrock ID and state against the pinned Mojang data. Support faces (`faces.bedrock`) come from the
+  in-game measurement in `docs/ingame/`, and `packages/core/test/supports.test.ts` keeps them in step.
 - **Validator rule:** a pure `Rule` (`code`, `stage`, `severity`, `editions`, `run`) added to the one `RULES`
   array in `packages/validator/src/rules/`. Codes are unique (tested) and documented in the catalogue
   `DIAGNOSTIC_CODES` (core), from which `docs/diagnostics.md` is generated.
@@ -108,6 +109,11 @@ parts, ghosted parts (layers above the cut, 15% opacity) and direction arrows. C
 explode, overlay or step rebuilds the instance buffers; rendering is on demand. Picking tests the ray against each
 shown block's whole cell, so thin parts (wall torches, dust) are as easy to click as cubes. Labels, pins, the
 inspector and diagnostics are DOM in the shadow root, written with `textContent` only.
+
+On load the viewer runs the static rules (stages 1 and 2) through `@dustwright/validator/static`, an entry point
+that imports only core, so the bundle carries no simulator or exporter. Each blamed cell gets one marker in the
+label overlay, coloured by its worst severity; clicking it selects the block, and the inspector lists the findings.
+Hosts that run more checks (the playground runs the full validator) pass their diagnostics with `setDiagnostics`.
 
 Three shapes ship: the library (`@dustwright/viewer` for Node-safe geometry, `@dustwright/viewer/browser` for the
 element), an IIFE bundle (`dist/bundle/redstone-viewer.js`) with three.js and the parser inlined, and the site's

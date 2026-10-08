@@ -95,8 +95,11 @@ signal from west to east is `repeater facing=east`. Torches have no `ceiling` mo
 | `trapdoor`        | consumer     | `facing` north/south/east/west (default north); `half` bottom/top (default bottom); `open` false/true (default false); `material` wood/iron (default wood) | —             | output (0/1)   |
 | `wool`            | solid        | `color` 16 dye colours, e.g. white/red/light_blue (default white)                                                                                          | —             | —              |
 
-"Needs support" blocks must sit on a solid block (below), or on the block their `mount` names. Inputs are what a
-test can drive (`set`); outputs are what it can read (`expect`), with the values they report.
+"Needs support" blocks must sit on a block that holds them (below), or on the block their `mount` names (E006).
+Measured on Bedrock: full blocks (stone, wool, concrete, lamps, pistons, observers, ...) and glass hold on every
+face; honey, hoppers and top-half slabs, stairs and trapdoors hold only on top; bottom-half slabs, stairs and closed
+trapdoors, and daylight sensors, hold only underneath; open trapdoors hold nothing. Levers attach to any block.
+Inputs are what a test can drive (`set`); outputs are what it can read (`expect`), with the values they report.
 
 - `door` occupies two cells: put it in the lower cell and leave the cell above as air (`.`); the upper half is
   placed for you.
@@ -166,9 +169,13 @@ steps. Exceeding a limit is E013.
    (add `90_degrees` and so on to turn it). Use it for builds over 10,000 blocks (E014).
 
 Common codes: E002 ragged grid, E003 character not in legend, E004 unknown type (hint has the closest names),
-E005 bad key or value (hint lists the allowed ones), E008 position outside the grid or on air, E011 port or test
-reference, E012 slug, E013 limit. W108 means a block's in-game mapping is not verified yet; it is safe to ignore
-while authoring. The full list is in `docs/diagnostics.md`.
+E005 bad key or value (hint lists the allowed ones), E006 a component with nothing that holds it, E008 position
+outside the grid or on air, E011 port or test reference, E012 slug, E013 limit. Stage 2 warnings point at likely
+wiring mistakes: W101 dust too long, W102 a repeater or comparator pointing at nothing, W103 dust that
+connects nothing, W104 a torch that powers its own support (a burnout loop), W105 a piston that only Java's
+quasi-connectivity would power. W108 means a block's in-game mapping is not verified yet; it is safe to ignore
+while authoring. `--strict` makes any warning fail. The full list is in `docs/diagnostics.md`, and the `--json`
+output follows `packages/core/schema/diagnostics.json`.
 
 ## Common mistakes
 
@@ -176,7 +183,7 @@ while authoring. The full list is in `docs/diagnostics.md`.
 - Reading layers top-down. `layers[0]` is the **bottom**.
 - Mixing up `mount` and `facing`: torches, levers and buttons use `mount` (where the support is).
 - A component with nothing under it: dust, repeaters, comparators, pressure plates and floor torches need a
-  solid block below.
+  block below that holds them; a bottom slab does not (E006).
 - A port on air, or an output port on stone (E008, E011).
 - Relying on quasi-connectivity for a piston (see above).
 

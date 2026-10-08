@@ -50,13 +50,19 @@ docker run --rm --platform linux/amd64 --ipc=host -v "$PWD":/work mcr.microsoft.
    regenerated `packages/core/src/generated/registry.ts`, `docs/bedrock-mapping.md` and
    `docs/verify-in-game.md`. Mark every state meaning you could not read from the pinned data with a
    `"verify": "VERIFY-IN-GAME: ..."` note.
+5. Give it `faces.bedrock` (which faces hold a floor, wall or ceiling component) from a measurement, not memory:
+   add the block to `deploy/test-world/measure-supports.mjs`, run it against the test world, and save the table
+   under `docs/ingame/`. `packages/core/test/supports.test.ts` checks the registry against that table.
 
 A test asserts all three parts exist for every registry type, so a half-added block fails CI.
 
 ## Add a validator rule
 
-Write a pure `Rule` in `packages/validator/src/rules/`, register it in the rule array, add a passing and a failing
-fixture in `packages/validator/fixtures/`, and regenerate `docs/diagnostics.md`. Codes are unique (tested).
+Write a pure `Rule` in `packages/validator/src/rules/`, register it in the rule array, add the code to
+`DIAGNOSTIC_CODES` and to the enum in `packages/core/schema/diagnostics.json`, add
+`packages/validator/fixtures/<code>/pass.rsd.json` and `fail.rsd.json`, and regenerate `docs/diagnostics.md`.
+Codes are unique, every code has both fixtures, and the schema's enum matches the catalogue (all tested). Rules in
+stages 1 and 2 must import only core: the viewer bundles them through `@dustwright/validator/static`.
 
 ## Add a pattern
 

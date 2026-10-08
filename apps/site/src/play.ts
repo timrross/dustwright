@@ -53,7 +53,8 @@ function update(): void {
   status.textContent =
     errors > 0 ? `${errors} error(s), ${warnings} other` : `No errors (${warnings} warnings or notes)`;
   // The viewer renders whatever stage 1 accepts; a design with parse errors shows its diagnostics instead.
-  viewer.load(text);
+  // The markers on the blocks show the same findings as the list (the full validator, not only the static rules).
+  if (viewer.load(text)) viewer.setDiagnostics(result.diagnostics);
   document.body.dataset.validated = String(Date.now());
 }
 

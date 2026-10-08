@@ -24,7 +24,14 @@
   "needsSupport": {
     "face": "down"
   },
-  "supportsTop": false,
+  "faces": {
+    "bedrock": {
+      "top": false,
+      "side": false,
+      "bottom": false
+    },
+    "java": null
+  },
   "occupies": [[0, 1, 0]],
   "conductsPower": false,
   "geometry": {

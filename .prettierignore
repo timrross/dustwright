@@ -13,3 +13,5 @@ playwright-report/
 test-results/
 e2e/__screenshots__/
 examples/orientation-test.rsd.json
+packages/validator/fixtures/
+.pnpm-store/

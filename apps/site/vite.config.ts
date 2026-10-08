@@ -9,6 +9,7 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: "@dustwright/viewer/browser", replacement: entry("viewer", "browser.ts") },
+      { find: "@dustwright/validator/static", replacement: entry("validator", "static.ts") },
       { find: /^@dustwright\/(core|validator|sim|export|viewer)$/, replacement: entry("$1") },
     ],
   },

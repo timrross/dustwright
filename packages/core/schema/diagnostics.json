@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dustwright.dev/schema/diagnostics.json",
+  "title": "Dustwright diagnostics output",
+  "description": "The single JSON document that `rsd validate --json` and `rsd export --json` print on stdout. Codes are documented in docs/diagnostics.md.",
+  "type": "object",
+  "required": ["ok", "diagnostics"],
+  "additionalProperties": false,
+  "properties": {
+    "ok": {
+      "type": "boolean",
+      "description": "False when there is an error, or any warning under --strict."
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/diagnostic"
+      }
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "rsd export only: the files written, in order."
+    },
+    "error": {
+      "type": "string",
+      "description": "Set when the command could not run at all (unreadable file, bad arguments)."
+    }
+  },
+  "$defs": {
+    "pos": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "integer"
+        },
+        {
+          "type": "integer"
+        }
+      ],
+      "items": false,
+      "minItems": 3,
+      "description": "A cell, [x, y, z]: x east, y up, z south, from the design origin."
+    },
+    "diagnostic": {
+      "type": "object",
+      "required": ["code", "severity", "message"],
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "E001",
+            "E002",
+            "E003",
+            "E004",
+            "E005",
+            "E006",
+            "E007",
+            "E008",
+            "E009",
+            "E010",
+            "E011",
+            "E012",
+            "E013",
+            "E014",
+            "E015",
+            "W101",
+            "W102",
+            "W103",
+            "W104",
+            "W105",
+            "W106",
+            "W107",
+            "W108",
+            "T001",
+            "T002",
+            "T003"
+          ],
+          "description": "The diagnostic code; see docs/diagnostics.md."
+        },
+        "severity": {
+          "enum": ["error", "warning", "info"]
+        },
+        "pos": {
+          "$ref": "#/$defs/pos",
+          "description": "The cell to blame, when there is one."
+        },
+        "path": {
+          "type": "string",
+          "description": "A JSON Pointer into the design, for schema-level findings."
+        },
+        "related": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pos"
+          },
+          "description": "Other cells involved."
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hint": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

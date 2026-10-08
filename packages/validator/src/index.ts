@@ -7,6 +7,7 @@
 export const PACKAGE_NAME = "@dustwright/validator";
 
 export { validate, validateText } from "./validate.js";
+export { checkStatic } from "./static.js";
 export type { ValidateOptions, ValidationResult } from "./validate.js";
 export { BEDROCK_PROFILE, JAVA_PROFILE, PROFILES, profileFor } from "./profiles.js";
 export { RULES } from "./rules/index.js";

@@ -12,6 +12,9 @@
   "references": [
     {
       "path": "../core/tsconfig.build.json"
+    },
+    {
+      "path": "../validator/tsconfig.build.json"
     }
   ]
 }

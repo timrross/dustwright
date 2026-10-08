@@ -20,7 +20,14 @@
   "needsSupport": {
     "face": "down"
   },
-  "supportsTop": false,
+  "faces": {
+    "bedrock": {
+      "top": false,
+      "side": false,
+      "bottom": false
+    },
+    "java": null
+  },
   "conductsPower": false,
   "geometry": {
     "builder": "comparator",

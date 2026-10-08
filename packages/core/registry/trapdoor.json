@@ -22,7 +22,33 @@
     }
   },
   "needsSupport": null,
-  "supportsTop": false,
+  "faces": {
+    "bedrock": {
+      "top": false,
+      "side": false,
+      "bottom": true,
+      "when": [
+        {
+          "states": {
+            "half": "top",
+            "open": false
+          },
+          "top": true,
+          "side": false,
+          "bottom": false
+        },
+        {
+          "states": {
+            "open": true
+          },
+          "top": false,
+          "side": false,
+          "bottom": false
+        }
+      ]
+    },
+    "java": null
+  },
   "conductsPower": false,
   "geometry": {
     "builder": "trapdoor",

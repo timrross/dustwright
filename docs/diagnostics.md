@@ -15,7 +15,7 @@ reported alongside the stage 1 errors.
 | E003 | error | 1 (structure) | parser | A grid character is not in the legend. | Add the character to `legend`, or use `.` for air. |
 | E004 | error | 1 (structure) | parser | Unknown block type, or a type that does not exist in this edition. | Use a type from the registry; the hint lists the closest names. |
 | E005 | error | 1 (structure) | parser | Malformed block spec, unknown state key, or a value outside the key's domain. | Use `<type> key=value ...` with single spaces; the hint lists the allowed keys or values. |
-| E006 | error | 2 (placement and wiring) | parser | A component lacks the block it needs for support. | Place a solid block on the named face, or change the mount. |
+| E006 | error | 2 (placement and wiring) | validator rule | A component lacks the block it needs for support. | Place a solid block on the named face, or change the mount. |
 | E007 | error | 1 (structure) | parser | The bounding box exceeds 64 × 384 × 64, the Bedrock structure limit. | Make the design smaller. |
 | E008 | error | 1 (structure) | parser | A port, annotation, override, step or extra cell is outside the grid, or a port or annotation sits on air. | Use a position inside the grid that holds a block. |
 | E009 | error | 2 (placement and wiring) | parser | Two blocks claim the same cell (repeated `blocks` overrides, or a block's extra cell such as a door's upper half). | Keep one block per cell; leave the cell above a door as air. |
@@ -25,11 +25,11 @@ reported alongside the stage 1 errors.
 | E013 | error | 1 (structure) | parser | A hard limit is exceeded; the message names it. | Reduce the item below the limit. |
 | E014 | error | export | exporter | The .mcfunction export would exceed the function command limit. | Export with `--to mcstructure`, or pass `--command-limit` for a server that raised the gamerule. |
 | E015 | error | 1 (structure) | validator rule | `meta.edition` names an edition whose profile is not implemented yet. | Use `edition: bedrock`; Java support arrives in M9. |
-| W101 | warning | 2 (placement and wiring) | parser | A dust run is longer than 15 from its nearest source with no repeater. | Insert a repeater before the signal fades. |
-| W102 | warning | 2 (placement and wiring) | parser | A repeater or comparator outputs into air or a non-conducting block with no consumer. | Point it at a consumer, dust or a conducting block. |
-| W103 | warning | 2 (placement and wiring) | parser | Isolated dust with no source or consumer in reach. | Connect the dust or remove it. |
-| W104 | warning | 2 (placement and wiring) | parser | A torch sits on a block that is powered every tick in a loop (burnout risk). | Break the loop or add delay. |
-| W105 | warning | 2 (placement and wiring) | parser | The design relies on a Java-only mechanic, such as quasi-connectivity. | Power the piston directly; Bedrock has no quasi-connectivity. |
+| W101 | warning | 2 (placement and wiring) | validator rule | A dust run is longer than 15 from its nearest source with no repeater. | Insert a repeater before the signal fades. |
+| W102 | warning | 2 (placement and wiring) | validator rule | A repeater or comparator outputs into air or a non-conducting block with no consumer. | Point it at a consumer, dust or a conducting block. |
+| W103 | warning | 2 (placement and wiring) | validator rule | Isolated dust with no source or consumer in reach. | Connect the dust or remove it. |
+| W104 | warning | 2 (placement and wiring) | validator rule | A torch sits on a block that is powered every tick in a loop (burnout risk). | Break the loop or add delay. |
+| W105 | warning | 2 (placement and wiring) | validator rule | The design relies on a Java-only mechanic, such as quasi-connectivity. | Power the piston directly; Bedrock has no quasi-connectivity. |
 | W106 | warning | 1 (structure) | parser | A legend key is not used by any layer. | Remove the key or use it. |
 | W107 | warning | 1 (structure) | validator rule | `meta.gameVersion` differs from the registry's pinned game version. | Re-verify the design in that version, or update `meta.gameVersion`. |
 | W108 | warning | 1 (structure) | validator rule | A block's mapping has not been proven in game yet (VERIFY-IN-GAME). | Check the block in a test world before relying on its orientation. |

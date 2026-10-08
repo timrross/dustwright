@@ -10,7 +10,14 @@
     }
   },
   "needsSupport": null,
-  "supportsTop": true,
+  "faces": {
+    "bedrock": {
+      "top": true,
+      "side": false,
+      "bottom": false
+    },
+    "java": null
+  },
   "conductsPower": false,
   "geometry": {
     "builder": "hopper",

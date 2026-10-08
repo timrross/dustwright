@@ -9,7 +9,14 @@
     }
   },
   "needsSupport": null,
-  "supportsTop": false,
+  "faces": {
+    "bedrock": {
+      "top": false,
+      "side": false,
+      "bottom": true
+    },
+    "java": null
+  },
   "conductsPower": false,
   "geometry": {
     "builder": "daylight_sensor",

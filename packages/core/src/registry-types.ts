@@ -40,8 +40,21 @@ export interface Verification {
   by: string;
 }
 
-/** Where a component needs a supporting block: a fixed face, or a face chosen by a state (a torch's `mount`). */
-export type SupportRule = { face: Face } | { byState: string; map: Readonly<Record<string, Face>> } | null;
+/**
+ * Where a component needs a supporting block: a fixed face, or a face chosen by a state (a torch's `mount`).
+ * `anyBlock` means any block holds it (levers), not only a sturdy face.
+ */
+export type SupportRule =
+  { face: Face } | { byState: string; map: Readonly<Record<string, Face>>; anyBlock?: true } | null;
+
+/** Which faces of a block can hold components, as measured in game for one edition. */
+export interface SturdyFaces {
+  top: boolean;
+  side: boolean;
+  bottom: boolean;
+  /** Overrides for state combinations; the first match wins. */
+  when?: readonly ({ states: Readonly<Record<string, StateValue>> } & Omit<SturdyFaces, "when">)[];
+}
 
 /** One registry entry, as stored in `packages/core/registry/<type>.json`. */
 export interface RegistryEntry {
@@ -50,8 +63,8 @@ export interface RegistryEntry {
   editions: readonly Edition[];
   states: Readonly<Record<string, StateDef>>;
   needsSupport: SupportRule;
-  supportsTop: boolean;
-  supportsTopWhen?: Readonly<Record<string, StateValue>>;
+  /** Sturdy faces per edition, measured in game (deploy/test-world/measure-supports.mjs). */
+  faces: { bedrock: SturdyFaces; java: SturdyFaces | null };
   occupies?: readonly (readonly [number, number, number])[];
   conductsPower: boolean;
   geometry: { builder: string; color: string };

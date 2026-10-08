@@ -58,8 +58,11 @@ export function loadRegistry() {
     if (entry.needsSupport && "byState" in entry.needsSupport) {
       checkFrom("needsSupport", entry.needsSupport.byState, entry.needsSupport.map);
     }
-    for (const key of Object.keys(entry.supportsTopWhen ?? {})) {
-      if (!entry.states[key]) problems.push(`${file}: supportsTopWhen names unknown state ${key}`);
+    for (const w of entry.faces.bedrock.when ?? []) {
+      for (const [key, value] of Object.entries(w.states)) {
+        if (!entry.states[key]?.values.includes(value))
+          problems.push(`${file}: faces.when names ${key}=${value}, not a state value`);
+      }
     }
     return entry;
   });

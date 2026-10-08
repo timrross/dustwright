@@ -22,9 +22,17 @@
       "south": "south",
       "east": "east",
       "west": "west"
-    }
+    },
+    "anyBlock": true
   },
-  "supportsTop": false,
+  "faces": {
+    "bedrock": {
+      "top": false,
+      "side": false,
+      "bottom": false
+    },
+    "java": null
+  },
   "conductsPower": false,
   "geometry": {
     "builder": "lever",

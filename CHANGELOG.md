@@ -7,6 +7,12 @@ All notable user-facing changes are recorded here. The format follows
 
 ### Added
 
+- M5: validator stage 2. E006 (a component with nothing that holds it, from support faces measured in game), W101
+  (dust too long), W102 (a diode pointing at nothing), W103 (dust that connects nothing), W104 (a torch that powers
+  its own support) and W105 (a piston only quasi-connectivity would power). Every diagnostic code has a passing and
+  a failing fixture. The `--json` output is described by `packages/core/schema/diagnostics.json`. The viewer marks
+  the blocks each finding blames, in the playground and in single-file bundles.
+
 - M4: `rsd export --to mcstructure`, proven in game: every example loads, also turned 90 degrees, and passes its
   tests (the 2x2 door's exact placement is not checked, as it moves at rest); structures saved by the game match the
   exports block for block (the container encoding differs).
@@ -29,3 +35,8 @@ All notable user-facing changes are recorded here. The format follows
 
 - M0: monorepo scaffold (`core`, `validator`, `sim`, `viewer`, `export`, `cli`, `mcp`, app `site`), CI, lint,
   licence allowlist and `rsd --help`.
+
+### Changed
+
+- M5: the registry's `supportsTop` is replaced by `faces` (`top`, `side`, `bottom`, with state-dependent
+  overrides), measured in game by `deploy/test-world/measure-supports.mjs`.

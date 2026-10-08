@@ -14,3 +14,4 @@ playwright-report/
 packs/redstone-designs-bp/functions/
 packs/redstone-designs-bp/structures/
 deploy/test-world/data/
+.pnpm-store/

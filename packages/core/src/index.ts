@@ -30,6 +30,7 @@ export type {
   SimClass,
   StateDef,
   StateMapping,
+  SturdyFaces,
   SupportRule,
   Verification,
 } from "./registry-types.js";
@@ -51,11 +52,13 @@ export { inBounds, keyPos, offsetPos, posKey } from "./pos.js";
 export {
   closestTypes,
   editionMapping,
+  holdsOnFace,
   REGISTRY,
   registryEntry,
   toEditionBlocks,
   valueText,
 } from "./registry.js";
+export type { FaceKind } from "./registry.js";
 export type { EditionBlock } from "./registry.js";
 export { deriveSlug, isValidSlug, SLUG_MAX, SLUG_PATTERN } from "./slug.js";
 export { formatSpec, parseSpec, printable, splitSpec, typedValue } from "./spec.js";

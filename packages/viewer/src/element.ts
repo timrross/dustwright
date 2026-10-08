@@ -1,5 +1,6 @@
-import { LIMITS, parse, parseText, posKey } from "@dustwright/core";
-import type { Diagnostic, Model, Pos, StateValue } from "@dustwright/core";
+import { inBounds, LIMITS, parse, parseText, posKey } from "@dustwright/core";
+import type { Diagnostic, Model, Pos, Severity, StateValue } from "@dustwright/core";
+import { checkStatic } from "@dustwright/validator/static";
 import { THEMES, type ThemeName } from "./palette.js";
 import { type BlockInfo, type SnapView, type ViewerMode, ViewerScene } from "./scene.js";
 import { VIEWER_CSS } from "./styles.js";
@@ -9,6 +10,11 @@ export const ELEMENT_NAME = "redstone-viewer";
 
 /** Below this width the inspector becomes a bottom sheet. */
 const NARROW_PX = 520;
+
+/** At most this many cells get a diagnostic marker; the rest are still listed in the inspector summary. */
+export const MAX_MARKERS = 256;
+
+const SEVERITY_RANK: Record<Severity, number> = { error: 2, warning: 1, info: 0 };
 
 /** Message source tag on every postMessage the viewer sends to a parent window. */
 export const MESSAGE_SOURCE = "dustwright-viewer";
@@ -66,7 +72,8 @@ async function readCapped(res: Response, limit: number): Promise<string> {
 /**
  * `<redstone-viewer>`: a read-only 3D view of a Dustwright design. Attributes: `src` (same-origin or https: URL)
  * or an inline `<script type="application/json">` child, `mode` (explore | instructions), `layer`, `step`, `height`,
- * `theme` (light | dark | auto). Events (DOM and, inside an iframe, postMessage to the parent): `ready`, `select`,
+ * `theme` (light | dark | auto). Diagnostics from the stage 1 and 2 rules (or from `setDiagnostics`) show as
+ * markers on the blocks they blame. Events (DOM and, inside an iframe, postMessage to the parent): `ready`, `select`,
  * `step`.
  */
 export class RedstoneViewer extends HTMLElement {
@@ -297,9 +304,27 @@ export class RedstoneViewer extends HTMLElement {
     return this.currentModel;
   }
 
-  /** Diagnostics from the last load. */
+  /** Diagnostics for the loaded design: the stage 1 and 2 findings, or what `setDiagnostics` last set. */
   get diagnostics(): readonly Diagnostic[] {
     return this.currentDiagnostics;
+  }
+
+  /**
+   * Replaces the diagnostics shown as markers, for hosts that run more checks (such as the stage 3 simulator) than
+   * the viewer does. Takes effect for the loaded design; the next `load` recomputes them.
+   */
+  setDiagnostics(diagnostics: readonly Diagnostic[]): void {
+    this.currentDiagnostics = [...diagnostics];
+    const model = this.currentModel;
+    if (!model || !this.scene) return;
+    this.buildLabels(model);
+    this.positionLabels();
+    this.showInspector(this.scene.info(this.scene.selected));
+  }
+
+  /** Cells that carry a diagnostic marker, as `x,y,z` keys (tests and host pages). */
+  markedCells(): string[] {
+    return this.labelNodes.filter((l) => l.node.classList.contains("marker")).map((l) => posKey(l.pos));
   }
 
   /**
@@ -309,7 +334,9 @@ export class RedstoneViewer extends HTMLElement {
   load(design: unknown): boolean {
     this.loadToken++;
     const result = typeof design === "string" ? parseText(design) : parse(design);
-    this.currentDiagnostics = result.diagnostics;
+    this.currentDiagnostics = result.model
+      ? [...result.diagnostics, ...checkStatic(result.model)]
+      : result.diagnostics;
     if (!result.model) {
       this.currentModel = null;
       this.showErrors(result.diagnostics);
@@ -513,6 +540,46 @@ export class RedstoneViewer extends HTMLElement {
       this.labels.appendChild(pin);
       this.labelNodes.push({ node: pin, pos: a.pos, lift: 0.6 });
     });
+    this.buildMarkers(model);
+  }
+
+  /** Diagnostics that blame a cell of the design, grouped by cell. */
+  private diagnosticsByCell(model: Model): Map<string, Diagnostic[]> {
+    const cells = new Map<string, Diagnostic[]>();
+    for (const d of this.currentDiagnostics) {
+      if (!d.pos || !inBounds(d.pos, model.size)) continue;
+      const key = posKey(d.pos);
+      cells.set(key, [...(cells.get(key) ?? []), d]);
+    }
+    return cells;
+  }
+
+  /** One marker per blamed cell, coloured by its worst severity. Clicking it selects the block. */
+  private buildMarkers(model: Model): void {
+    let count = 0;
+    for (const [key, list] of this.diagnosticsByCell(model)) {
+      if (count++ >= MAX_MARKERS) break;
+      const pos = list[0]?.pos as Pos;
+      const worst = list.reduce<Severity>(
+        (w, d) => (SEVERITY_RANK[d.severity] > SEVERITY_RANK[w] ? d.severity : w),
+        "info",
+      );
+      const marker = el("button", { className: `marker ${worst}`, text: worst === "error" ? "×" : "!" });
+      marker.type = "button";
+      marker.dataset.pos = key;
+      const codes = [...new Set(list.map((d) => d.code))].join(", ");
+      marker.setAttribute(
+        "aria-label",
+        `${list.length} ${list.length === 1 ? "problem" : "problems"} at [${key}]: ${codes}`,
+      );
+      marker.setAttribute("title", list.map((d) => `${d.code} ${d.severity}: ${d.message}`).join("\n"));
+      marker.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        this.select(pos);
+      });
+      this.labels.appendChild(marker);
+      this.labelNodes.push({ node: marker, pos, lift: 1 });
+    }
   }
 
   private toggleNote(pin: HTMLElement, text: string): void {
@@ -562,6 +629,15 @@ export class RedstoneViewer extends HTMLElement {
           }),
         );
       }
+      const errors = this.currentDiagnostics.filter((d) => d.severity === "error").length;
+      const warnings = this.currentDiagnostics.filter((d) => d.severity === "warning").length;
+      if (errors + warnings > 0) {
+        summary.push(
+          el("p", {
+            text: `${errors} error(s), ${warnings} warning(s). Markers show the blocks they concern; click one for details.`,
+          }),
+        );
+      }
       summary.push(
         el("p", { className: "muted", text: "Click a block to see its type, states and Bedrock mapping." }),
       );
@@ -587,6 +663,24 @@ export class RedstoneViewer extends HTMLElement {
           ...Object.entries(b.states).map(([k, v]) => [k, valueText(v)] as [string, string]),
         ]),
       );
+    }
+    const problems = this.currentModel
+      ? this.diagnosticsByCell(this.currentModel).get(posKey(info.pos))
+      : undefined;
+    if (problems) {
+      const list = el("ul", { className: "problems" });
+      for (const d of problems) {
+        list.appendChild(
+          el(
+            "li",
+            { className: d.severity },
+            el("span", { className: "code", text: d.code }),
+            document.createTextNode(` ${d.severity}: ${d.message}`),
+            ...(d.hint ? [el("br"), el("span", { className: "hint", text: d.hint })] : []),
+          ),
+        );
+      }
+      parts.push(el("h2", { text: "Problems" }), list);
     }
     this.inspector.replaceChildren(...parts);
   }
