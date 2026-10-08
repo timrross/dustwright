@@ -1,5 +1,6 @@
 import { inBounds, LIMITS, parse, parseText, posKey } from "@dustwright/core";
 import type { Diagnostic, Model, Pos, Severity, StateValue } from "@dustwright/core";
+import { GAME_TICKS_PER_REDSTONE_TICK, SETTLE_TICKS, settle, Simulation } from "@dustwright/sim";
 import { checkStatic } from "@dustwright/validator/static";
 import { THEMES, type ThemeName } from "./palette.js";
 import { type BlockInfo, type SnapView, type ViewerMode, ViewerScene } from "./scene.js";
@@ -10,6 +11,18 @@ export const ELEMENT_NAME = "redstone-viewer";
 
 /** Below this width the inspector becomes a bottom sheet. */
 const NARROW_PX = 520;
+
+/** Game ticks the power view's free run lasts (no inputs set): 10 seconds. */
+export const FREE_RUN_TICKS = 200;
+
+/**
+ * The power view refuses designs whose longest possible run (blocks x game ticks, settle cap included) exceeds
+ * this, so a large design cannot freeze the page. A run this size takes well under a second.
+ */
+const POWER_VIEW_WORK = 2_000_000;
+
+/** Formats a game-tick count as redstone ticks (halves when needed). */
+const redstoneTicks = (gameTicks: number) => String(gameTicks / GAME_TICKS_PER_REDSTONE_TICK);
 
 /** At most this many cells get a diagnostic marker; the rest are still listed in the inspector summary. */
 export const MAX_MARKERS = 256;
@@ -98,7 +111,18 @@ export class RedstoneViewer extends HTMLElement {
     stepLabel: HTMLSpanElement;
     layerGroup: HTMLSpanElement;
     stepGroup: HTMLSpanElement;
+    power: HTMLSelectElement;
+    powerTick: HTMLInputElement;
+    powerLabel: HTMLSpanElement;
+    powerGroup: HTMLSpanElement;
   };
+  /** The power view: which run is shown, the simulation at `tick`, and where the inputs are set. */
+  private power: {
+    test: number | "free";
+    sim: Simulation;
+    settleTicks: number;
+    maxTick: number;
+  } | null = null;
   private scene: ViewerScene | null = null;
   private currentModel: Model | null = null;
   private currentDiagnostics: Diagnostic[] = [];
@@ -181,6 +205,23 @@ export class RedstoneViewer extends HTMLElement {
       isolate,
     );
     const stepGroup = el("span", { className: "group" }, back, stepLabel, next);
+    const power = el("select");
+    power.setAttribute("aria-label", "Power view: show simulated power for a test case");
+    power.addEventListener("change", () =>
+      this.setPowerView(power.value === "" ? null : power.value === "free" ? "free" : Number(power.value)),
+    );
+    const powerTick = range("Simulated tick", 0, 0, 1);
+    powerTick.addEventListener("input", () => this.setPowerTick(Number(powerTick.value)));
+    const powerLabel = el("span", { className: "muted" });
+    powerLabel.setAttribute("aria-live", "polite");
+    const powerGroup = el(
+      "span",
+      { className: "group" },
+      el("span", { text: "Power", className: "wide-only" }),
+      power,
+    );
+    const powerTickGroup = el("span", { className: "group" }, powerTick, powerLabel);
+    powerTickGroup.hidden = true;
     const toolbar = el(
       "div",
       { className: "toolbar" },
@@ -191,6 +232,8 @@ export class RedstoneViewer extends HTMLElement {
       arrows,
       mode,
       stepGroup,
+      powerGroup,
+      powerTickGroup,
     );
     toolbar.setAttribute("role", "toolbar");
     toolbar.setAttribute("aria-label", "Viewer controls");
@@ -206,6 +249,10 @@ export class RedstoneViewer extends HTMLElement {
       stepLabel,
       layerGroup,
       stepGroup,
+      power,
+      powerTick,
+      powerLabel,
+      powerGroup: powerTickGroup,
     };
     this.canvasHost = el("div");
     this.labels = el("div", { className: "labels" });
@@ -322,6 +369,148 @@ export class RedstoneViewer extends HTMLElement {
     this.showInspector(this.scene.info(this.scene.selected));
   }
 
+  /** Rebuilds the power view's choices for a newly loaded design and turns the view off. */
+  private resetPowerView(model: Model): void {
+    this.power = null;
+    const select = this.controls.power;
+    const option = (value: string, text: string) => {
+      const o = el("option", { text });
+      o.value = value;
+      return o;
+    };
+    select.replaceChildren(
+      option("", "Off"),
+      option("free", "Free run"),
+      ...model.tests.map((t, i) =>
+        option(
+          String(i),
+          `Test ${i + 1}: ${
+            Object.entries(t.set)
+              .map(([k, v]) => `${k}=${v}`)
+              .join(" ") || "no input"
+          }`,
+        ),
+      ),
+    );
+    select.value = "";
+    this.controls.powerGroup.hidden = true;
+  }
+
+  /**
+   * Shows simulated power: `"free"` runs the design with no inputs set, a number runs that test case (settle, then
+   * its `set`, then `afterTicks`), and null goes back to the design as written. Starts at the end of the run.
+   * Returns false when the design is too large to simulate here.
+   */
+  setPowerView(test: number | "free" | null): boolean {
+    try {
+      return this.showPower(test);
+    } catch (err) {
+      this.failPower(err);
+      return false;
+    }
+  }
+
+  /** A simulator error turns the power view off with a message instead of breaking the toolbar. */
+  private failPower(err: unknown): void {
+    this.power = null;
+    this.scene?.setBlocks(null);
+    this.controls.power.value = "";
+    this.controls.powerGroup.hidden = false;
+    this.controls.powerLabel.textContent = `simulator error: ${(err as Error).message}`;
+  }
+
+  private showPower(test: number | "free" | null): boolean {
+    const model = this.currentModel;
+    const scene = this.scene;
+    if (!model || !scene) return false;
+    if (test === null || (test !== "free" && !model.tests[test])) {
+      this.power = null;
+      this.controls.power.value = "";
+      this.controls.powerGroup.hidden = true;
+      scene.setBlocks(null);
+      this.showInspector(scene.info(scene.selected));
+      this.positionLabels();
+      return test === null;
+    }
+    // Checked before anything runs: the longest run is the settle cap plus afterTicks.
+    const after = test === "free" ? 0 : (model.tests[test]?.afterTicks ?? 0) * GAME_TICKS_PER_REDSTONE_TICK;
+    const longest = test === "free" ? FREE_RUN_TICKS : SETTLE_TICKS * GAME_TICKS_PER_REDSTONE_TICK + after;
+    if (model.blocks.size * longest > POWER_VIEW_WORK) {
+      this.controls.powerLabel.textContent = "too large to simulate here";
+      this.controls.powerGroup.hidden = false;
+      return false;
+    }
+    const settleTicks = test === "free" ? 0 : settle(model).tick;
+    const maxTick = test === "free" ? FREE_RUN_TICKS : settleTicks + after;
+    if (this.scene?.mode === "instructions") this.setMode("explore");
+    this.power = { test, sim: new Simulation(model), settleTicks, maxTick };
+    this.controls.power.value = String(test);
+    this.controls.powerTick.max = String(maxTick);
+    this.controls.powerGroup.hidden = false;
+    this.showPowerTick(maxTick);
+    return true;
+  }
+
+  /** Moves the power view to game tick `tick` (clamped; a redstone tick is 2 game ticks) and emits `power`. */
+  setPowerTick(tick: number): void {
+    try {
+      this.showPowerTick(tick);
+    } catch (err) {
+      this.failPower(err);
+    }
+  }
+
+  private showPowerTick(tick: number): void {
+    const power = this.power;
+    const model = this.currentModel;
+    if (!power || !model || !this.scene || Number.isNaN(tick)) return;
+    const target = Math.max(0, Math.min(power.maxTick, Math.round(tick)));
+    // The run is deterministic, so going back means starting again; going forward continues.
+    if (power.sim.tick > target) power.sim = new Simulation(model);
+    const test = power.test === "free" ? null : model.tests[power.test];
+    const applySetAt = (sim: Simulation) => {
+      if (test && sim.tick === power.settleTicks) {
+        for (const [name, value] of Object.entries(test.set)) {
+          const port = model.ports.inputs.find((p) => p.name === name);
+          if (port) sim.setInput(port.pos, value);
+        }
+      }
+    };
+    if (power.sim.tick === 0) applySetAt(power.sim);
+    while (power.sim.tick < target) {
+      power.sim.step();
+      applySetAt(power.sim);
+    }
+    this.scene.setBlocks(power.sim.snapshot().blocks);
+    this.controls.powerTick.value = String(target);
+    const phase = test
+      ? target < power.settleTicks
+        ? "settling"
+        : `inputs set at ${redstoneTicks(power.settleTicks)}`
+      : "no inputs";
+    this.controls.powerLabel.textContent = `tick ${redstoneTicks(target)} / ${redstoneTicks(power.maxTick)} (${phase})`;
+    this.showInspector(this.scene.info(this.scene.selected));
+    this.positionLabels();
+    this.emit("power", {
+      test: power.test,
+      tick: target,
+      maxTick: power.maxTick,
+      settleTicks: power.settleTicks,
+    });
+  }
+
+  /** The power view's state, or null when it is off. Ticks are game ticks (a redstone tick is 2). */
+  get powerView(): { test: number | "free"; tick: number; maxTick: number; settleTicks: number } | null {
+    const p = this.power;
+    return p ? { test: p.test, tick: p.sim.tick, maxTick: p.maxTick, settleTicks: p.settleTicks } : null;
+  }
+
+  /** The block drawn at `pos` now (simulated in the power view), for tests and host pages. */
+  shownBlock(pos: Pos): { type: string; states: Record<string, StateValue> } | null {
+    const info = this.scene?.info(posKey(pos));
+    return info ? { type: info.type, states: { ...info.states } } : null;
+  }
+
   /** Cells that carry a diagnostic marker, as `x,y,z` keys (tests and host pages). */
   markedCells(): string[] {
     return this.labelNodes.filter((l) => l.node.classList.contains("marker")).map((l) => posKey(l.pos));
@@ -430,6 +619,7 @@ export class RedstoneViewer extends HTMLElement {
   /** Switches between free exploration and instructions mode (stepping through the design's `steps`). */
   setMode(mode: ViewerMode): void {
     if (!this.scene) return;
+    if (mode === "instructions" && this.power) this.setPowerView(null);
     this.scene.mode = mode;
     const instructions = mode === "instructions";
     this.controls.mode.setAttribute("aria-pressed", String(instructions));
@@ -501,6 +691,7 @@ export class RedstoneViewer extends HTMLElement {
     this.controls.layer.max = String(model.size[1] - 1);
     this.setLayer(model.size[1] - 1);
     this.buildLabels(model);
+    this.resetPowerView(model);
     this.showInspector(null);
     const mode = this.getAttribute("mode") === "instructions" ? "instructions" : "explore";
     this.setMode(mode);
@@ -650,9 +841,12 @@ export class RedstoneViewer extends HTMLElement {
       return list;
     };
     const states = Object.entries(info.states).map(([k, v]) => [k, valueText(v)] as [string, string]);
+    const simulated: [string, string][] = this.power
+      ? [[`power at tick ${redstoneTicks(this.power.sim.tick)}`, String(this.power.sim.powerAt(info.pos))]]
+      : [];
     const parts: Node[] = [
       el("h2", { text: info.type }),
-      dl([["position", `[${info.pos.join(", ")}]`], ...states]),
+      dl([["position", `[${info.pos.join(", ")}]`], ...states, ...simulated]),
     ];
     for (const b of info.bedrock) {
       const label = b.offset.some((o) => o !== 0) ? `Bedrock (+[${b.offset.join(",")}])` : "Bedrock";

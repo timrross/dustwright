@@ -131,6 +131,14 @@ Inputs are what a test can drive (`set`); outputs are what it can read (`expect`
 - Lamps, pistons, doors, trapdoors and note blocks report `0` or `1`. Dust and comparators report their power
   level, `0` to `15`.
 - Write `ports` and `tests` **before** placing blocks, from the brief.
+- `rsd validate` runs the tests in an approximate simulator (stage 3). T001: a case failed; the message lists
+  expected and actual per output. T002: `afterTicks` above 1,000, or the design is too big to simulate that long.
+  T003 (info): the case was skipped because it needs something not modelled (a comparator reading a container, a
+  daylight sensor, a piston moving a container or a slime or honey block); check it in game.
+- Delays the simulator uses: torch, comparator, lamp, door and piston 1 tick; repeater 1 tick per delay step;
+  observer reacts after 1.5 ticks and pulses for 1 (inferred from the observer clock period measured in game). Leave a tick or two of margin in
+  `afterTicks`. If a case passes in game but fails here, the game is right: report it.
+- The viewer's Power menu shows any test case tick by tick: dust brightness is its level.
 
 ## Bedrock rules that bite
 

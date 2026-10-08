@@ -62,6 +62,17 @@ const BASE: Record<string, number> = {
   "trapdoor.wood": 0x9c6f3e,
   "trapdoor.iron": 0xc3c8cc,
 };
+// Dust by power level, from just above dust.off (level 1) to dust.on (level 15).
+for (let level = 1; level <= 15; level++) {
+  const mix = (a: number, b: number, shift: number) => {
+    const ca = (a >> shift) & 0xff;
+    const cb = (b >> shift) & 0xff;
+    return Math.round(ca + ((cb - ca) * (level + 3)) / 18) << shift;
+  };
+  const off = BASE["dust.off"] as number;
+  const on = BASE["dust.on"] as number;
+  BASE[`dust.p${level}`] = mix(off, on, 16) | mix(off, on, 8) | mix(off, on, 0);
+}
 for (const [dye, hex] of Object.entries(DYES)) {
   BASE[`wool.${dye}`] = hex;
   BASE[`concrete.${dye}`] = hex;

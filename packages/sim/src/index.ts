@@ -1,7 +1,7 @@
 /**
  * @packageDocumentation
- * Approximate tick-based Bedrock redstone simulator. The behaviour classes arrive in M6; M1 provides the edition
- * mechanics objects and the list of behaviour classes the registry may name.
+ * Approximate tick-based Bedrock redstone simulator: runs a design's truth-table tests (stage 3) and drives the
+ * viewer's power view. The game is the ground truth; where they disagree, the game wins.
  */
 
 import type { SimClass } from "@dustwright/core";
@@ -10,6 +10,18 @@ import type { SimClass } from "@dustwright/core";
 export const PACKAGE_NAME = "@dustwright/sim";
 
 export { BEDROCK_MECHANICS, JAVA_MECHANICS_STUB } from "./mechanics.js";
+export { PISTON_HEAD, Simulation } from "./simulation.js";
+export type { SimSnapshot } from "./simulation.js";
+export {
+  applySet,
+  GAME_TICKS_PER_REDSTONE_TICK,
+  runCase,
+  settle,
+  SETTLE_TICKS,
+  simulateTests,
+  WORK_BUDGET,
+} from "./run.js";
+export type { CaseResult, RunOptions } from "./run.js";
 
 /**
  * The behaviour classes the simulator implements, one per registry `sim.class`. The registry test asserts every

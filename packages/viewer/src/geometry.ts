@@ -199,8 +199,9 @@ export const BUILDERS: Readonly<Record<string, Builder>> = {
     return [...parts.map((p) => rotate(p, facing)), ...directionArrow(facing)];
   },
   dust: (block, pos, at) => {
-    const lit = typeof block.states.power === "number" && block.states.power > 0;
-    const c = lit ? "dust.on" : "dust.off";
+    // Brighter with more power: dust.p1 (dim) to dust.p15 (the same as dust.on); the power view relies on it.
+    const power = typeof block.states.power === "number" ? block.states.power : 0;
+    const c = power > 0 ? `dust.p${Math.min(15, power)}` : "dust.off";
     const parts: Part[] = [box([0.3125, 0, 0.3125], [0.6875, DUST_Y, 0.6875], c)];
     for (const d of dustArms(pos, at)) parts.push(rotate(box([0.375, 0, 0], [0.625, DUST_Y, 0.3125], c), d));
     return parts;
@@ -265,10 +266,16 @@ export const BUILDERS: Readonly<Record<string, Builder>> = {
   piston: (block) => {
     const facing = str(block.states.facing, "up") as Dir;
     const sticky = block.type === "sticky_piston";
-    const parts = [
-      box([0, 0, 0.25], [1, 1, 1], "piston.body"),
-      box([0, 0, 0], [1, 1, 0.25], sticky ? "piston.sticky" : "piston.head", "face"),
-    ];
+    const head = sticky ? "piston.sticky" : "piston.head";
+    // `extended` is not a registry state: the simulator's power view sets it, and the head then sits one cell out.
+    const parts =
+      block.states.extended === true
+        ? [
+            box([0, 0, 0.25], [1, 1, 1], "piston.body"),
+            box([0.375, 0.375, -0.75], [0.625, 0.625, 0.25], "piston.body"),
+            box([0, 0, -1], [1, 1, -0.75], head, "face"),
+          ]
+        : [box([0, 0, 0.25], [1, 1, 1], "piston.body"), box([0, 0, 0], [1, 1, 0.25], head, "face")];
     return [...parts.map((p) => rotate(p, facing)), ...directionArrow(facing)];
   },
   door: (block) => {

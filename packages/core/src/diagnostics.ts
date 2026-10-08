@@ -184,8 +184,8 @@ export const DIAGNOSTIC_CODES: readonly DiagnosticInfo[] = [
     "T002",
     "error",
     3,
-    "A test case ran out of its tick budget (afterTicks above 1,000).",
-    "Lower `afterTicks` to at most 1,000.",
+    "A test case ran out of its tick budget: afterTicks above 1,000, or a design too large to simulate that long.",
+    "Lower `afterTicks` to at most 1,000; test a very large circuit in a smaller design.",
   ),
   info(
     "T003",

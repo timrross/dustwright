@@ -134,6 +134,9 @@ importers:
       '@dustwright/core':
         specifier: workspace:*
         version: link:../core
+      '@dustwright/sim':
+        specifier: workspace:*
+        version: link:../sim
       '@dustwright/validator':
         specifier: workspace:*
         version: link:../validator

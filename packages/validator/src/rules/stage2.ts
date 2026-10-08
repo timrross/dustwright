@@ -1,4 +1,4 @@
-import { diag, holdsOnFace, keyPos, posKey, registryEntry } from "@dustwright/core";
+import { diag, isSupported, keyPos, posKey, registryEntry } from "@dustwright/core";
 import type { Diagnostic, Model, Pos, Rule } from "@dustwright/core";
 import {
   ALL,
@@ -10,7 +10,6 @@ import {
   dustNeighbours,
   dustPointsInto,
   dustReachesConsumer,
-  faceKind,
   feedsDust,
   HORIZONTAL,
   isSource,
@@ -37,13 +36,8 @@ export const E006: Rule = {
       const pos = keyPos(key);
       const at = step(pos, dir);
       const support = blockAt(model, at);
-      // A lever attaches to any block that stands by itself; the game would not place one on a component in the
-      // measurement, so a component (dust, a torch, a repeater...) does not count.
-      const anyBlock = "byState" in rule && rule.anyBlock === true;
-      const kind = faceKind(dir);
-      const ok = anyBlock
-        ? support !== undefined && !registryEntry(support.type)?.needsSupport
-        : support !== undefined && holdsOnFace(support, kind, ctx.edition);
+      // Measured faces; a lever takes any block that stands by itself (see isSupported in core).
+      const ok = isSupported((p) => blockAt(model, p), pos, b, ctx.edition);
       if (ok) continue;
       const where = dir === "down" ? "below it" : dir === "up" ? "above it" : `to its ${dir}`;
       out.push(

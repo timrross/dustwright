@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 // The viewer bundles the stage 1 and 2 rules through `@dustwright/validator/static`, so those files may import only
-// core: anything else (the simulator, the exporters and nbtify) would end up in the single-file viewer.
+// core: anything else (the exporters and nbtify above all) would end up in the single-file viewer.
 const root = fileURLToPath(new URL("..", import.meta.url));
 const validatorSrc = `${root}/packages/validator/src`;
 const staticFiles = ["static.ts", ...readdirSync(`${validatorSrc}/rules`).map((f) => `rules/${f}`)];
@@ -19,14 +19,12 @@ describe("static rules stay light", () => {
   });
 
   // CI builds before it tests; locally, run `pnpm build` first.
-  it.skipIf(!existsSync(bundle) && !process.env.CI)(
-    "the viewer bundle carries no exporter or simulator",
-    () => {
-      const code = readFileSync(bundle, "utf8");
-      // The pack paths are what catch an exporter: bundling drops module names such as "nbtify".
-      for (const marker of ["functions/rsd", "structures/rsd", "quasiConnectivity", "nbtify"]) {
-        expect(code.includes(marker), marker).toBe(false);
-      }
-    },
-  );
+  it.skipIf(!existsSync(bundle) && !process.env.CI)("the viewer bundle carries no exporter", () => {
+    const code = readFileSync(bundle, "utf8");
+    // The pack paths are what catch an exporter: bundling drops module names such as "nbtify". The simulator
+    // is in the bundle on purpose (the power view).
+    for (const marker of ["functions/rsd", "structures/rsd", "nbtify"]) {
+      expect(code.includes(marker), marker).toBe(false);
+    }
+  });
 });

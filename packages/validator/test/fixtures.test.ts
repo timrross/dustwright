@@ -18,19 +18,19 @@ async function codesFor(code: string, text: string): Promise<string[]> {
   return codes;
 }
 
-const stageOneTwo = DIAGNOSTIC_CODES.filter((d) => d.stage !== 3).map((d) => d.code);
+const allCodes = DIAGNOSTIC_CODES.map((d) => d.code);
 
 describe("diagnostic fixtures", () => {
-  it("cover every stage 1 and 2 code and the exporter's", () => {
-    expect(readdirSync(dir).sort()).toEqual([...stageOneTwo].sort());
+  it("cover every code: stages 1 to 3 and the exporter's", () => {
+    expect(readdirSync(dir).sort()).toEqual([...allCodes].sort());
   });
 
-  it.each(stageOneTwo)("%s: the failing fixture reports it, the passing one does not", async (code) => {
+  it.each(allCodes)("%s: the failing fixture reports it, the passing one does not", async (code) => {
     expect(await codesFor(code, read(code, "fail")), "fail fixture").toContain(code);
     expect(await codesFor(code, read(code, "pass")), "pass fixture").not.toContain(code);
   });
 
-  it.each(stageOneTwo)("%s: the passing fixture has no errors at all", async (code) => {
+  it.each(allCodes)("%s: the passing fixture has no errors at all", async (code) => {
     const result = validateText(read(code, "pass"));
     expect(result.diagnostics.filter((d) => d.severity === "error")).toEqual([]);
   });

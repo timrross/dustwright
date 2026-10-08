@@ -19,4 +19,5 @@ and an LLM cannot tell which one a bare number means.
   semantics (the case fails with T002). The parser does **not** reject a larger value: the simulator reports T002
   for that case (M6), so one over-long case does not hide the rest of the design. The other Limits rows are E013
   at parse time.
-- Anything measured in game ticks (game-side timings) is converted at the boundary.
+- Anything measured in game ticks (game-side timings) is converted at the boundary. The simulator itself steps in
+  game ticks (ADR 0007) and converts at its boundary too.

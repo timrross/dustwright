@@ -1,0 +1,69 @@
+{
+  "when": "2026-10-08T22:40:27.324Z",
+  "container": "dw-bds",
+  "tool": "deploy/test-world/measure-timing.mjs",
+  "unit": "game ticks (a redstone tick is 2)",
+  "game": {
+    "clock": {
+      "rises": 43,
+      "gaps": {
+        "6": 44
+      },
+      "widths": {
+        "2": 47
+      }
+    },
+    "observer": [
+      {
+        "delay": 4,
+        "width": 2
+      },
+      {
+        "delay": 4,
+        "width": 2
+      },
+      {
+        "delay": 5,
+        "width": 2
+      },
+      {
+        "delay": 5,
+        "width": 2
+      },
+      {
+        "delay": 4,
+        "width": 2
+      },
+      {
+        "delay": 4,
+        "width": 2
+      },
+      {
+        "delay": 5,
+        "width": 2
+      },
+      {
+        "delay": 5,
+        "width": 2
+      }
+    ],
+    "tffSequence": [1, 0, 1, 0],
+    "tffLatency": [7, 10, 8, 10]
+  },
+  "simulator": {
+    "clockGaps": [6],
+    "clockWidths": [2],
+    "observerDelay": 3,
+    "observerWidth": 2,
+    "tffSequence": [1, 0, 1, 0],
+    "tffLatency": [8, 8, 8, 8]
+  },
+  "checks": {
+    "observer clock period: game {\"6\":44}, simulator 6": true,
+    "observer clock pulse width: game {\"2\":47}, simulator 2": true,
+    "lone observer pulse width: game 2,2,2,2,2,2,2,2, simulator 2": true,
+    "lone observer delay from a console-set lever: game 4,4,5,5,4,4,5,5, simulator 3 (slack 2)": true,
+    "T flip-flop toggles: game 1,0,1,0, simulator 1,0,1,0": true,
+    "T flip-flop latency from a console-set lever: game 7,10,8,10, simulator 8,8,8,8 (slack 2)": true
+  }
+}

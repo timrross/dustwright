@@ -147,9 +147,11 @@ test.describe("diagnostic markers", () => {
   }) => {
     await loadDesign(page, fixture("W102"));
     const viewer = page.locator("redstone-viewer");
-    // The repeater at [2,1,0] outputs into air.
-    expect(await viewer.evaluate((v: RV) => v.markedCells())).toEqual(["2,1,0"]);
-    const marker = viewer.locator(".marker.warning");
+    // The repeater at [2,1,0] outputs into air; the playground's full validator also simulates the test, so the
+    // lamp it never lights carries a T001 marker.
+    expect((await viewer.evaluate((v: RV) => v.markedCells())).sort()).toEqual(["2,1,0", "4,1,0"]);
+    await expect(viewer.locator('.marker.error[data-pos="4,1,0"]')).toHaveAttribute("aria-label", /T001/);
+    const marker = viewer.locator('.marker.warning[data-pos="2,1,0"]');
     await expect(marker).toHaveAttribute("aria-label", /W102/);
     await expect(page.locator("#diagnostics")).toContainText("W102 warning [2,1,0]");
     await marker.click();
@@ -190,6 +192,56 @@ test.describe("diagnostic markers", () => {
     expect(await viewer.evaluate((v: RV) => v.markedCells())).toEqual(["1,1,0"]);
     await viewer.evaluate((v: RV) => v.setDiagnostics([]));
     await expect(viewer.locator(".marker")).toHaveCount(0);
+  });
+});
+
+test.describe("power view", () => {
+  test("shows a test case's simulated state: the NOT gate's lamp goes out after A=1", async ({ page }) => {
+    await openExample(page, "not-gate");
+    const viewer = page.locator("redstone-viewer");
+    // Through the toolbar: pick test 2 (A=1); it opens at the end of the run.
+    await viewer.locator("select").selectOption({ label: "Test 2: A=1" });
+    const view = await viewer.evaluate((v: RV) => v.powerView);
+    expect(view).toMatchObject({ test: 1 });
+    expect(await viewer.evaluate((v: RV) => v.shownBlock([4, 1, 0])?.states.lit)).toBe(false);
+    expect(await viewer.evaluate((v: RV) => v.shownBlock([0, 1, 0])?.states.on)).toBe(true);
+    expect(await viewer.evaluate((v: RV) => v.shownBlock([1, 1, 0])?.states.power)).toBe(15);
+    // Back at the moment the input is set, the lamp is still lit.
+    await viewer.evaluate((v: RV) => v.setPowerTick(v.powerView!.settleTicks));
+    expect(await viewer.evaluate((v: RV) => v.shownBlock([4, 1, 0])?.states.lit)).toBe(true);
+    await expect(viewer.locator(".toolbar")).toContainText("inputs set at");
+    // The inspector shows the simulated power of the selected block.
+    await viewer.evaluate((v: RV) => v.select([1, 1, 0]));
+    await expect(viewer.locator(".inspector")).toContainText("power at tick");
+    // Off again: the design as written.
+    await viewer.locator("select").selectOption({ label: "Off" });
+    expect(await viewer.evaluate((v: RV) => v.powerView)).toBeNull();
+    expect(await viewer.evaluate((v: RV) => v.shownBlock([0, 1, 0])?.states.on)).toBe(false);
+  });
+
+  test("draws blocks where the simulated pistons moved them (T flip-flop)", async ({ page }) => {
+    await openExample(page, "t-flip-flop");
+    const viewer = page.locator("redstone-viewer");
+    expect(await viewer.evaluate((v: RV) => v.shownBlock([4, 2, 2])?.type)).toBe("redstone_block");
+    await viewer.evaluate((v: RV) => v.setPowerView(1));
+    expect(await viewer.evaluate((v: RV) => v.shownBlock([4, 2, 3])?.type)).toBe("redstone_block");
+    expect(await viewer.evaluate((v: RV) => v.shownBlock([5, 2, 3])?.states.lit)).toBe(true);
+  });
+
+  test("free run shows the observer clock pulsing", async ({ page }) => {
+    await openExample(page, "observer-clock");
+    const viewer = page.locator("redstone-viewer");
+    expect(await viewer.evaluate((v: RV) => v.setPowerView("free"))).toBe(true);
+    const levels = await viewer.evaluate((v: RV) => {
+      const out: number[] = [];
+      for (let t = 0; t <= 30; t++) {
+        v.setPowerTick(t);
+        out.push(Number(v.shownBlock([3, 1, 0])?.states.power ?? 0));
+      }
+      return out;
+    });
+    expect(levels.filter((l) => l > 0).length).toBeGreaterThan(5);
+    expect(levels.filter((l) => l === 0).length).toBeGreaterThan(5);
   });
 });
 

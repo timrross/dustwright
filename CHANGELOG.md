@@ -7,6 +7,10 @@ All notable user-facing changes are recorded here. The format follows
 
 ### Added
 
+- M6: the simulator (`@dustwright/sim`). It runs every test case in `rsd validate` (stage 3: T001, T002, T003), in
+  game ticks, with the observer timing measured in game. The viewer's power view shows any test case or a free run
+  tick by tick. `deploy/test-world/measure-timing.mjs` cross-checks the simulator against the game.
+
 - M5: validator stage 2. E006 (a component with nothing that holds it, from support faces measured in game), W101
   (dust too long), W102 (a diode pointing at nothing), W103 (dust that connects nothing), W104 (a torch that powers
   its own support) and W105 (a piston only quasi-connectivity would power). Every diagnostic code has a passing and
@@ -37,6 +41,9 @@ All notable user-facing changes are recorded here. The format follows
   licence allowlist and `rsd --help`.
 
 ### Changed
+
+- M6: the redstone topology helpers (directions, dust connections, diode faces, support) moved into core, shared
+  by the stage 2 rules and the simulator. Dust is drawn brighter with more power.
 
 - M5: the registry's `supportsTop` is replaced by `faces` (`top`, `side`, `bottom`, with state-dependent
   overrides), measured in game by `deploy/test-world/measure-supports.mjs`.

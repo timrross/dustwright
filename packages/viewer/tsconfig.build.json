@@ -15,6 +15,9 @@
     },
     {
       "path": "../validator/tsconfig.build.json"
+    },
+    {
+      "path": "../sim/tsconfig.build.json"
     }
   ]
 }

@@ -59,6 +59,24 @@ export {
   valueText,
 } from "./registry.js";
 export type { FaceKind } from "./registry.js";
+export {
+  ALL_FACES,
+  attachedFace,
+  conducts,
+  DIRS,
+  dustConnections,
+  dustNeighbours,
+  dustPointsInto,
+  faceKind,
+  HORIZONTAL,
+  isPowerSource,
+  isSupported,
+  OPPOSITE,
+  outputFace,
+  simClass,
+  stepPos,
+} from "./topology.js";
+export type { BlockLookup } from "./topology.js";
 export type { EditionBlock } from "./registry.js";
 export { deriveSlug, isValidSlug, SLUG_MAX, SLUG_PATTERN } from "./slug.js";
 export { formatSpec, parseSpec, printable, splitSpec, typedValue } from "./spec.js";

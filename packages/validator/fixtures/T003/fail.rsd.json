@@ -1,0 +1,43 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Fixture",
+    "gameVersion": "1.26.50"
+  },
+  "ports": {
+    "outputs": [
+      {
+        "name": "out",
+        "pos": [
+          3,
+          1,
+          0
+        ]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "set": {},
+      "afterTicks": 2,
+      "expect": {
+        "out": 0
+      }
+    }
+  ],
+  "legend": {
+    "#": "stone",
+    "h": "hopper",
+    "c": "comparator facing=east",
+    "-": "dust",
+    "*": "lamp"
+  },
+  "layers": [
+    [
+      "####"
+    ],
+    [
+      "hc-*"
+    ]
+  ]
+}

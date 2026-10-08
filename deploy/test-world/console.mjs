@@ -35,16 +35,26 @@ export async function cmd(command, settleMs = 120) {
 
 /** Sends a query and returns the first new log line `match` recognises; throws NoAnswer after 3 seconds. */
 export async function query(command, match) {
-  // Anchor on the last line logged before the command; only lines after it can be its answer.
-  const before = logLines();
+  const lines = await answer(command, (after) => after.find((l) => match.test(l)));
+  return lines;
+}
+
+/**
+ * Sends a command and waits until `pick` finds its answer among the log lines logged after it; throws NoAnswer
+ * after 3 seconds. The anchor is the last timestamped line before the command (timestamps are unique to the
+ * millisecond; continuation lines such as "- dw: 0 (dw)" repeat and would anchor on a later answer).
+ */
+export async function answer(command, pick) {
+  const stamped = (l) => /^\[\d{4}-\d\d-\d\d /.test(l);
+  const before = logLines().filter(stamped);
   const anchor = before[before.length - 1];
   send(command);
   for (let i = 0; i < 40; i++) {
     await sleep(75);
     const lines = logLines();
     const from = anchor === undefined ? 0 : lines.lastIndexOf(anchor) + 1;
-    const line = lines.slice(from).find((l) => match.test(l));
-    if (line) return line;
+    const found = pick(lines.slice(from));
+    if (found !== undefined) return found;
   }
   throw new NoAnswer(`no answer to: ${command}`);
 }

@@ -1,0 +1,55 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Fixture",
+    "gameVersion": "1.26.50"
+  },
+  "legend": {
+    "#": "stone",
+    "L": "lever mount=floor on=false",
+    "-": "dust",
+    "t": "torch mount=west",
+    "*": "lamp"
+  },
+  "layers": [
+    [
+      "#####"
+    ],
+    [
+      "L-#t*"
+    ]
+  ],
+  "ports": {
+    "inputs": [
+      {
+        "name": "A",
+        "pos": [
+          0,
+          1,
+          0
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "out",
+        "pos": [
+          4,
+          1,
+          0
+        ]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "set": {
+        "A": 1
+      },
+      "afterTicks": 1001,
+      "expect": {
+        "out": 0
+      }
+    }
+  ]
+}

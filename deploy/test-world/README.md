@@ -55,6 +55,23 @@ truth-table tests; checks that the T flip-flop toggles through a sequence, that 
 build, that a build never removes a block around it, and that the orientation test builds with nothing dropped.
 It works only inside an 80 × 64 area at the world origin, and prints a JSON summary last.
 
+## Simulator timing cross-check
+
+`measure-timing.mjs` measures in game, at game-tick resolution, what the simulator assumes about timing: the
+observer clock's period and pulse width, a lone observer's delay and pulse, and the T flip-flop's toggles and
+latency. It compares each with the simulator and exits 1 on a difference.
+
+```sh
+pnpm build
+for f in examples/observer-clock.rsd.json examples/t-flip-flop.rsd.json; do pnpm rsd export "$f" --to mcfunction --clear; done
+node deploy/test-world/measure-timing.mjs install <pack-dir>     # restart the server cold
+node deploy/test-world/measure-timing.mjs run dustwright-test > timing.json
+node deploy/test-world/measure-timing.mjs uninstall <pack-dir>   # restart the server cold again
+```
+
+The probe runs a function every game tick (`functions/tick.json`). Remove it straight after the run: while it is
+installed, redstone stops ticking in parts of the world (seen on BDS 1.26.52.3), and `ingame-check.mjs` fails.
+
 ## Structure round trip
 
 Save a build with `/structure save <name> <from> <to> false disk true`, stop the server (the world database must

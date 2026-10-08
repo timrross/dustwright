@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@dustwright/core": "workspace:*",
+    "@dustwright/sim": "workspace:*",
     "@dustwright/validator": "workspace:*",
     "three": "0.186.0"
   },

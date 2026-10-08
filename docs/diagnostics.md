@@ -34,5 +34,5 @@ reported alongside the stage 1 errors.
 | W107 | warning | 1 (structure) | validator rule | `meta.gameVersion` differs from the registry's pinned game version. | Re-verify the design in that version, or update `meta.gameVersion`. |
 | W108 | warning | 1 (structure) | validator rule | A block's mapping has not been proven in game yet (VERIFY-IN-GAME). | Check the block in a test world before relying on its orientation. |
 | T001 | error | 3 (simulation) | simulator | A test case failed: an output did not match. | Compare expected and actual per output and fix the circuit, not the test. |
-| T002 | error | 3 (simulation) | simulator | A test case ran out of its tick budget (afterTicks above 1,000). | Lower `afterTicks` to at most 1,000. |
+| T002 | error | 3 (simulation) | simulator | A test case ran out of its tick budget: afterTicks above 1,000, or a design too large to simulate that long. | Lower `afterTicks` to at most 1,000; test a very large circuit in a smaller design. |
 | T003 | info | 3 (simulation) | simulator | A test case needs something the simulator does not model and was skipped. | Verify that case in game. |

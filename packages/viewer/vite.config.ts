@@ -2,7 +2,7 @@ import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 
 // Builds the self-contained viewer script used by `rsd bundle` and the hosted viewer.html: one IIFE file with
-// three.js, the core parser and the static validator rules inlined, no dynamic imports, no external requests.
+// three.js, the core parser, the static validator rules and the simulator (power view) inlined, no dynamic imports, no external requests.
 export default defineConfig({
   plugins: [
     {
@@ -17,6 +17,7 @@ export default defineConfig({
     alias: {
       "@dustwright/core": fileURLToPath(new URL("../core/src/index.ts", import.meta.url)),
       "@dustwright/validator/static": fileURLToPath(new URL("../validator/src/static.ts", import.meta.url)),
+      "@dustwright/sim": fileURLToPath(new URL("../sim/src/index.ts", import.meta.url)),
     },
   },
   build: {

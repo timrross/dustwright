@@ -48,6 +48,22 @@ export interface SimMechanics {
   quasiConnectivity: boolean;
   /** Most blocks a piston can push. */
   pushLimit: number;
+  /**
+   * Delays in game ticks (20 per second; a redstone tick is 2). The simulator steps in game ticks because some
+   * Bedrock delays are not whole redstone ticks (an observer reacts after 3). A component reacts to the power it
+   * sees at game tick t from tick t + delay; a repeater waits `repeater` x its own delay setting.
+   */
+  timing: Readonly<{
+    torch: number;
+    repeater: number;
+    comparator: number;
+    observer: number;
+    /** How long an observer's output stays on. */
+    observerPulse: number;
+    piston: number;
+    /** Lamps, doors, trapdoors and note blocks. */
+    consumer: number;
+  }>;
 }
 
 /**

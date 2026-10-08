@@ -1,5 +1,6 @@
 import { hasErrors, parse, parseText } from "@dustwright/core";
 import type { Diagnostic, Model, ParseResult } from "@dustwright/core";
+import { simulateTests } from "@dustwright/sim";
 import { profileFor } from "./profiles.js";
 
 /** Options for a validation run. */
@@ -35,6 +36,8 @@ function run(parsed: ParseResult, opts: ValidateOptions): ValidationResult {
       for (const rule of profile.rules) {
         if (rule.stage === stage) diagnostics.push(...rule.run(model, { edition: profile.id }));
       }
+      // Stage 3 is the simulator running the design's tests under the profile's mechanics.
+      if (stage === 3 && model.tests.length > 0) diagnostics.push(...simulateTests(model, profile.mechanics));
     }
   }
   const ok = !hasErrors(diagnostics) && !(opts.strict && diagnostics.some((d) => d.severity === "warning"));

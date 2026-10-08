@@ -86,6 +86,8 @@ export class ViewerScene {
   private readonly selectBox = new LineSegments(EDGES, new LineBasicMaterial({ color: 0xffb000 }));
   private readonly raycaster = new Raycaster();
   private model: Model | null = null;
+  /** The blocks drawn: the model's, or a simulated tick's (power view). */
+  private blocks: ReadonlyMap<string, Block> = new Map();
   private parts = new Map<string, Part[]>();
   private solidKeys: string[] = [];
   private stepOf = new Map<string, number>();
@@ -157,13 +159,34 @@ export class ViewerScene {
   /** Loads a model: builds every block's parts once and frames the camera. */
   load(model: Model): void {
     this.model = model;
-    this.parts.clear();
-    const at = (p: Pos) => model.blocks.get(posKey(p));
-    for (const [key, block] of model.blocks) this.parts.set(key, buildBlock(block, keyPos(key), at));
+    this.buildParts(model.blocks);
     this.stepOf.clear();
     model.steps.forEach((s, i) => {
       for (const p of s.positions) if (!this.stepOf.has(posKey(p))) this.stepOf.set(posKey(p), i);
     });
+    this.layer = model.size[1] - 1;
+    this.step = 0;
+    this.selected = null;
+    this.hovered = null;
+    this.snap("iso");
+    this.rebuild();
+  }
+
+  /**
+   * Draws a different set of blocks over the same design, such as one simulated tick (pistons may have moved
+   * blocks); null goes back to the model's blocks. The camera, layer and selection stay.
+   */
+  setBlocks(blocks: ReadonlyMap<string, Block> | null): void {
+    if (!this.model) return;
+    this.buildParts(blocks ?? this.model.blocks);
+    this.rebuild();
+  }
+
+  private buildParts(blocks: ReadonlyMap<string, Block>): void {
+    this.blocks = blocks;
+    this.parts.clear();
+    const at = (p: Pos) => blocks.get(posKey(p));
+    for (const [key, block] of blocks) this.parts.set(key, buildBlock(block, keyPos(key), at));
     const capacity = (role: (p: Part) => boolean) =>
       Math.max(
         1,
@@ -181,12 +204,6 @@ export class ViewerScene {
       this.arrows,
       capacity((p) => p.role === "arrow"),
     );
-    this.layer = model.size[1] - 1;
-    this.step = 0;
-    this.selected = null;
-    this.hovered = null;
-    this.snap("iso");
-    this.rebuild();
   }
 
   private resize(mesh: InstancedMesh, capacity: number): void {
@@ -326,7 +343,7 @@ export class ViewerScene {
 
   /** Places a marker box around a block (with its extra cells, such as a door's upper half). */
   private updateMarker(marker: LineSegments, key: string | null): void {
-    const block = key ? this.model?.blocks.get(key) : undefined;
+    const block = key ? this.blocks.get(key) : undefined;
     if (!key || !block || this.visibility(key, keyPos(key)[1]) === "hidden") {
       marker.visible = false;
       return;
@@ -363,7 +380,7 @@ export class ViewerScene {
     let bestT = Infinity;
     for (const key of new Set(this.solidKeys)) {
       const pos = keyPos(key);
-      const block = model.blocks.get(key);
+      const block = this.blocks.get(key);
       const height =
         1 + Math.max(0, ...(block ? (registryEntry(block.type)?.occupies ?? []).map((o) => o[1]) : []));
       const min = [pos[0], this.layerY(pos[1]), pos[2]];
@@ -387,7 +404,7 @@ export class ViewerScene {
 
   /** Info for a block key, or null. */
   info(key: string | null): BlockInfo | null {
-    const block = key ? this.model?.blocks.get(key) : undefined;
+    const block = key ? this.blocks.get(key) : undefined;
     return key && block ? blockInfo(block, keyPos(key)) : null;
   }
 

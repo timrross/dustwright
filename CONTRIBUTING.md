@@ -45,7 +45,9 @@ docker run --rm --platform linux/amd64 --ipc=host -v "$PWD":/work mcr.microsoft.
 
 1. Add `packages/core/registry/<type>.json` (validated against `packages/core/schema/registry.json`).
 2. Add a geometry builder in `packages/viewer`.
-3. Add or reuse a sim behaviour class in `packages/sim`.
+3. Name its sim behaviour class and parameters in the registry file (`sim.class`, `sim.params`); the simulator
+   reads only those, so a new class is the only reason to touch `packages/sim`. A new delay is measured in game
+   first (`deploy/test-world/measure-timing.mjs`) and lands in `SimMechanics.timing`.
 4. Run `pnpm gen` (the parser reads the generated registry module) and `pnpm docs:gen`, and commit the
    regenerated `packages/core/src/generated/registry.ts`, `docs/bedrock-mapping.md` and
    `docs/verify-in-game.md`. Mark every state meaning you could not read from the pinned data with a

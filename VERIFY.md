@@ -261,3 +261,49 @@ Deviations and findings:
 - **Evidence file annotated by hand.** At the time of the run `measure-supports.mjs` printed `when`, `container` and `table` (it now also prints `tool`); the saved `docs/ingame/2026-10-08-supports.json` keeps `when` and `table` as printed and replaces `container` with `server` and `tool` descriptions written after the run.
 - **New package entry points:** `@dustwright/validator/static` (stage 1 and 2 rules on a parsed model, importing
   only core) and `@dustwright/core/schema/*.json`. The viewer now depends on the validator, which is still inward.
+
+## M6: Simulator (2026-10-08)
+
+Environment: as M3 (local BDS 1.26.52.3 test world in Docker, console only). Timing cross-check:
+`docs/ingame/2026-10-08-m6-timing.json`. Full in-game suite re-run (the console helper changed): `docs/ingame/2026-10-08-m6.json`, **116 passed, 0 failed, 6 skipped** (the same as M5), run on a cold start
+with the timing probe removed.
+
+| Item                                                                                                                                          | How                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Result                     |
+| --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| Every example's `tests` pass                                                                                                                  | `rsd validate` on every example runs stage 3: no T diagnostics. `packages/sim/test/mechanics.test.ts` runs every case and also flips every expectation, which must then fail, so the tests are not vacuous. The T flip-flop also toggles through four presses (1, 0, 1, 0)                                                                                                                                                                                                                                                                                                                                                                                | Pass                       |
+| Unit tests: dust decay over 15 blocks, repeater delays 1 to 4, comparator subtract, torch inversion, observer pulse length, piston push limit | `packages/sim/test/mechanics.test.ts`: dust 15 down to 0 over 16 blocks; a repeater of delay d lights the lamp d + 1 redstone ticks after the lever; locking from the side; subtract 14 - 6 = 8 and compare; NOT gate lamp off 2 ticks after the lever; observer pulse 2 game ticks, 3 after the change; 12 blocks pushed, 13 not; no quasi-connectivity                                                                                                                                                                                                                                                                                                  | Pass                       |
+| A clock with `afterTicks` of 1,001 reports T002 within the budget; a comparator reading a container reports T003 and is skipped               | Unit tests, and fixtures T001 to T003 in `packages/validator/fixtures/`. The 1,001-tick case reports T002 without running (under 1 s). The budget counts cell updates, not time (a dust cell weighs 8, a consumer's or piston's power check 10, any other cell 1). The worst cases found end in T002 for every case after about 5 s and at most 260 MB, each with 64 cases of 1,000 ticks: a 49,152-block observer-clock design, 6 pairs of 64 x 64 stone and dust layers, and 6 pairs of 64 x 64 lamp and dust layers, both driven by an observer clock (the review measured 20 s and 8.5 s for the last two before dust and power checks were weighted) | Pass                       |
+| **Game cross-check:** observer clock period and T flip-flop toggle measured in game match the simulator (logged)                              | `deploy/test-world/measure-timing.mjs` probes at game-tick resolution with a function run every game tick. Observer clock: every gap between rises 6 game ticks (44 of 44) and every pulse 2 (47 of 47); simulator 6 and 2. Lone observer: pulse 2 (8 of 8), simulator 2; delay 4 or 5 game ticks from a console-set lever, simulator 3. T flip-flop: toggles 1, 0, 1, 0 in both; latency 7, 10, 8, 10 game ticks from a console-set lever, simulator 8                                                                                                                                                                                                   | Pass, with the slack below |
+| Power view in the viewer shows the simulated state for a chosen test and tick                                                                 | Toolbar "Power": Off, Free run, or a test case, and a tick slider. e2e: the NOT gate's lamp lit at the moment A=1 is set and out at the end, with the lever on and the dust at 15; the inspector shows simulated power; the T flip-flop's redstone block is drawn where the piston pushed it; the observer clock's free run pulses. Screenshot baselines regenerated (the toolbar changed) on macOS and Linux                                                                                                                                                                                                                                             | Pass                       |
+
+Deviations and findings:
+
+- **The simulator steps in game ticks** (ADR 0007), because the measured observer clock period, 6 game ticks, is
+  not a whole number of redstone ticks for a pair. Every tick count in the format and the diagnostics is still a
+  redstone tick. The first in-game run with redstone-tick steps disagreed (period 3 redstone ticks in game, 2 in the
+  simulator); the observer timing changed to the measured values and a regression test holds them.
+- **Console slack.** An input set from the console lands at an arbitrary point of a game tick, so latencies measured
+  from it carry up to two game ticks of slack, and the check allows that. The lone observer was consistently one to
+  two game ticks later in game than in the simulator; the observer clock, which is internal to the game, matches
+  exactly. The other delays (torch, repeater step, comparator, piston, lamps and doors: one redstone tick each)
+  are assumptions, marked VERIFY-IN-GAME in `packages/sim/src/mechanics.ts`; the T flip-flop latency is consistent
+  with them but does not prove each one.
+- **The probe breaks ticking.** With the probe's tick function installed, redstone stopped ticking in most of the
+  test world's ticking area (a redstone block no longer lit a lamp), and the in-game suite failed; with it removed,
+  every spot ticked again. The tool now has `uninstall`, and the README says to remove the probe straight after a
+  run. The timing results stand: the tool checks that each of its build sites ticks before it measures.
+- **Build-time observer pulses** follow the export placement order (ADR 0006): an observer fires once at build
+  time only when the block it watches is placed after it, as in the game.
+- **Not modelled (T003):** comparators reading containers, daylight sensors, pistons moving containers, slime and
+  honey. Pistons break components in their way, as their registry `needsSupport` says they need support.
+- **Known gaps, not reported:** a door's upper half is not a cell, so a piston can push a block into it; a
+  comparator reading a container through a solid block is not detected; dispensers are `container: false` in the
+  registry, so a comparator reading one gets 0. All are rare in redstone designs and listed for later.
+- **Registry-driven:** the simulator dispatches on `sim.class` and `sim.params`, and the core topology helpers it
+  shares with the stage 2 rules (moved from the validator into core) read `sim.class` too. The stage 2 rules still
+  name types in places. Unproven assumptions are a VERIFY-IN-GAME block at the top of `simulation.ts`.
+- **Review fixes:** one piston moving another on the tick it fires crashed the simulator (a design could make
+  `rsd validate` exit 2); pistons now act as cells, a moved one acts next tick, and a regression test checks every
+  extended piston has its head. A simulator error is now a T003 naming it, and in the viewer a message, not a crash.
+- **The viewer bundle now carries the simulator** for the power view (687 kB, up from 673 kB); it still carries no
+  exporter (`test/static-rules.test.ts`).

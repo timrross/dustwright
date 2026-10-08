@@ -25,7 +25,7 @@ design is clean.
 | `@dustwright/core`      | Schema, parser, normaliser, registry, editions    | nothing                        |
 | `@dustwright/sim`       | Tick-based Bedrock redstone simulator             | core                           |
 | `@dustwright/validator` | Stage 1 to 3 rules, diagnostics, edition profiles | core, sim, export              |
-| `@dustwright/viewer`    | Three.js viewer web component                     | core, validator (static rules) |
+| `@dustwright/viewer`    | Three.js viewer web component                     | core, validator (static), sim  |
 | `@dustwright/export`    | `.mcfunction`, `.mcstructure`, `.mcpack`, sheets  | core                           |
 | `@dustwright/mcp`       | MCP server over stdio                             | core, validator, sim, export   |
 | `dustwright` (cli)      | The `dustwright` / `rsd` binary                   | everything except viewer, site |
@@ -111,14 +111,41 @@ shown block's whole cell, so thin parts (wall torches, dust) are as easy to clic
 inspector and diagnostics are DOM in the shadow root, written with `textContent` only.
 
 On load the viewer runs the static rules (stages 1 and 2) through `@dustwright/validator/static`, an entry point
-that imports only core, so the bundle carries no simulator or exporter. Each blamed cell gets one marker in the
+that imports only core, so the bundle carries no exporter. Each blamed cell gets one marker in the
 label overlay, coloured by its worst severity; clicking it selects the block, and the inspector lists the findings.
 Hosts that run more checks (the playground runs the full validator) pass their diagnostics with `setDiagnostics`.
+
+The power view (toolbar "Power") runs the simulator in the page: "Free run" with no inputs, or one test case
+(settle, its `set`, `afterTicks`). A slider picks the game tick; the scene draws that tick's blocks through
+`ViewerScene.setBlocks`, with dust shaded by level, lamps, torches and diodes lit, and pistons extended with blocks
+moved. Going back re-runs from the start (the run is deterministic). Before running anything it refuses designs
+whose longest run (blocks x game ticks, settle cap included) exceeds 2 million, so a large design cannot freeze the
+page; a simulator error turns the view off with a message.
 
 Three shapes ship: the library (`@dustwright/viewer` for Node-safe geometry, `@dustwright/viewer/browser` for the
 element), an IIFE bundle (`dist/bundle/redstone-viewer.js`) with three.js and the parser inlined, and the site's
 pages. `rsd bundle` inlines that IIFE into one HTML file: `packages/cli/scripts/copy-viewer.mjs` copies it into
 `packages/cli/assets/` at build time, so the CLI never depends on the viewer as code.
+
+## Simulator
+
+`@dustwright/sim` is an approximate model of Bedrock redstone, a pure function of the model and the test case. It
+steps in game ticks (ADR 0007). Each tick the power field follows instantly from the state: strong power into
+blocks (from diodes, observers, a torch below, a switched-on lever, button or plate attached), dust levels (seeded
+by sources, diodes and strongly powered blocks, one less per connected dust), then weak power into the blocks dust
+lies on or points into. Components react after their delay in `SimMechanics.timing`: torches invert their support,
+repeaters delay (and lock from the side), comparators compare or subtract, observers pulse when the block they
+watch changes (at build time only if it is placed after them, ADR 0006), consumers follow their power, and pistons
+push up to 12 blocks (components in the way break) and sticky pistons pull one back. No quasi-connectivity.
+
+Behaviour comes from the registry's `sim.class` and `sim.params`, not type names; the topology it relies on (dust
+connections, diode faces, support, in core's `topology.ts`, shared with the stage 2 rules) also reads `sim.class`.
+The stage 2 rules themselves still name types in places. The assumptions not yet proven in game are listed as a
+VERIFY-IN-GAME block at the top of `packages/sim/src/simulation.ts`. Stage 3 runs every
+test case under a work budget (cell updates, not time, so results stay deterministic) and reports T001 (failed,
+expected against actual), T002 (`afterTicks` above 1,000, or the budget ran out) and T003 (skipped: a comparator
+reading a container, a daylight sensor, a piston moving a container or a slime or honey block). Where the
+simulator and the game disagree, the game wins and the simulator gets a regression test.
 
 ## Exporters
 
