@@ -1,0 +1,10 @@
+packages:
+  - packages/*
+  - apps/*
+
+# Dependency lifecycle scripts stay blocked (the pnpm 10 default): no dependency is allowed to build,
+# and an install fails if a new dependency asks to run a script that has not been reviewed here.
+strictDepBuilds: true
+# esbuild ships its binary through optional dependencies; its install script is not needed.
+ignoredBuiltDependencies:
+  - esbuild

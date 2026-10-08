@@ -1,0 +1,25 @@
+{
+  "name": "@dustwright/export",
+  "version": "0.0.0",
+  "description": "Exporters: .mcfunction, .mcstructure, .mcpack and layer sheets.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@dustwright/core": "workspace:*"
+  }
+}

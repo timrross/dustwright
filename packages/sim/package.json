@@ -1,0 +1,25 @@
+{
+  "name": "@dustwright/sim",
+  "version": "0.0.0",
+  "description": "Approximate tick-based Bedrock redstone simulator.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@dustwright/core": "workspace:*"
+  }
+}

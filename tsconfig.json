@@ -1,0 +1,26 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "paths": {
+      "@dustwright/core": ["./packages/core/src/index.ts"],
+      "@dustwright/validator": ["./packages/validator/src/index.ts"],
+      "@dustwright/sim": ["./packages/sim/src/index.ts"],
+      "@dustwright/viewer": ["./packages/viewer/src/index.ts"],
+      "@dustwright/export": ["./packages/export/src/index.ts"],
+      "@dustwright/mcp": ["./packages/mcp/src/index.ts"],
+      "dustwright": ["./packages/cli/src/index.ts"]
+    }
+  },
+  "include": [
+    "packages/*/src",
+    "packages/*/test",
+    "apps/*/src",
+    "apps/*/*.config.ts",
+    "scripts",
+    "test",
+    "*.config.ts"
+  ]
+}

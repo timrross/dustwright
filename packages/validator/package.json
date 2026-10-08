@@ -1,0 +1,26 @@
+{
+  "name": "@dustwright/validator",
+  "version": "0.0.0",
+  "description": "Validator: stage 1 to 3 rules that turn a design into diagnostics.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@dustwright/core": "workspace:*",
+    "@dustwright/sim": "workspace:*"
+  }
+}

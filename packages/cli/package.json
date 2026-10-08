@@ -1,0 +1,33 @@
+{
+  "name": "dustwright",
+  "version": "0.0.0",
+  "description": "The Dustwright CLI (`dustwright`, alias `rsd`).",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json && node -e \"require('node:fs').chmodSync('dist/bin.js', 0o755)\""
+  },
+  "dependencies": {
+    "@dustwright/core": "workspace:*",
+    "@dustwright/validator": "workspace:*",
+    "@dustwright/sim": "workspace:*",
+    "@dustwright/export": "workspace:*",
+    "@dustwright/mcp": "workspace:*"
+  },
+  "bin": {
+    "dustwright": "./dist/bin.js",
+    "rsd": "./dist/bin.js"
+  }
+}

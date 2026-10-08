@@ -1,0 +1,25 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "types": ["node"],
+    "tsBuildInfoFile": "dist/tsconfig.build.tsbuildinfo"
+  },
+  "include": ["src"],
+  "references": [
+    {
+      "path": "../core/tsconfig.build.json"
+    },
+    {
+      "path": "../validator/tsconfig.build.json"
+    },
+    {
+      "path": "../sim/tsconfig.build.json"
+    },
+    {
+      "path": "../export/tsconfig.build.json"
+    }
+  ]
+}

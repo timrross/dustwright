@@ -1,0 +1,22 @@
+{
+  "name": "@dustwright/core",
+  "version": "0.0.0",
+  "description": "Design format: schema, parser, normaliser, block registry and edition profiles.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  }
+}

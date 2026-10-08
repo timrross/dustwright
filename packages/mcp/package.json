@@ -1,0 +1,28 @@
+{
+  "name": "@dustwright/mcp",
+  "version": "0.0.0",
+  "description": "MCP server over stdio exposing the Dustwright toolchain to agents.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "dependencies": {
+    "@dustwright/core": "workspace:*",
+    "@dustwright/validator": "workspace:*",
+    "@dustwright/sim": "workspace:*",
+    "@dustwright/export": "workspace:*"
+  }
+}
