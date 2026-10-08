@@ -5,6 +5,8 @@ Date: 2026-10-08. Status: accepted.
 ## Decision
 
 - A slug is runs of `[a-z0-9]` joined by single `-`, 1 to 48 characters (`/^[a-z0-9]+(-[a-z0-9]+)*$/`).
+- Windows device names (`con`, `prn`, `aux`, `nul`, `com0`–`com9`, `lpt0`–`lpt9`) are not valid slugs (E012):
+  Windows cannot create files with those names, with or without an extension.
 - `meta.slug` is used when given; an invalid one is E012.
 - Otherwise the slug is derived from `meta.name`: lowercase, every character outside `[a-z0-9]` becomes `-`, runs
   of `-` collapse, both ends are trimmed, and the result is cut to 48 characters and trimmed again. Empty after

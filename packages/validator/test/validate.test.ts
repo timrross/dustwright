@@ -16,7 +16,8 @@ const root = fileURLToPath(new URL("../../../", import.meta.url));
 const base = {
   format: "rsd/1",
   meta: { name: "v" },
-  legend: { "#": "stone", L: "lever", "*": "lamp" },
+  // glass has no in-game verification yet, so it draws W108; lever and lamp are verified.
+  legend: { "#": "glass", L: "lever", "*": "lamp" },
   layers: [["##"], ["L*"]],
 };
 
@@ -42,7 +43,8 @@ describe("validate", () => {
   it("W108 once per unverified type; W107 on a differing game version", () => {
     const r = validate({ ...base, meta: { name: "v", gameVersion: "1.21.0" } });
     expect(r.ok).toBe(true);
-    expect(r.diagnostics.map((d) => d.code)).toEqual(["W107", "W108", "W108", "W108"]);
+    expect(r.diagnostics.map((d) => d.code)).toEqual(["W107", "W108"]);
+    expect(r.diagnostics[1]?.message).toContain("glass");
     expect(
       validate({ ...base, meta: { name: "v", gameVersion: PINS.gameVersion } }).diagnostics.some(
         (d) => d.code === "W107",

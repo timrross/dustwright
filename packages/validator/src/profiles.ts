@@ -1,16 +1,17 @@
 import type { Edition, EditionProfile } from "@dustwright/core";
+import { EXPORTERS } from "@dustwright/export";
 import { BEDROCK_MECHANICS, JAVA_MECHANICS_STUB } from "@dustwright/sim";
 import { RULES } from "./rules/index.js";
 
 const rulesFor = (edition: Edition) => RULES.filter((r) => r.editions.includes(edition));
 
-/** The Bedrock profile: the one edition v1 implements. Exporters join it in M3 and M4. */
+/** The Bedrock profile: the one edition v1 implements. */
 export const BEDROCK_PROFILE: EditionProfile = {
   id: "bedrock",
   rules: rulesFor("bedrock"),
   mechanics: BEDROCK_MECHANICS,
   mapping: "bedrock",
-  exporters: [],
+  exporters: EXPORTERS.filter((e) => e.target === "bedrock"),
   docs: "Bedrock Edition: no quasi-connectivity; see AUTHORING.md.",
 };
 

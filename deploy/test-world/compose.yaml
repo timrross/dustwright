@@ -1,0 +1,38 @@
+# The Dustwright test world: a separate Bedrock dedicated server on its own port (19142/tcp), flat, creative, cheats on,
+# with the redstone-designs behavior pack applied. All in-game verification happens here, never on live worlds.
+# It mounts only packs/redstone-designs-bp (read-only) from this repo; no other world ever sees the pack.
+services:
+  dustwright-test:
+    image: itzg/minecraft-bedrock-server:2026.9.0
+    container_name: dustwright-test
+    restart: unless-stopped
+    environment:
+      EULA: "TRUE"
+      # Pin the game version the registry targets (PINS.gameVersion) or a newer patch of it. See the README for the
+      # download workaround: BDS_DIRECT_DOWNLOAD_URL=file:///data/bedrock-server-<version>.zip.
+      VERSION: "${BDS_VERSION:-1.26.50}"
+      DIRECT_DOWNLOAD_URL: "${BDS_DIRECT_DOWNLOAD_URL:-}"
+      # From 1.26.5x NetherNet (TCP) is the only transport players can connect over; the server says so at start-up
+      # if it is set to raknet. The image's health check probes NetherNet's /v1/join when TRANSPORT says so.
+      TRANSPORT: "nethernet"
+      SERVER_NAME: "Dustwright test"
+      LEVEL_NAME: "dustwright-test"
+      LEVEL_TYPE: "FLAT"
+      GAMEMODE: "creative"
+      DIFFICULTY: "peaceful"
+      ALLOW_CHEATS: "true"
+      ONLINE_MODE: "true"
+      # Run on the port that is published, 1:1, so nothing redirects clients to another server on the host.
+      SERVER_PORT: "19142"
+      SERVER_PORT_V6: "19143"
+      CONTENT_LOG_CONSOLE_OUTPUT_ENABLED: "true"
+    ports:
+      - "19142:19142/tcp"
+    volumes:
+      - ./data:/data
+      - ../../packs/redstone-designs-bp:/data/behavior_packs/redstone-designs-bp:ro
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/bds-healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 5

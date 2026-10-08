@@ -37,7 +37,11 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       },
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
-    verified: null,
+    verified: {
+      gameVersion: "1.26.52",
+      date: "2026-10-08",
+      by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
+    },
     java: null,
   },
   {
@@ -65,6 +69,11 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
           map: { north: "south", south: "north", east: "west", west: "east" },
           verify:
             "VERIFY-IN-GAME: minecraft:cardinal_direction names the input side, the opposite of the direction the signal exits (it equals Java facing, per GeyserMC mappings-generator BlockMappers)",
+          proven: {
+            gameVersion: "1.26.52",
+            date: "2026-10-08",
+            by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
+          },
         },
         output_subtract_bit: {
           from: "mode",
@@ -314,7 +323,11 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       },
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
-    verified: null,
+    verified: {
+      gameVersion: "1.26.52",
+      date: "2026-10-08",
+      by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
+    },
     java: null,
   },
   {
@@ -396,7 +409,11 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       states: {},
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
-    verified: null,
+    verified: {
+      gameVersion: "1.26.52",
+      date: "2026-10-08",
+      by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
+    },
     java: null,
   },
   {
@@ -444,7 +461,11 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       },
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
-    verified: null,
+    verified: {
+      gameVersion: "1.26.52",
+      date: "2026-10-08",
+      by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
+    },
     java: null,
   },
   {
@@ -522,7 +543,11 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       },
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
-    verified: null,
+    verified: {
+      gameVersion: "1.26.52",
+      date: "2026-10-08",
+      by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
+    },
     java: null,
   },
   {
@@ -571,7 +596,11 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       states: {},
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
-    verified: null,
+    verified: {
+      gameVersion: "1.26.52",
+      date: "2026-10-08",
+      by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
+    },
     java: null,
   },
   {
@@ -599,6 +628,11 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
           map: { north: "south", south: "north", east: "west", west: "east" },
           verify:
             "VERIFY-IN-GAME: minecraft:cardinal_direction names the input side, the opposite of the direction the signal exits (it equals Java facing, per GeyserMC mappings-generator BlockMappers)",
+          proven: {
+            gameVersion: "1.26.52",
+            date: "2026-10-08",
+            by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
+          },
         },
         repeater_delay: {
           from: "delay",
@@ -704,7 +738,11 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       },
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
-    verified: null,
+    verified: {
+      gameVersion: "1.26.52",
+      date: "2026-10-08",
+      by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
+    },
     java: null,
   },
   {
@@ -722,7 +760,11 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       states: {},
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
-    verified: null,
+    verified: {
+      gameVersion: "1.26.52",
+      date: "2026-10-08",
+      by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
+    },
     java: null,
   },
   {
@@ -771,7 +813,11 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       },
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
-    verified: null,
+    verified: {
+      gameVersion: "1.26.52",
+      date: "2026-10-08",
+      by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
+    },
     java: null,
   },
   {

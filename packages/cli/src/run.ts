@@ -1,5 +1,6 @@
 import { parseArgs } from "node:util";
 import { bundleCommand } from "./commands/bundle.js";
+import { exportCommand, exportListCommand } from "./commands/export.js";
 import { registryDumpCommand } from "./commands/registry.js";
 import { validateCommand } from "./commands/validate.js";
 import { HELP_TEXT, VERSION } from "./help.js";
@@ -8,6 +9,8 @@ import { HELP_TEXT, VERSION } from "./help.js";
 export interface RunIO {
   stdout: (text: string) => void;
   stderr: (text: string) => void;
+  /** Environment variables the CLI reads (only RSD_PACK_DIR). */
+  env?: Readonly<Record<string, string | undefined>>;
 }
 
 /** Result of a CLI run: the process exit code (0 ok, 1 validation errors, 2 usage or I/O error). */
@@ -17,14 +20,15 @@ export interface RunResult {
 
 /** Commands listed in the help that later milestones implement, with the milestone that brings each. */
 const PLANNED_COMMANDS: Readonly<Record<string, string>> = {
-  export: "M3",
   sheets: "M7",
   pack: "M7",
   mcp: "M8",
 };
 
-function usage(io: RunIO, message: string): RunResult {
+function usage(io: RunIO, json: boolean, message: string): RunResult {
   io.stderr(`rsd: ${message}\nRun rsd --help for usage.\n`);
+  // With --json, stdout always carries exactly one JSON document, usage errors included.
+  if (json) io.stdout(`${JSON.stringify({ ok: false, diagnostics: [], error: message })}\n`);
   return { exitCode: 2 };
 }
 
@@ -33,22 +37,29 @@ function usage(io: RunIO, message: string): RunResult {
  * Never throws: usage errors are reported on stderr with exit code 2.
  */
 export async function run(argv: readonly string[], io: RunIO): Promise<RunResult> {
+  const wantsJson = argv.includes("--json");
   let parsed;
   try {
     parsed = parseArgs({
-      args: [...argv],
+      args: joinOrigin(argv),
       options: {
         help: { type: "boolean", short: "h" },
         version: { type: "boolean", short: "v" },
         json: { type: "boolean" },
         strict: { type: "boolean" },
         output: { type: "string", short: "o" },
+        to: { type: "string" },
+        pack: { type: "string" },
+        clear: { type: "boolean" },
+        origin: { type: "string" },
+        "command-limit": { type: "string" },
+        list: { type: "boolean" },
       },
       allowPositionals: true,
       strict: true,
     });
   } catch (err) {
-    return usage(io, (err as Error).message);
+    return usage(io, wantsJson, (err as Error).message);
   }
   const { values, positionals } = parsed;
   const [command, ...args] = positionals;
@@ -63,19 +74,52 @@ export async function run(argv: readonly string[], io: RunIO): Promise<RunResult
   try {
     switch (command) {
       case "validate": {
-        if (args.length !== 1) return usage(io, "validate takes exactly one file");
+        if (args.length !== 1) return usage(io, wantsJson, "validate takes exactly one file");
         return await validateCommand(
           args[0] as string,
           { json: values.json ?? false, strict: values.strict ?? false },
           io,
         );
       }
+      case "export": {
+        if (values.list) return exportListCommand(io);
+        if (args.length !== 1) return usage(io, wantsJson, "export takes exactly one file");
+        let origin: [number, number, number] | undefined;
+        if (values.origin !== undefined) {
+          const parts = values.origin.split(",").map((n) => Number(n));
+          if (parts.length !== 3 || parts.some((n) => !Number.isInteger(n) || Math.abs(n) > 30_000_000)) {
+            return usage(io, wantsJson, "--origin takes three integers: --origin x y z");
+          }
+          origin = parts as [number, number, number];
+        }
+        let commandLimit: number | undefined;
+        if (values["command-limit"] !== undefined) {
+          commandLimit = /^[1-9]\d{0,8}$/.test(values["command-limit"])
+            ? Number(values["command-limit"])
+            : NaN;
+          if (!Number.isInteger(commandLimit) || commandLimit < 1)
+            return usage(io, wantsJson, "--command-limit takes a positive integer");
+        }
+        return await exportCommand(
+          args[0] as string,
+          {
+            to: values.to,
+            pack: values.pack,
+            clear: values.clear ?? false,
+            origin,
+            commandLimit,
+            json: values.json ?? false,
+          },
+          io,
+        );
+      }
       case "bundle": {
-        if (args.length !== 1) return usage(io, "bundle takes exactly one file and -o <html>");
+        if (args.length !== 1) return usage(io, wantsJson, "bundle takes exactly one file and -o <html>");
         return await bundleCommand(args[0] as string, values.output, io);
       }
       case "registry": {
-        if (args[0] !== "dump" || args.length !== 1) return usage(io, 'registry takes the subcommand "dump"');
+        if (args[0] !== "dump" || args.length !== 1)
+          return usage(io, wantsJson, 'registry takes the subcommand "dump"');
         return await registryDumpCommand(values.output, io);
       }
     }
@@ -90,4 +134,22 @@ export async function run(argv: readonly string[], io: RunIO): Promise<RunResult
   }
   io.stderr(`rsd: unknown command "${command}". Run rsd --help.\n`);
   return { exitCode: 2 };
+}
+
+/** `--origin x y z` takes three values; parseArgs takes one, so join them as `x,y,z` first. */
+function joinOrigin(argv: readonly string[]): string[] {
+  const out: string[] = [];
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i] as string;
+    if (
+      a === "--origin" &&
+      i + 3 < argv.length &&
+      [1, 2, 3].every((k) => /^-?\d+$/.test(argv[i + k] ?? ""))
+    ) {
+      // The = form, because parseArgs refuses a separate value that starts with "-".
+      out.push(`--origin=${argv[i + 1]},${argv[i + 2]},${argv[i + 3]}`);
+      i += 3;
+    } else out.push(a);
+  }
+  return out;
 }

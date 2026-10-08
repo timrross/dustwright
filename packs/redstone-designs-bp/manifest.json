@@ -1,0 +1,17 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Dustwright redstone designs",
+    "description": "Redstone designs exported by Dustwright. Data only: functions and structures, no scripts.",
+    "uuid": "528f5772-da6b-4496-b443-e23a2fe3e732",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 26, 50]
+  },
+  "modules": [
+    {
+      "type": "data",
+      "uuid": "35082e34-dc4e-4772-a683-12e61d110011",
+      "version": [1, 0, 0]
+    }
+  ]
+}

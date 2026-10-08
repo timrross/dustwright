@@ -20,8 +20,8 @@ export interface StateDef {
 
 /** How one target-edition state is derived: from an abstract state through a value map, or a fixed value. */
 export type StateMapping =
-  | { from: string; map: Readonly<Record<string, StateValue>>; verify?: string }
-  | { value: StateValue; verify?: string };
+  | { from: string; map: Readonly<Record<string, StateValue>>; verify?: string; proven?: Verification }
+  | { value: StateValue; verify?: string; proven?: Verification };
 
 /** How an abstract block maps to one edition's block ID and states. */
 export interface EditionMapping {

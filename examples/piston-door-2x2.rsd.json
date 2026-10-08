@@ -2,7 +2,7 @@
   "format": "rsd/1",
   "meta": {
     "name": "2x2 piston door",
-    "description": "Four sticky pistons close a 2x2 doorway. Two torches keep the door shut; the lever turns them off and the door opens. Bedrock has no quasi-connectivity, so each upper piston is powered through the block its torch strongly powers. The design shows the pistons retracted; the torches extend them on placement (with /function), closing the door.",
+    "description": "Four sticky pistons close a 2x2 doorway. Two torches keep the door shut; the lever turns them off and the door opens. Bedrock has no quasi-connectivity, so each upper piston is powered through the block its torch strongly powers. The design shows the pistons retracted; the torches extend them on placement (with /function), closing the door. Because it moves at rest, run rsd/2x2-piston-door_clear before building it again in the same place.",
     "edition": "bedrock",
     "gameVersion": "1.26.50"
   },

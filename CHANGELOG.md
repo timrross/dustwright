@@ -7,6 +7,11 @@ All notable user-facing changes are recorded here. The format follows
 
 ### Added
 
+- M3: `rsd export --to mcfunction` with a fixed placement order, a separate `--clear` function, `--origin` and
+  `--command-limit`; safe writes into a pack (no symlinks, two directories only); the data-only behavior pack
+  `packs/redstone-designs-bp`; the orientation test design; a Docker Compose test world; and an automated in-game
+  check (`deploy/test-world/ingame-check.mjs`) that proves mappings and example behaviour through the server console.
+
 - M2: the `<redstone-viewer>` web component (orbit, pan, zoom, hover and click inspector with the Bedrock mapping,
   layer slider with isolate and ghosting, explode, direction arrows, instructions mode, port labels and
   annotation pins, keyboard control, light and dark themes, bottom-sheet inspector on narrow screens), the

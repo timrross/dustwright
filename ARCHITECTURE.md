@@ -20,16 +20,16 @@ design is clean.
 
 ## Package map
 
-| Package                 | Holds                                            | Depends on                     |
-| ----------------------- | ------------------------------------------------ | ------------------------------ |
-| `@dustwright/core`      | Schema, parser, normaliser, registry, editions   | nothing                        |
-| `@dustwright/sim`       | Tick-based Bedrock redstone simulator            | core                           |
-| `@dustwright/validator` | Stage 1 to 3 rules, diagnostics                  | core, sim                      |
-| `@dustwright/viewer`    | Three.js viewer web component                    | core                           |
-| `@dustwright/export`    | `.mcfunction`, `.mcstructure`, `.mcpack`, sheets | core                           |
-| `@dustwright/mcp`       | MCP server over stdio                            | core, validator, sim, export   |
-| `dustwright` (cli)      | The `dustwright` / `rsd` binary                  | everything except viewer, site |
-| `apps/site`             | Public static website and playground             | packages                       |
+| Package                 | Holds                                             | Depends on                     |
+| ----------------------- | ------------------------------------------------- | ------------------------------ |
+| `@dustwright/core`      | Schema, parser, normaliser, registry, editions    | nothing                        |
+| `@dustwright/sim`       | Tick-based Bedrock redstone simulator             | core                           |
+| `@dustwright/validator` | Stage 1 to 3 rules, diagnostics, edition profiles | core, sim, export              |
+| `@dustwright/viewer`    | Three.js viewer web component                     | core                           |
+| `@dustwright/export`    | `.mcfunction`, `.mcstructure`, `.mcpack`, sheets  | core                           |
+| `@dustwright/mcp`       | MCP server over stdio                             | core, validator, sim, export   |
+| `dustwright` (cli)      | The `dustwright` / `rsd` binary                   | everything except viewer, site |
+| `apps/site`             | Public static website and playground              | packages                       |
 
 Packages depend inward only: everything depends on `core`; nothing depends on `viewer`, `cli` or `site` (the site
 alone renders with the viewer). A test (`test/dependency-graph.test.ts`) enforces the edges and the absence of
@@ -112,6 +112,14 @@ Three shapes ship: the library (`@dustwright/viewer` for Node-safe geometry, `@d
 element), an IIFE bundle (`dist/bundle/redstone-viewer.js`) with three.js and the parser inlined, and the site's
 pages. `rsd bundle` inlines that IIFE into one HTML file: `packages/cli/scripts/copy-viewer.mjs` copies it into
 `packages/cli/assets/` at build time, so the CLI never depends on the viewer as code.
+
+## Exporters
+
+An exporter returns files (`{ path, bytes }`) relative to a pack root; it never touches the disk. The CLI's
+`writeIntoPack` is the one place that writes, and the one place path safety lives. The `.mcfunction` exporter
+emits only `setblock` and `fill` lines built from registry data and integers, plus one comment line carrying the
+slug and the registry version; a golden allowlist test checks every line of every example. The behavior pack in
+`packs/redstone-designs-bp/` is data only (one data module, no scripts) with UUIDs fixed in its manifest.
 
 ## Generated files
 

@@ -20,15 +20,15 @@ pnpm rsd --help
 
 ## Commands
 
-| Command                                                       | Does                                 | Available |
-| ------------------------------------------------------------- | ------------------------------------ | --------- |
-| `rsd validate <file> [--json] [--strict]`                     | Check a design                       | M1        |
-| `rsd export <file> --to mcfunction\|mcstructure --pack <dir>` | Write a design into a behavior pack  | M3, M4    |
-| `rsd bundle <file> -o <html>`                                 | Single-file viewer                   | M2        |
-| `rsd sheets <file> -o <dir>`                                  | Layer sheet SVGs                     | M7        |
-| `rsd pack <file> -o <mcpack>`                                 | One-design behavior pack             | M7        |
-| `rsd registry dump`                                           | Regenerate `docs/bedrock-mapping.md` | M1        |
-| `rsd mcp`                                                     | MCP server over stdio                | M8        |
+| Command                                                       | Does                                 | Available                         |
+| ------------------------------------------------------------- | ------------------------------------ | --------------------------------- |
+| `rsd validate <file> [--json] [--strict]`                     | Check a design                       | M1                                |
+| `rsd export <file> --to mcfunction\|mcstructure --pack <dir>` | Write a design into a behavior pack  | M3 (mcfunction), M4 (mcstructure) |
+| `rsd bundle <file> -o <html>`                                 | Single-file viewer                   | M2                                |
+| `rsd sheets <file> -o <dir>`                                  | Layer sheet SVGs                     | M7                                |
+| `rsd pack <file> -o <mcpack>`                                 | One-design behavior pack             | M7                                |
+| `rsd registry dump`                                           | Regenerate `docs/bedrock-mapping.md` | M1                                |
+| `rsd mcp`                                                     | MCP server over stdio                | M8                                |
 
 Exit codes: 0 ok, 1 validation errors, 2 usage or I/O error.
 
@@ -40,6 +40,8 @@ pnpm rsd validate examples/not-gate.rsd.json          # human-readable diagnosti
 pnpm rsd validate examples/not-gate.rsd.json --json   # {"ok": true, "diagnostics": [...]}
 pnpm rsd registry dump | head                         # the Bedrock mapping table
 pnpm rsd bundle examples/not-gate.rsd.json -o not-gate.html   # one self-contained HTML viewer
+pnpm rsd export examples/not-gate.rsd.json --to mcfunction --pack packs/redstone-designs-bp --clear
+#   then in game: /function rsd/not-gate (see deploy/test-world/README.md)
 pnpm --filter @dustwright/site dev                    # the playground at http://localhost:5173/play/
 ```
 

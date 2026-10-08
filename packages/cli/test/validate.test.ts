@@ -7,7 +7,8 @@ import { renderMappingDoc } from "@dustwright/core";
 import { run } from "../src/index.js";
 
 const root = fileURLToPath(new URL("../../../", import.meta.url));
-const example = join(root, "examples/not-gate.rsd.json");
+// The observer clock has unverified blocks (observers), so it validates with W108 warnings.
+const example = join(root, "examples/observer-clock.rsd.json");
 const tmp = mkdtempSync(join(tmpdir(), "rsd-cli-"));
 
 async function rsd(...args: string[]) {

@@ -10,3 +10,7 @@ playwright-report/
 packages/cli/assets/
 test-results/
 playwright-report/
+# Exported designs are generated per run; the pack in the repo holds only its manifest.
+packs/redstone-designs-bp/functions/
+packs/redstone-designs-bp/structures/
+deploy/test-world/data/

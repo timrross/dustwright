@@ -2,7 +2,7 @@
   "format": "rsd/1",
   "meta": {
     "name": "Observer clock",
-    "description": "Two observers watch each other, so each pulse triggers the other: a free-running fast clock that flashes two lamps. Placing the second observer starts it, so /function builds a running clock; /structure load may place it stopped (give it a block update to start).",
+    "description": "Two observers watch each other, so each pulse triggers the other: a free-running fast clock. The dust on the east flickers with every pulse; the lamp on the west stays lit, because the pulses come too fast for a lamp to go dark (checked in game). Placing the second observer starts it, so /function builds a running clock; /structure load may place it stopped (give it a block update to start).",
     "edition": "bedrock",
     "gameVersion": "1.26.50"
   },
@@ -10,9 +10,10 @@
     "#": "stone",
     "e": "observer facing=east",
     "w": "observer facing=west",
-    "*": "lamp"
+    "*": "lamp",
+    "-": "dust"
   },
-  "layers": [["####"], ["*ew*"]],
+  "layers": [["####"], ["*ew-"]],
   "ports": {
     "outputs": [
       {

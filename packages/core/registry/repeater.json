@@ -47,7 +47,12 @@
           "east": "west",
           "west": "east"
         },
-        "verify": "VERIFY-IN-GAME: minecraft:cardinal_direction names the input side, the opposite of the direction the signal exits (it equals Java facing, per GeyserMC mappings-generator BlockMappers)"
+        "verify": "VERIFY-IN-GAME: minecraft:cardinal_direction names the input side, the opposite of the direction the signal exits (it equals Java facing, per GeyserMC mappings-generator BlockMappers)",
+        "proven": {
+          "gameVersion": "1.26.52",
+          "date": "2026-10-08",
+          "by": "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)"
+        }
       },
       "repeater_delay": {
         "from": "delay",

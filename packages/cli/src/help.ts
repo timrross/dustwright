@@ -10,8 +10,8 @@ Usage: rsd <command> [options]
 
 Commands:
   validate <file> [--json] [--strict]     Check a design (stages 1 to 3)
-  export <file> --to <mcfunction|mcstructure> --pack <dir> [--clear] [--origin x y z]
-                                           Write a design into a behavior pack
+  export <file> --to <mcfunction|mcstructure> --pack <dir> [--clear] [--origin x y z] [--command-limit n] [--json]
+                                           Write a design into a behavior pack (pack root: --pack or RSD_PACK_DIR)
   export --list                            List the available exporters
   bundle <file> -o <html>                  Write a single-file viewer
   sheets <file> -o <dir>                   Write layer sheet SVGs

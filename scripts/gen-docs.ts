@@ -4,6 +4,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { renderMappingDoc, renderVerifyLog } from "@dustwright/core";
+import { EXPORTER_ASSUMPTIONS } from "@dustwright/export";
 import { renderDiagnosticsDoc } from "@dustwright/validator";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
@@ -11,7 +12,7 @@ const check = process.argv.includes("--check");
 const docs: Record<string, string> = {
   "docs/bedrock-mapping.md": renderMappingDoc("bedrock"),
   "docs/diagnostics.md": renderDiagnosticsDoc(),
-  "docs/verify-in-game.md": renderVerifyLog("bedrock"),
+  "docs/verify-in-game.md": renderVerifyLog("bedrock", EXPORTER_ASSUMPTIONS),
 };
 let drift = false;
 for (const [path, content] of Object.entries(docs)) {

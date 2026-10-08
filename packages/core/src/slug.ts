@@ -4,9 +4,12 @@ export const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 /** Maximum slug length. */
 export const SLUG_MAX = 48;
 
-/** True when `slug` matches the slug grammar and length. */
+/** Windows device names, which cannot be file names on Windows even with an extension. */
+const RESERVED = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])$/;
+
+/** True when `slug` matches the slug grammar and length and is not a Windows device name. */
 export function isValidSlug(slug: string): boolean {
-  return slug.length >= 1 && slug.length <= SLUG_MAX && SLUG_PATTERN.test(slug);
+  return slug.length >= 1 && slug.length <= SLUG_MAX && SLUG_PATTERN.test(slug) && !RESERVED.test(slug);
 }
 
 /**

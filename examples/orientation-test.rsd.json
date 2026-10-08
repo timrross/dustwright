@@ -1,0 +1,1758 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Orientation test",
+    "description": "One of every directional block in every orientation, each on a wool square coloured by orientation: north red, south blue, east yellow, west lime, up white, down black, floor gray, ceiling light gray. Rows run north to south in this order: repeater, comparator, torch, lever, button, piston, sticky piston, observer, hopper, dropper, dispenser, stairs, door (closed and open, both hinges), trapdoor (bottom and top, closed and open). Build it in the test world and compare each block with the viewer from the same angle.",
+    "edition": "bedrock",
+    "gameVersion": "1.26.50"
+  },
+  "legend": {
+    "#": "stone",
+    "A": "wool color=red",
+    "B": "wool color=blue",
+    "C": "wool color=yellow",
+    "D": "wool color=lime",
+    "E": "wool color=gray",
+    "F": "wool color=light_gray",
+    "G": "wool color=white",
+    "H": "wool color=black"
+  },
+  "layers": [
+    [
+      "................................................",
+      ".A..B..C..D.....................................",
+      "................................................",
+      "................................................",
+      ".A..B..C..D.....................................",
+      "................................................",
+      "................................................",
+      ".E..A..B..C..D..................................",
+      "................................................",
+      "................................................",
+      ".E..F..A..B..C..D...............................",
+      "................................................",
+      "................................................",
+      ".E..F..A..B..C..D...............................",
+      "................................................",
+      "................................................",
+      ".A..B..C..D..G..H...............................",
+      "................................................",
+      "................................................",
+      ".A..B..C..D..G..H...............................",
+      "................................................",
+      "................................................",
+      ".A..B..C..D..G..H...............................",
+      "................................................",
+      "................................................",
+      ".H..A..B..C..D..................................",
+      "................................................",
+      "................................................",
+      ".A..B..C..D..G..H...............................",
+      "................................................",
+      "................................................",
+      ".A..B..C..D..G..H...............................",
+      "................................................",
+      "................................................",
+      ".A..A..B..B..C..C..D..D.........................",
+      "................................................",
+      "................................................",
+      ".A..A..A..A..B..B..B..B..C..C..C..C..D..D..D..D.",
+      "................................................",
+      "................................................",
+      ".A..A..A..A..B..B..B..B..C..C..C..C..D..D..D..D.",
+      "................................................"
+    ],
+    [
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "....#...........................................",
+      "...........##...................................",
+      ".......#........................................",
+      ".......#........................................",
+      "..............##................................",
+      "..........#.....................................",
+      ".......#........................................",
+      "..............##................................",
+      "..........#.....................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................"
+    ],
+    [
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "....#...........................................",
+      "................................................",
+      "................................................",
+      "....#...........................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................",
+      "................................................"
+    ]
+  ],
+  "blocks": [
+    {
+      "pos": [
+        1,
+        1,
+        1
+      ],
+      "block": "repeater facing=north"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        1
+      ],
+      "block": "repeater facing=south"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        1
+      ],
+      "block": "repeater facing=east"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        1
+      ],
+      "block": "repeater facing=west"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        4
+      ],
+      "block": "comparator facing=north"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        4
+      ],
+      "block": "comparator facing=south"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        4
+      ],
+      "block": "comparator facing=east"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        4
+      ],
+      "block": "comparator facing=west"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        7
+      ],
+      "block": "torch mount=floor"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        7
+      ],
+      "block": "torch mount=north"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        7
+      ],
+      "block": "torch mount=south"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        7
+      ],
+      "block": "torch mount=east"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        7
+      ],
+      "block": "torch mount=west"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        10
+      ],
+      "block": "lever mount=floor"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        10
+      ],
+      "block": "lever mount=ceiling"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        10
+      ],
+      "block": "lever mount=north"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        10
+      ],
+      "block": "lever mount=south"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        10
+      ],
+      "block": "lever mount=east"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        10
+      ],
+      "block": "lever mount=west"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        13
+      ],
+      "block": "button mount=floor"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        13
+      ],
+      "block": "button mount=ceiling"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        13
+      ],
+      "block": "button mount=north"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        13
+      ],
+      "block": "button mount=south"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        13
+      ],
+      "block": "button mount=east"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        13
+      ],
+      "block": "button mount=west"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        16
+      ],
+      "block": "piston facing=north"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        16
+      ],
+      "block": "piston facing=south"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        16
+      ],
+      "block": "piston facing=east"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        16
+      ],
+      "block": "piston facing=west"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        16
+      ],
+      "block": "piston facing=up"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        16
+      ],
+      "block": "piston facing=down"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        19
+      ],
+      "block": "sticky_piston facing=north"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        19
+      ],
+      "block": "sticky_piston facing=south"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        19
+      ],
+      "block": "sticky_piston facing=east"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        19
+      ],
+      "block": "sticky_piston facing=west"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        19
+      ],
+      "block": "sticky_piston facing=up"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        19
+      ],
+      "block": "sticky_piston facing=down"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        22
+      ],
+      "block": "observer facing=north"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        22
+      ],
+      "block": "observer facing=south"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        22
+      ],
+      "block": "observer facing=east"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        22
+      ],
+      "block": "observer facing=west"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        22
+      ],
+      "block": "observer facing=up"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        22
+      ],
+      "block": "observer facing=down"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        25
+      ],
+      "block": "hopper facing=down"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        25
+      ],
+      "block": "hopper facing=north"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        25
+      ],
+      "block": "hopper facing=south"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        25
+      ],
+      "block": "hopper facing=east"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        25
+      ],
+      "block": "hopper facing=west"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        28
+      ],
+      "block": "dropper facing=north"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        28
+      ],
+      "block": "dropper facing=south"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        28
+      ],
+      "block": "dropper facing=east"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        28
+      ],
+      "block": "dropper facing=west"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        28
+      ],
+      "block": "dropper facing=up"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        28
+      ],
+      "block": "dropper facing=down"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        31
+      ],
+      "block": "dispenser facing=north"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        31
+      ],
+      "block": "dispenser facing=south"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        31
+      ],
+      "block": "dispenser facing=east"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        31
+      ],
+      "block": "dispenser facing=west"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        31
+      ],
+      "block": "dispenser facing=up"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        31
+      ],
+      "block": "dispenser facing=down"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        34
+      ],
+      "block": "stairs facing=north half=bottom"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        34
+      ],
+      "block": "stairs facing=north half=top"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        34
+      ],
+      "block": "stairs facing=south half=bottom"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        34
+      ],
+      "block": "stairs facing=south half=top"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        34
+      ],
+      "block": "stairs facing=east half=bottom"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        34
+      ],
+      "block": "stairs facing=east half=top"
+    },
+    {
+      "pos": [
+        19,
+        1,
+        34
+      ],
+      "block": "stairs facing=west half=bottom"
+    },
+    {
+      "pos": [
+        22,
+        1,
+        34
+      ],
+      "block": "stairs facing=west half=top"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        37
+      ],
+      "block": "door facing=north hinge=left"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        37
+      ],
+      "block": "door facing=north hinge=right"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        37
+      ],
+      "block": "door facing=north hinge=left open=true"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        37
+      ],
+      "block": "door facing=north hinge=right open=true"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        37
+      ],
+      "block": "door facing=south hinge=left"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        37
+      ],
+      "block": "door facing=south hinge=right"
+    },
+    {
+      "pos": [
+        19,
+        1,
+        37
+      ],
+      "block": "door facing=south hinge=left open=true"
+    },
+    {
+      "pos": [
+        22,
+        1,
+        37
+      ],
+      "block": "door facing=south hinge=right open=true"
+    },
+    {
+      "pos": [
+        25,
+        1,
+        37
+      ],
+      "block": "door facing=east hinge=left"
+    },
+    {
+      "pos": [
+        28,
+        1,
+        37
+      ],
+      "block": "door facing=east hinge=right"
+    },
+    {
+      "pos": [
+        31,
+        1,
+        37
+      ],
+      "block": "door facing=east hinge=left open=true"
+    },
+    {
+      "pos": [
+        34,
+        1,
+        37
+      ],
+      "block": "door facing=east hinge=right open=true"
+    },
+    {
+      "pos": [
+        37,
+        1,
+        37
+      ],
+      "block": "door facing=west hinge=left"
+    },
+    {
+      "pos": [
+        40,
+        1,
+        37
+      ],
+      "block": "door facing=west hinge=right"
+    },
+    {
+      "pos": [
+        43,
+        1,
+        37
+      ],
+      "block": "door facing=west hinge=left open=true"
+    },
+    {
+      "pos": [
+        46,
+        1,
+        37
+      ],
+      "block": "door facing=west hinge=right open=true"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        40
+      ],
+      "block": "trapdoor facing=north open=false"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        40
+      ],
+      "block": "trapdoor facing=north open=true"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        40
+      ],
+      "block": "trapdoor facing=north half=top open=false"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        40
+      ],
+      "block": "trapdoor facing=north half=top open=true"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        40
+      ],
+      "block": "trapdoor facing=south open=false"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        40
+      ],
+      "block": "trapdoor facing=south open=true"
+    },
+    {
+      "pos": [
+        19,
+        1,
+        40
+      ],
+      "block": "trapdoor facing=south half=top open=false"
+    },
+    {
+      "pos": [
+        22,
+        1,
+        40
+      ],
+      "block": "trapdoor facing=south half=top open=true"
+    },
+    {
+      "pos": [
+        25,
+        1,
+        40
+      ],
+      "block": "trapdoor facing=east open=false"
+    },
+    {
+      "pos": [
+        28,
+        1,
+        40
+      ],
+      "block": "trapdoor facing=east open=true"
+    },
+    {
+      "pos": [
+        31,
+        1,
+        40
+      ],
+      "block": "trapdoor facing=east half=top open=false"
+    },
+    {
+      "pos": [
+        34,
+        1,
+        40
+      ],
+      "block": "trapdoor facing=east half=top open=true"
+    },
+    {
+      "pos": [
+        37,
+        1,
+        40
+      ],
+      "block": "trapdoor facing=west open=false"
+    },
+    {
+      "pos": [
+        40,
+        1,
+        40
+      ],
+      "block": "trapdoor facing=west open=true"
+    },
+    {
+      "pos": [
+        43,
+        1,
+        40
+      ],
+      "block": "trapdoor facing=west half=top open=false"
+    },
+    {
+      "pos": [
+        46,
+        1,
+        40
+      ],
+      "block": "trapdoor facing=west half=top open=true"
+    }
+  ],
+  "annotations": [
+    {
+      "pos": [
+        1,
+        1,
+        1
+      ],
+      "text": "repeater facing=north"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        1
+      ],
+      "text": "repeater facing=south"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        1
+      ],
+      "text": "repeater facing=east"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        1
+      ],
+      "text": "repeater facing=west"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        4
+      ],
+      "text": "comparator facing=north"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        4
+      ],
+      "text": "comparator facing=south"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        4
+      ],
+      "text": "comparator facing=east"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        4
+      ],
+      "text": "comparator facing=west"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        7
+      ],
+      "text": "torch mount=floor"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        7
+      ],
+      "text": "torch mount=north"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        7
+      ],
+      "text": "torch mount=south"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        7
+      ],
+      "text": "torch mount=east"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        7
+      ],
+      "text": "torch mount=west"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        10
+      ],
+      "text": "lever mount=floor"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        10
+      ],
+      "text": "lever mount=ceiling"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        10
+      ],
+      "text": "lever mount=north"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        10
+      ],
+      "text": "lever mount=south"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        10
+      ],
+      "text": "lever mount=east"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        10
+      ],
+      "text": "lever mount=west"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        13
+      ],
+      "text": "button mount=floor"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        13
+      ],
+      "text": "button mount=ceiling"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        13
+      ],
+      "text": "button mount=north"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        13
+      ],
+      "text": "button mount=south"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        13
+      ],
+      "text": "button mount=east"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        13
+      ],
+      "text": "button mount=west"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        16
+      ],
+      "text": "piston facing=north"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        16
+      ],
+      "text": "piston facing=south"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        16
+      ],
+      "text": "piston facing=east"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        16
+      ],
+      "text": "piston facing=west"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        16
+      ],
+      "text": "piston facing=up"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        16
+      ],
+      "text": "piston facing=down"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        19
+      ],
+      "text": "sticky_piston facing=north"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        19
+      ],
+      "text": "sticky_piston facing=south"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        19
+      ],
+      "text": "sticky_piston facing=east"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        19
+      ],
+      "text": "sticky_piston facing=west"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        19
+      ],
+      "text": "sticky_piston facing=up"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        19
+      ],
+      "text": "sticky_piston facing=down"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        22
+      ],
+      "text": "observer facing=north"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        22
+      ],
+      "text": "observer facing=south"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        22
+      ],
+      "text": "observer facing=east"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        22
+      ],
+      "text": "observer facing=west"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        22
+      ],
+      "text": "observer facing=up"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        22
+      ],
+      "text": "observer facing=down"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        25
+      ],
+      "text": "hopper facing=down"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        25
+      ],
+      "text": "hopper facing=north"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        25
+      ],
+      "text": "hopper facing=south"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        25
+      ],
+      "text": "hopper facing=east"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        25
+      ],
+      "text": "hopper facing=west"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        28
+      ],
+      "text": "dropper facing=north"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        28
+      ],
+      "text": "dropper facing=south"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        28
+      ],
+      "text": "dropper facing=east"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        28
+      ],
+      "text": "dropper facing=west"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        28
+      ],
+      "text": "dropper facing=up"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        28
+      ],
+      "text": "dropper facing=down"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        31
+      ],
+      "text": "dispenser facing=north"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        31
+      ],
+      "text": "dispenser facing=south"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        31
+      ],
+      "text": "dispenser facing=east"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        31
+      ],
+      "text": "dispenser facing=west"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        31
+      ],
+      "text": "dispenser facing=up"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        31
+      ],
+      "text": "dispenser facing=down"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        34
+      ],
+      "text": "stairs facing=north half=bottom"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        34
+      ],
+      "text": "stairs facing=north half=top"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        34
+      ],
+      "text": "stairs facing=south half=bottom"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        34
+      ],
+      "text": "stairs facing=south half=top"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        34
+      ],
+      "text": "stairs facing=east half=bottom"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        34
+      ],
+      "text": "stairs facing=east half=top"
+    },
+    {
+      "pos": [
+        19,
+        1,
+        34
+      ],
+      "text": "stairs facing=west half=bottom"
+    },
+    {
+      "pos": [
+        22,
+        1,
+        34
+      ],
+      "text": "stairs facing=west half=top"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        37
+      ],
+      "text": "door facing=north hinge=left"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        37
+      ],
+      "text": "door facing=north hinge=right"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        37
+      ],
+      "text": "door facing=north hinge=left open=true"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        37
+      ],
+      "text": "door facing=north hinge=right open=true"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        37
+      ],
+      "text": "door facing=south hinge=left"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        37
+      ],
+      "text": "door facing=south hinge=right"
+    },
+    {
+      "pos": [
+        19,
+        1,
+        37
+      ],
+      "text": "door facing=south hinge=left open=true"
+    },
+    {
+      "pos": [
+        22,
+        1,
+        37
+      ],
+      "text": "door facing=south hinge=right open=true"
+    },
+    {
+      "pos": [
+        25,
+        1,
+        37
+      ],
+      "text": "door facing=east hinge=left"
+    },
+    {
+      "pos": [
+        28,
+        1,
+        37
+      ],
+      "text": "door facing=east hinge=right"
+    },
+    {
+      "pos": [
+        31,
+        1,
+        37
+      ],
+      "text": "door facing=east hinge=left open=true"
+    },
+    {
+      "pos": [
+        34,
+        1,
+        37
+      ],
+      "text": "door facing=east hinge=right open=true"
+    },
+    {
+      "pos": [
+        37,
+        1,
+        37
+      ],
+      "text": "door facing=west hinge=left"
+    },
+    {
+      "pos": [
+        40,
+        1,
+        37
+      ],
+      "text": "door facing=west hinge=right"
+    },
+    {
+      "pos": [
+        43,
+        1,
+        37
+      ],
+      "text": "door facing=west hinge=left open=true"
+    },
+    {
+      "pos": [
+        46,
+        1,
+        37
+      ],
+      "text": "door facing=west hinge=right open=true"
+    },
+    {
+      "pos": [
+        1,
+        1,
+        40
+      ],
+      "text": "trapdoor facing=north open=false"
+    },
+    {
+      "pos": [
+        4,
+        1,
+        40
+      ],
+      "text": "trapdoor facing=north open=true"
+    },
+    {
+      "pos": [
+        7,
+        1,
+        40
+      ],
+      "text": "trapdoor facing=north half=top open=false"
+    },
+    {
+      "pos": [
+        10,
+        1,
+        40
+      ],
+      "text": "trapdoor facing=north half=top open=true"
+    },
+    {
+      "pos": [
+        13,
+        1,
+        40
+      ],
+      "text": "trapdoor facing=south open=false"
+    },
+    {
+      "pos": [
+        16,
+        1,
+        40
+      ],
+      "text": "trapdoor facing=south open=true"
+    },
+    {
+      "pos": [
+        19,
+        1,
+        40
+      ],
+      "text": "trapdoor facing=south half=top open=false"
+    },
+    {
+      "pos": [
+        22,
+        1,
+        40
+      ],
+      "text": "trapdoor facing=south half=top open=true"
+    },
+    {
+      "pos": [
+        25,
+        1,
+        40
+      ],
+      "text": "trapdoor facing=east open=false"
+    },
+    {
+      "pos": [
+        28,
+        1,
+        40
+      ],
+      "text": "trapdoor facing=east open=true"
+    },
+    {
+      "pos": [
+        31,
+        1,
+        40
+      ],
+      "text": "trapdoor facing=east half=top open=false"
+    },
+    {
+      "pos": [
+        34,
+        1,
+        40
+      ],
+      "text": "trapdoor facing=east half=top open=true"
+    },
+    {
+      "pos": [
+        37,
+        1,
+        40
+      ],
+      "text": "trapdoor facing=west open=false"
+    },
+    {
+      "pos": [
+        40,
+        1,
+        40
+      ],
+      "text": "trapdoor facing=west open=true"
+    },
+    {
+      "pos": [
+        43,
+        1,
+        40
+      ],
+      "text": "trapdoor facing=west half=top open=false"
+    },
+    {
+      "pos": [
+        46,
+        1,
+        40
+      ],
+      "text": "trapdoor facing=west half=top open=true"
+    }
+  ]
+}

@@ -114,7 +114,7 @@ test can drive (`set`); outputs are what it can read (`expect`), with the values
 - `annotations`: `[{ "pos": [x,y,z], "text": "..." }]`, pinned to a block, shown in the viewer.
 - `steps`: build steps, `{ "title", "layers": [y, ...] }` or `{ "title", "positions": [[x,y,z], ...] }`. Default:
   one step per layer.
-- `meta`: `name` (1 to 80 printable characters), `slug` (optional; `a-z0-9` runs joined by `-`, at most 48;
+- `meta`: `name` (1 to 80 printable characters), `slug` (optional; `a-z0-9` runs joined by `-`, at most 48, not a Windows device name such as `con` or `nul`;
   derived from the name when omitted), `description` (at most 2,000), `edition` (`bedrock`, the default;
   `java` is not supported yet), `gameVersion` (e.g. `1.26.50`).
 
@@ -157,6 +157,11 @@ steps. Exceeding a limit is E013.
    tests to make a failure go away**; if the brief was wrong, say so.
 5. **Show:** `rsd bundle design.rsd.json -o design.html` writes one self-contained HTML viewer (publish it as an
    artifact or open it offline).
+6. **Export:** `rsd export design.rsd.json --to mcfunction --pack <pack-dir> [--clear]` writes
+   `functions/rsd/<slug>.mcfunction`. In game, stand at the build origin and run `/function rsd/<slug>`; the build
+   lands one block east. `--clear` also writes `rsd/<slug>_clear`, which empties the bounding box. Run the clear
+   function before rebuilding in the same place if the design moves on its own once built (pistons that a torch
+   extends at rest): building over it pushes its blocks a second time.
 
 Common codes: E002 ragged grid, E003 character not in legend, E004 unknown type (hint has the closest names),
 E005 bad key or value (hint lists the allowed ones), E008 position outside the grid or on air, E011 port or test
