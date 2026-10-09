@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { serveLines } from "@dustwright/mcp";
 import type { McpHost } from "@dustwright/mcp";
 import { VERSION } from "../help.js";
-import { writeIntoPack } from "../pack-write.js";
+import { JAVA_PATH, writeIntoPack } from "../pack-write.js";
 import type { RunIO, RunResult } from "../run.js";
 import { VIEWER_ASSET } from "./bundle.js";
 
@@ -29,6 +29,7 @@ export const nodeHost: McpHost = {
     return join(dir, name);
   },
   writeIntoPack,
+  writeJavaFiles: (dir, files) => writeIntoPack(dir, files, JAVA_PATH),
 };
 
 /** `rsd mcp`: serves the toolchain as MCP tools over stdin and stdout until stdin closes. Logs go to stderr. */

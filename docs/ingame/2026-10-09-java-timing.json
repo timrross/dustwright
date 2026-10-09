@@ -1,0 +1,59 @@
+{
+  "when": "2026-10-09T06:17:36.737Z",
+  "container": "dustwright-test-java",
+  "tool": "deploy/test-world-java/measure-timing.mjs",
+  "table": {
+    "torch": {
+      "label": "torch turns off (its block powered by a lever on top)",
+      "gameTicks": [2, 2, 2, 2, 2]
+    },
+    "repeater1": {
+      "label": "repeater delay 1 turns on",
+      "gameTicks": [2, 2, 2, 2, 2]
+    },
+    "repeater2": {
+      "label": "repeater delay 2 turns on",
+      "gameTicks": [4, 4, 4, 4, 4]
+    },
+    "repeater3": {
+      "label": "repeater delay 3 turns on",
+      "gameTicks": [6, 6, 6, 6, 6]
+    },
+    "repeater4": {
+      "label": "repeater delay 4 turns on",
+      "gameTicks": [8, 8, 8, 8, 8]
+    },
+    "comparator": {
+      "label": "comparator turns on",
+      "gameTicks": [2, 2, 2, 2, 2]
+    },
+    "observer": {
+      "label": "observer fires after the block it watches changes",
+      "gameTicks": [2, 2, 2, 2, 2]
+    },
+    "observerPulse": {
+      "label": "observer pulse length",
+      "gameTicks": [2, 2, 2, 2, 2]
+    },
+    "piston": {
+      "label": "piston extends (its head appears)",
+      "gameTicks": [3, 3, 3, 3, 3]
+    },
+    "doorOpen": {
+      "label": "door opens",
+      "gameTicks": [0, 0, 0, 0, 0]
+    },
+    "trapdoorOpen": {
+      "label": "trapdoor opens",
+      "gameTicks": [0, 0, 0, 0, 0]
+    },
+    "lampOn": {
+      "label": "lamp turns on",
+      "gameTicks": [0, 0, 0, 0, 0]
+    },
+    "lampOff": {
+      "label": "lamp turns off",
+      "gameTicks": [4, 4, 4, 4, 4]
+    }
+  }
+}

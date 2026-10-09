@@ -22,6 +22,7 @@
     "docs:gen": "tsx --tsconfig tsconfig.json scripts/gen-docs.ts",
     "docs:check": "tsx --tsconfig tsconfig.json scripts/gen-docs.ts --check",
     "fetch:bedrock-data": "node scripts/fetch-bedrock-data.mjs",
+    "fetch:java-data": "node scripts/fetch-java-data.mjs",
     "e2e": "playwright test"
   },
   "devDependencies": {

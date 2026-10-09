@@ -105,6 +105,7 @@ export async function run(argv: readonly string[], io: RunIO): Promise<RunResult
           {
             to: values.to,
             pack: values.pack,
+            out: values.output,
             clear: values.clear ?? false,
             origin,
             commandLimit,

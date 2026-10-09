@@ -223,10 +223,17 @@
     },
     "valueMap": {
       "type": "object",
-      "description": "Abstract value (as text) to target value.",
+      "description": "Abstract value (as text) to target value; null means the target block has no such state for that value (a floor torch has no facing).",
       "minProperties": 1,
       "additionalProperties": {
-        "$ref": "#/$defs/value"
+        "oneOf": [
+          {
+            "$ref": "#/$defs/value"
+          },
+          {
+            "type": "null"
+          }
+        ]
       }
     },
     "stateMapping": {
@@ -325,18 +332,41 @@
           }
         },
         "checkedAgainst": {
-          "type": "object",
-          "required": ["vanillaData", "bedrockSamples"],
-          "additionalProperties": false,
-          "description": "The pinned @minecraft/vanilla-data version and Mojang bedrock-samples tag this mapping was checked against.",
-          "properties": {
-            "vanillaData": {
-              "type": "string"
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["vanillaData", "bedrockSamples"],
+              "additionalProperties": false,
+              "description": "Bedrock: the pinned @minecraft/vanilla-data version and Mojang bedrock-samples tag this mapping was checked against.",
+              "properties": {
+                "vanillaData": {
+                  "type": "string"
+                },
+                "bedrockSamples": {
+                  "type": "string"
+                }
+              }
             },
-            "bedrockSamples": {
-              "type": "string"
+            {
+              "type": "object",
+              "required": ["javaVersion"],
+              "additionalProperties": false,
+              "description": "Java: the pinned Java Edition version whose generated block report this mapping was checked against.",
+              "properties": {
+                "javaVersion": {
+                  "type": "string"
+                }
+              }
             }
-          }
+          ]
+        },
+        "verified": {
+          "$ref": "#/$defs/proof",
+          "description": "Java only: who proved this mapping in game, and when."
+        },
+        "conductsPower": {
+          "type": "boolean",
+          "description": "Java only, where it differs from the entry's conductsPower (measured)."
         }
       }
     },
@@ -412,9 +442,16 @@
               },
               "bottom": {
                 "type": "boolean"
+              },
+              "topCenter": {
+                "type": "boolean"
               }
             }
           }
+        },
+        "topCenter": {
+          "type": "boolean",
+          "description": "Java only, when it differs from top: can hold floor torches, floor levers, floor buttons and doors (they need the centre of the top face)."
         }
       }
     }

@@ -1,0 +1,27 @@
+{
+  "when": "2026-10-09T05:43:35.021Z",
+  "container": "dustwright-test-paper",
+  "design": "/examples/orientation-test.rsd.json",
+  "pass": true,
+  "results": [
+    {
+      "step": "load and paste",
+      "detail": " The clipboard has been pasted at (0, 0, 0) 6048 blocks affected 0 biomes affected 0 entities affected"
+    },
+    {
+      "step": "every block in the world by ID and state",
+      "pass": true,
+      "checked": 230,
+      "wrong": []
+    },
+    {
+      "step": "WorldEdit's saved copy equals our export, block by block",
+      "pass": true,
+      "ours": 230,
+      "theirs": 230,
+      "theirVersion": 3,
+      "theirDataVersion": 5023,
+      "diff": []
+    }
+  ]
+}

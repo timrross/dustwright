@@ -1,0 +1,59 @@
+# The Dustwright Java test worlds (M9). All Java verification happens here, never on other worlds.
+# - dustwright-test-java: Fabric with no gameplay mods, so the game logic is vanilla. Probes, supports, timings and
+#   the patterns are checked here, built with /setblock from the registry's Java mapping.
+# - dustwright-test-paper: Paper with WorldEdit, only to load and save Sponge .schem files from the console (WorldEdit
+#   on Fabric offers the console no world to act in). Paper is not used for redstone behaviour.
+# The Fabric game port is published on localhost only, for an optional visual check; checks use RCON in the container.
+services:
+  dustwright-test-java:
+    image: itzg/minecraft-server:2026.9.2-java25
+    container_name: dustwright-test-java
+    restart: unless-stopped
+    environment:
+      EULA: "TRUE"
+      TYPE: "FABRIC"
+      # PINS.javaVersion in packages/core/src/pins.ts.
+      VERSION: "26.3"
+      FABRIC_LOADER_VERSION: "0.19.5"
+      MODRINTH_PROJECTS: "fabric-api:bNnaTiuM"
+      REMOVE_OLD_MODS: "TRUE"
+      MODRINTH_DOWNLOAD_DEPENDENCIES: "none"
+      LEVEL: "dustwright-test"
+      LEVEL_TYPE: "minecraft:flat"
+      MODE: "creative"
+      DIFFICULTY: "peaceful"
+      SPAWN_MONSTERS: "false"
+      GENERATE_STRUCTURES: "false"
+      # RCON is reachable only inside the container: the image makes a random password and rcon-cli reads it.
+      ENABLE_RCON: "true"
+      ONLINE_MODE: "true"
+      MEMORY: "2G"
+      ENABLE_COMMAND_BLOCK: "true"
+      # The checks run with nobody online: never pause the game (Java pauses an empty server after 60 s by default).
+      PAUSE_WHEN_EMPTY_SECONDS: "0"
+    ports:
+      - "127.0.0.1:25566:25565/tcp"
+    volumes:
+      - ./data:/data
+  dustwright-test-paper:
+    image: itzg/minecraft-server:2026.9.2-java25
+    container_name: dustwright-test-paper
+    restart: unless-stopped
+    environment:
+      EULA: "TRUE"
+      TYPE: "PAPER"
+      VERSION: "26.3"
+      PAPER_BUILD: "162"
+      MODRINTH_PROJECTS: "worldedit:J1eeOh6C"
+      MODRINTH_DOWNLOAD_DEPENDENCIES: "none"
+      LEVEL: "world"
+      LEVEL_TYPE: "minecraft:flat"
+      MODE: "creative"
+      DIFFICULTY: "peaceful"
+      SPAWN_MONSTERS: "false"
+      GENERATE_STRUCTURES: "false"
+      ENABLE_RCON: "true"
+      PAUSE_WHEN_EMPTY_SECONDS: "0"
+      MEMORY: "2G"
+    volumes:
+      - ./data-paper:/data

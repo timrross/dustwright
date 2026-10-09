@@ -85,8 +85,16 @@ describe("registry", () => {
         vanillaData: PINS.vanillaData,
         bedrockSamples: PINS.bedrockSamples,
       });
+      expect(e.java?.checkedAgainst, e.type).toEqual({ javaVersion: PINS.javaVersion });
     }
   });
+
+  it.each(REGISTRY.map((e) => [e.type, e] as const))(
+    "%s maps every state combination to Java",
+    (_t, entry) => {
+      for (const block of allBlocks(entry)) expect(toEditionBlocks(block, "java").length).toBeGreaterThan(0);
+    },
+  );
 
   it("the installed @minecraft/vanilla-data is the pinned version", () => {
     const pkg = JSON.parse(
@@ -133,6 +141,36 @@ describe.skipIf(!haveMetadata)("Bedrock states against the pinned mojang-blocks.
           for (const [name, value] of Object.entries(b.states)) {
             const domain = props.get(name)?.values.map((v) => v.value) ?? [];
             expect(domain, `${b.id} ${name}=${String(value)}`).toContain(value);
+          }
+        }
+      }
+    },
+  );
+});
+
+// The Java block report is generated from Mojang's server jar and not committed; `pnpm fetch:java-data` builds the
+// pinned copy (it needs Docker for the Java 25 runtime). CI sets RSD_REQUIRE_JAVA_DATA so this cannot skip there.
+const javaReportPath = `${root}/.cache/java/${PINS.javaVersion}/blocks.json`;
+const haveJavaReport = existsSync(javaReportPath);
+if (!haveJavaReport && process.env.RSD_REQUIRE_JAVA_DATA) {
+  throw new Error(`${javaReportPath} is missing; run pnpm fetch:java-data`);
+}
+
+describe.skipIf(!haveJavaReport)("Java states against the pinned block report", () => {
+  type Report = Record<string, { properties?: Record<string, string[]> }>;
+  const report = haveJavaReport ? (JSON.parse(readFileSync(javaReportPath, "utf8")) as Report) : {};
+
+  it.each(REGISTRY.map((e) => [e.type, e] as const))(
+    "%s: every Java ID exists, every state of the block is set, and every value is in its domain",
+    (_t, e) => {
+      for (const block of allBlocks(e)) {
+        for (const b of toEditionBlocks(block, "java")) {
+          const known = report[b.id];
+          expect(known, b.id).toBeDefined();
+          const props = known?.properties ?? {};
+          expect(Object.keys(b.states).sort(), b.id).toEqual(Object.keys(props).sort());
+          for (const [name, value] of Object.entries(b.states)) {
+            expect(props[name], `${b.id} ${name}=${String(value)}`).toContain(String(value));
           }
         }
       }

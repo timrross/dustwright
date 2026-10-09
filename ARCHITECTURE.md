@@ -98,8 +98,14 @@ slug (E012).
 
 `meta.edition` is the switch. `EditionProfile { id, rules, mechanics, mapping, exporters, docs }` is defined in
 core; the profile objects live in `@dustwright/validator` (`BEDROCK_PROFILE`, `JAVA_PROFILE`), which depends on
-`sim` for mechanics and `export` for exporters. The Java profile is a stub whose only rule is E015 until M9. See
-`docs/adr/0004-edition-profiles.md`.
+`sim` for mechanics and `export` for exporters. See `docs/adr/0004-edition-profiles.md`.
+
+Since M9 both profiles are implemented (scope: `docs/m9-java.md`). The Java profile runs the edition-neutral rules
+with Java's measured support faces (`faces.java`) and without W105, simulates with `JAVA_MECHANICS`
+(quasi-connectivity, Java timings) and exports `.schem` (Sponge v3) and `.litematic`. Java IDs and states come from
+the registry's `java` mappings, checked against the block report of the pinned Java version
+(`pnpm fetch:java-data`). The Java exporters work dust connections out from the neighbours (`dustShape`), since
+Java stores them in the block and structure tools place them as stored. E015, the stub's only rule, is retired.
 
 ## Viewer
 
@@ -152,6 +158,12 @@ simulator and the game disagree, the game wins and the simulator gets a regressi
 `.mcpack` (`buildMcpack`) zips the function and the structure with a manifest from the one builder every pack
 uses (`manifest.ts`; the committed test-pack manifest is tested against it); its UUIDs are UUIDv5 of the slug. Layer
 sheets (`sheets.ts`) are A4 SVGs, one per layer, with design text only as escaped SVG text.
+
+Java (M9): `.schem` is Sponge Schematic v3 (gzipped big-endian NBT, a palette of block state strings, varint
+indices in x, z, y order) and `.litematic` is Litematica's format (one region, palette indices packed into longs at
+max(2, bits) bits, fixed timestamps). Both name the file from the slug, write the pinned Java data version, and are
+deterministic; they are written into a plain directory (`rsd export --to schem -o <dir>`), through the same safe
+writer with its own allowed names.
 
 An exporter returns files (`{ path, bytes }`) relative to a pack root; it never touches the disk. The CLI's
 `writeIntoPack` is the one place that writes, and the one place path safety lives. The `.mcfunction` exporter

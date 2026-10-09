@@ -1,0 +1,690 @@
+{
+  "when": "2026-10-09T07:17:53.305Z",
+  "container": "dustwright-test-java",
+  "results": [
+    {
+      "area": "probe",
+      "name": "torch mount=north: powering its support turns it off",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "lever mount=north: on, it powers its support (a lamp beyond it lights)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "button mount=north: on, it powers its support (a lamp beyond it lights)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "repeater facing=north: the signal exits on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "comparator facing=north: the signal exits on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "stairs facing=north: the tall back (facing side) holds a wall torch",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "torch mount=south: powering its support turns it off",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "lever mount=south: on, it powers its support (a lamp beyond it lights)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "button mount=south: on, it powers its support (a lamp beyond it lights)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "repeater facing=south: the signal exits on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "comparator facing=south: the signal exits on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "stairs facing=south: the tall back (facing side) holds a wall torch",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "torch mount=east: powering its support turns it off",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "lever mount=east: on, it powers its support (a lamp beyond it lights)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "button mount=east: on, it powers its support (a lamp beyond it lights)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "repeater facing=east: the signal exits on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "comparator facing=east: the signal exits on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "stairs facing=east: the tall back (facing side) holds a wall torch",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "torch mount=west: powering its support turns it off",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "lever mount=west: on, it powers its support (a lamp beyond it lights)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "button mount=west: on, it powers its support (a lamp beyond it lights)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "repeater facing=west: the signal exits on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "comparator facing=west: the signal exits on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "stairs facing=west: the tall back (facing side) holds a wall torch",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "lever mount=floor: on, it powers the block it stands on or hangs from (a lamp beyond it lights)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "button mount=floor: on, it powers the block it stands on or hangs from (a lamp beyond it lights)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "lever mount=ceiling: on, it powers the block it stands on or hangs from (a lamp beyond it lights)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "button mount=ceiling: on, it powers the block it stands on or hangs from (a lamp beyond it lights)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "piston facing=north: the head pushes to the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "sticky_piston facing=north: the head pushes to the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "observer facing=north: a change on the facing side pulses the opposite side (a copper bulb toggles)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "dropper facing=north: a powered dropper moves its item into the chest on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "piston facing=south: the head pushes to the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "sticky_piston facing=south: the head pushes to the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "observer facing=south: a change on the facing side pulses the opposite side (a copper bulb toggles)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "dropper facing=south: a powered dropper moves its item into the chest on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "piston facing=east: the head pushes to the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "sticky_piston facing=east: the head pushes to the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "observer facing=east: a change on the facing side pulses the opposite side (a copper bulb toggles)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "dropper facing=east: a powered dropper moves its item into the chest on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "piston facing=west: the head pushes to the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "sticky_piston facing=west: the head pushes to the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "observer facing=west: a change on the facing side pulses the opposite side (a copper bulb toggles)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "dropper facing=west: a powered dropper moves its item into the chest on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "piston facing=up: the head pushes to the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "sticky_piston facing=up: the head pushes to the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "observer facing=up: a change on the facing side pulses the opposite side (a copper bulb toggles)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "dropper facing=up: a powered dropper moves its item into the chest on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "piston facing=down: the head pushes to the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "sticky_piston facing=down: the head pushes to the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "observer facing=down: a change on the facing side pulses the opposite side (a copper bulb toggles)",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "dropper facing=down: a powered dropper moves its item into the chest on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "dispenser facing=north: a powered dispenser drops its item on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "dispenser facing=south: a powered dispenser drops its item on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "dispenser facing=east: a powered dispenser drops its item on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "dispenser facing=west: a powered dispenser drops its item on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "dispenser facing=up: a powered dispenser drops its item on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "dispenser facing=down: a powered dispenser drops its item on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "hopper facing=down: items leave into the chest on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "hopper facing=north: items leave into the chest on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "hopper facing=south: items leave into the chest on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "hopper facing=east: items leave into the chest on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "probe",
+      "name": "hopper facing=west: items leave into the chest on the facing side",
+      "status": "pass",
+      "detail": "mapping works, opposite fails"
+    },
+    {
+      "area": "pattern and-gate",
+      "name": "dust shapes: ours equal the game's after an update",
+      "status": "pass",
+      "detail": "6 wires"
+    },
+    {
+      "area": "pattern and-gate",
+      "name": "test 0: set {\"A\":0,\"B\":0} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern and-gate",
+      "name": "test 1: set {\"A\":0,\"B\":1} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern and-gate",
+      "name": "test 2: set {\"A\":1,\"B\":0} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern and-gate",
+      "name": "test 3: set {\"A\":1,\"B\":1} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "pattern hopper-sorter",
+      "name": "dust shapes: ours equal the game's after an update",
+      "status": "pass",
+      "detail": "4 wires"
+    },
+    {
+      "area": "pattern hopper-sorter",
+      "name": "test 0: set {} expect sorted=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern hopper-sorter",
+      "name": "sorts iron ingots out of the stream and lets cobblestone pass",
+      "status": "pass",
+      "detail": "collector lamp: loaded 0, after cobblestone 0, after two iron ingots 1"
+    },
+    {
+      "area": "pattern not-gate",
+      "name": "dust shapes: ours equal the game's after an update",
+      "status": "pass",
+      "detail": "1 wires"
+    },
+    {
+      "area": "pattern not-gate",
+      "name": "test 0: set {\"A\":0} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "pattern not-gate",
+      "name": "test 1: set {\"A\":1} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern observer-clock",
+      "name": "dust shapes: ours equal the game's after an update",
+      "status": "pass",
+      "detail": "1 wires"
+    },
+    {
+      "area": "pattern observer-clock",
+      "name": "test 0: set {} expect tick=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern observer-clock",
+      "name": "test 1: set {} expect tick=15",
+      "status": "pass",
+      "detail": "actual 15"
+    },
+    {
+      "area": "pattern observer-clock",
+      "name": "output changes over time (clock)",
+      "status": "pass",
+      "detail": "samples 0,0,0,1"
+    },
+    {
+      "area": "pattern or-gate",
+      "name": "dust shapes: ours equal the game's after an update",
+      "status": "pass",
+      "detail": "4 wires"
+    },
+    {
+      "area": "pattern or-gate",
+      "name": "test 0: set {\"A\":0,\"B\":0} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern or-gate",
+      "name": "test 1: set {\"A\":0,\"B\":1} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "pattern or-gate",
+      "name": "test 2: set {\"A\":1,\"B\":0} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "pattern or-gate",
+      "name": "test 3: set {\"A\":1,\"B\":1} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "pattern 2x2-piston-door",
+      "name": "dust shapes: ours equal the game's after an update",
+      "status": "pass",
+      "detail": "4 wires"
+    },
+    {
+      "area": "pattern 2x2-piston-door",
+      "name": "test 0: set {\"open\":0} expect closed=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "pattern 2x2-piston-door",
+      "name": "test 1: set {\"open\":1} expect closed=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern pulse-extender",
+      "name": "dust shapes: ours equal the game's after an update",
+      "status": "pass",
+      "detail": "32 wires"
+    },
+    {
+      "area": "pattern pulse-extender",
+      "name": "test 0: set {\"press\":1} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "pattern pulse-extender",
+      "name": "test 1: set {\"press\":1} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern pulse-extender",
+      "name": "test 2: set {\"press\":0} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern pulse-limiter",
+      "name": "dust shapes: ours equal the game's after an update",
+      "status": "pass",
+      "detail": "2 wires"
+    },
+    {
+      "area": "pattern pulse-limiter",
+      "name": "test 0: set {\"A\":1} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "pattern pulse-limiter",
+      "name": "test 1: set {\"A\":1} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern pulse-limiter",
+      "name": "test 2: set {\"A\":0} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern repeater-clock",
+      "name": "dust shapes: ours equal the game's after an update",
+      "status": "pass",
+      "detail": "6 wires"
+    },
+    {
+      "area": "pattern repeater-clock",
+      "name": "test 0: set {\"start\":0} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern repeater-clock",
+      "name": "test 1: set {\"start\":1} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "pattern repeater-clock",
+      "name": "output changes over time (clock)",
+      "status": "pass",
+      "detail": "samples 1,1,1,1,1,0"
+    },
+    {
+      "area": "pattern repeater-line",
+      "name": "dust shapes: ours equal the game's after an update",
+      "status": "pass",
+      "detail": "16 wires"
+    },
+    {
+      "area": "pattern repeater-line",
+      "name": "test 0: set {\"A\":1} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "pattern repeater-line",
+      "name": "test 1: set {\"A\":0} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern rs-latch",
+      "name": "dust shapes: ours equal the game's after an update",
+      "status": "pass",
+      "detail": "10 wires"
+    },
+    {
+      "area": "pattern rs-latch",
+      "name": "test 0: set {\"S\":1} expect Q=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "pattern rs-latch",
+      "name": "test 1: set {\"R\":1} expect Q=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern rs-latch",
+      "name": "sequence {\"S\":1}->{\"Q\":1} {\"S\":0}->{\"Q\":1} {\"R\":1}->{\"Q\":0} {\"R\":0}->{\"Q\":0}",
+      "status": "pass",
+      "detail": "steps ok: true,true,true,true"
+    },
+    {
+      "area": "pattern t-flip-flop",
+      "name": "dust shapes: ours equal the game's after an update",
+      "status": "pass",
+      "detail": "6 wires"
+    },
+    {
+      "area": "pattern t-flip-flop",
+      "name": "test 0: set {\"T\":0} expect Q=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern t-flip-flop",
+      "name": "test 1: set {\"T\":1} expect Q=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "pattern t-flip-flop",
+      "name": "sequence {\"T\":1}->{\"Q\":1} {\"T\":0}->{\"Q\":1} {\"T\":1}->{\"Q\":0} {\"T\":0}->{\"Q\":0}",
+      "status": "pass",
+      "detail": "steps ok: true,true,true,true"
+    },
+    {
+      "area": "pattern xor-gate",
+      "name": "dust shapes: ours equal the game's after an update",
+      "status": "pass",
+      "detail": "13 wires"
+    },
+    {
+      "area": "pattern xor-gate",
+      "name": "test 0: set {\"A\":0,\"B\":0} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "pattern xor-gate",
+      "name": "test 1: set {\"A\":0,\"B\":1} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "pattern xor-gate",
+      "name": "test 2: set {\"A\":1,\"B\":0} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "pattern xor-gate",
+      "name": "test 3: set {\"A\":1,\"B\":1} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "when": "2026-10-09T07:06:57.253Z",
+  "container": "dustwright-test-java",
+  "tool": "deploy/test-world-java/measure-conductivity.mjs",
+  "table": {
+    "concrete": {
+      "conducts": true,
+      "runs": [true, true, true]
+    },
+    "daylight_sensor": {
+      "conducts": null,
+      "lightsAlone": true
+    },
+    "dispenser": {
+      "conducts": true,
+      "runs": [true, true, true]
+    },
+    "dropper": {
+      "conducts": true,
+      "runs": [true, true, true]
+    },
+    "glass": {
+      "conducts": false,
+      "runs": [false, false, false]
+    },
+    "honey_block": {
+      "conducts": false,
+      "runs": [false, false, false]
+    },
+    "hopper": {
+      "conducts": false,
+      "runs": [false, false, false]
+    },
+    "lamp": {
+      "conducts": true,
+      "runs": [true, true, true]
+    },
+    "note_block": {
+      "conducts": true,
+      "runs": [true, true, true]
+    },
+    "observer": {
+      "conducts": false,
+      "runs": [false, false, false]
+    },
+    "piston": {
+      "conducts": false,
+      "runs": [false, false, false]
+    },
+    "redstone_block": {
+      "conducts": null,
+      "lightsAlone": true
+    },
+    "slab": {
+      "conducts": false,
+      "runs": [false, false, false]
+    },
+    "slime": {
+      "conducts": true,
+      "runs": [true, true, true]
+    },
+    "stairs": {
+      "conducts": false,
+      "runs": [false, false, false]
+    },
+    "sticky_piston": {
+      "conducts": false,
+      "runs": [false, false, false]
+    },
+    "stone": {
+      "conducts": true,
+      "runs": [true, true, true]
+    },
+    "target": {
+      "conducts": true,
+      "runs": [true, true, true]
+    },
+    "trapdoor": {
+      "conducts": false,
+      "runs": [false, false, false]
+    },
+    "wool": {
+      "conducts": true,
+      "runs": [true, true, true]
+    }
+  }
+}

@@ -10,7 +10,11 @@
       "side": true,
       "bottom": true
     },
-    "java": null
+    "java": {
+      "top": true,
+      "side": true,
+      "bottom": true
+    }
   },
   "conductsPower": true,
   "geometry": {
@@ -30,5 +34,15 @@
     }
   },
   "verified": null,
-  "java": null
+  "java": {
+    "id": "minecraft:target",
+    "states": {
+      "power": {
+        "value": 0
+      }
+    },
+    "checkedAgainst": {
+      "javaVersion": "26.3"
+    }
+  }
 }

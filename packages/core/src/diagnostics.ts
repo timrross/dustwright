@@ -22,6 +22,9 @@ const info = (
   hint: string,
 ): DiagnosticInfo => ({ code, severity, stage, summary, hint });
 
+/** Codes kept in the catalogue (they are stable) that no rule reports any more. */
+export const RETIRED_CODES: readonly string[] = ["E015"];
+
 /** Every diagnostic code Dustwright can emit, in code order. */
 export const DIAGNOSTIC_CODES: readonly DiagnosticInfo[] = [
   info(
@@ -120,8 +123,8 @@ export const DIAGNOSTIC_CODES: readonly DiagnosticInfo[] = [
     "E015",
     "error",
     1,
-    "`meta.edition` names an edition whose profile is not implemented yet.",
-    "Use `edition: bedrock`; Java support arrives in M9.",
+    "Retired in M9 (no rule reports it): the Java profile stub used it before Java was implemented.",
+    "Nothing to fix; both editions are implemented.",
   ),
   info(
     "W101",

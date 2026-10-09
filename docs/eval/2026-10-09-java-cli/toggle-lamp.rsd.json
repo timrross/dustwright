@@ -1,0 +1,57 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Toggle lamp (T flip-flop)",
+    "edition": "java",
+    "gameVersion": "26.3",
+    "description": "Each button press toggles the lamp. Master-slave flip-flop built from two locking repeaters: the master (M) is unlocked while the button is held and loads NOT Q; the slave (S) is unlocked while the button is released and copies M to Q. The lamp changes when the button pops back out."
+  },
+  "legend": {
+    "#": "stone",
+    "B": "button mount=floor material=stone",
+    "-": "dust",
+    "v": "repeater facing=south delay=1",
+    "V": "repeater facing=south delay=1 powered=true",
+    "t": "torch mount=north",
+    "w": "torch mount=west",
+    "M": "repeater facing=east delay=4",
+    "S": "repeater facing=east delay=1",
+    "*": "lamp"
+  },
+  "layers": [
+    [
+      "########",
+      "########",
+      "########",
+      "########",
+      "########",
+      "########",
+      "########",
+      "########"
+    ],
+    [
+      "B----...",
+      "..v.-...",
+      "..#.-...",
+      "..t.-...",
+      "..V.v...",
+      "#wM-S--*",
+      "-....-..",
+      "------.."
+    ]
+  ],
+  "ports": {
+    "inputs": [{ "name": "button", "pos": [0, 1, 0] }],
+    "outputs": [{ "name": "lamp", "pos": [7, 1, 5] }]
+  },
+  "tests": [
+    { "set": { "button": 0 }, "afterTicks": 30, "expect": { "lamp": 0 } },
+    { "set": { "button": 1 }, "afterTicks": 30, "expect": { "lamp": 1 } },
+    { "set": { "button": 1 }, "afterTicks": 80, "expect": { "lamp": 1 } }
+  ],
+  "annotations": [
+    { "pos": [2, 1, 5], "text": "Master latch: locked while the button is up" },
+    { "pos": [4, 1, 5], "text": "Slave latch: locked while the button is down" },
+    { "pos": [1, 1, 5], "text": "Feedback inverter: NOT Q into the master" }
+  ]
+}

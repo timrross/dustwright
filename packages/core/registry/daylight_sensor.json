@@ -15,7 +15,11 @@
       "side": false,
       "bottom": true
     },
-    "java": null
+    "java": {
+      "top": false,
+      "side": false,
+      "bottom": true
+    }
   },
   "conductsPower": false,
   "geometry": {
@@ -47,5 +51,22 @@
     }
   },
   "verified": null,
-  "java": null
+  "java": {
+    "id": "minecraft:daylight_detector",
+    "states": {
+      "inverted": {
+        "from": "inverted",
+        "map": {
+          "false": false,
+          "true": true
+        }
+      },
+      "power": {
+        "value": 0
+      }
+    },
+    "checkedAgainst": {
+      "javaVersion": "26.3"
+    }
+  }
 }

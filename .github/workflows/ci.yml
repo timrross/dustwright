@@ -29,9 +29,13 @@ jobs:
       - run: pnpm build
       # Mojang's block metadata is not committed (not MIT); fetch the pinned, checksummed copy for the mapping tests.
       - run: pnpm fetch:bedrock-data
+      # Java's block report (M9) is generated from the pinned server jar by its own data generator, in a Java 25
+      # container (Docker is on the runner); not committed either.
+      - run: pnpm fetch:java-data
       - run: pnpm test
         env:
           RSD_REQUIRE_BEDROCK_DATA: "1"
+          RSD_REQUIRE_JAVA_DATA: "1"
 
   e2e:
     # Viewer tests in headless Chromium (SwiftShader WebGL) against the built site and the single-file bundle.

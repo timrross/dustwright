@@ -1,4 +1,4 @@
-import { DIAGNOSTIC_CODES } from "@dustwright/core";
+import { DIAGNOSTIC_CODES, RETIRED_CODES } from "@dustwright/core";
 import { RULES } from "./rules/index.js";
 
 const STAGE: Record<string, string> = {
@@ -25,14 +25,18 @@ export function renderDiagnosticsDoc(): string {
     "| Code | Severity | Stage | Checked by | Meaning | Fix |",
     "| --- | --- | --- | --- | --- | --- |",
   ];
+  const editions = (code: string) => RULES.find((r) => r.code === code)?.editions ?? [];
   for (const d of DIAGNOSTIC_CODES) {
-    const by = ruleCodes.has(d.code)
-      ? "validator rule"
-      : d.stage === "export"
-        ? "exporter"
-        : d.stage === 3
-          ? "simulator"
-          : "parser";
+    const only = editions(d.code).length === 1 ? ` (${editions(d.code)[0]} only)` : "";
+    const by = RETIRED_CODES.includes(d.code)
+      ? "retired"
+      : ruleCodes.has(d.code)
+        ? `validator rule${only}`
+        : d.stage === "export"
+          ? "exporter"
+          : d.stage === 3
+            ? "simulator"
+            : "parser";
     lines.push(
       `| ${d.code} | ${d.severity} | ${STAGE[String(d.stage)]} | ${by} | ${d.summary} | ${d.hint} |`,
     );

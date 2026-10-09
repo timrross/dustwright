@@ -7,6 +7,12 @@ All notable user-facing changes are recorded here. The format follows
 
 ### Added
 
+- M9: the Java edition profile. Java designs (`"edition": "java"`) validate with Java's measured support faces and
+  without W105, simulate with quasi-connectivity and Java timings, and export as Sponge `.schem` and Litematica
+  `.litematic` (`rsd export --to schem|litematic -o <dir>`, the MCP `export` tool, and the playground's downloads).
+  The registry carries Java mappings for every block, checked against the pinned Java 26.3 block report
+  (`pnpm fetch:java-data`). E015 is retired.
+
 - M8: the pattern library (`patterns/`, 13 designs: NOT, OR, AND, XOR, repeater line, pulse extender and limiter,
   observer and repeater clocks, T flip-flop, RS latch, 2x2 piston door, hopper sorter), each passing its tests in
   the simulator and in game; `rsd mcp`, an MCP server over stdio with the authoring guide, validate, simulate, the

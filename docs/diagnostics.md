@@ -24,12 +24,12 @@ reported alongside the stage 1 errors.
 | E012 | error | 1 (structure) | parser | `meta.slug` is invalid, or `meta.name` yields no usable slug. | Set `meta.slug` to runs of a-z and 0-9 joined by `-`, at most 48 characters. |
 | E013 | error | 1 (structure) | parser | A hard limit is exceeded; the message names it. | Reduce the item below the limit. |
 | E014 | error | export | exporter | The .mcfunction export would exceed the function command limit. | Export with `--to mcstructure`, or pass `--command-limit` for a server that raised the gamerule. |
-| E015 | error | 1 (structure) | validator rule | `meta.edition` names an edition whose profile is not implemented yet. | Use `edition: bedrock`; Java support arrives in M9. |
+| E015 | error | 1 (structure) | retired | Retired in M9 (no rule reports it): the Java profile stub used it before Java was implemented. | Nothing to fix; both editions are implemented. |
 | W101 | warning | 2 (placement and wiring) | validator rule | A dust run is longer than 15 from its nearest source with no repeater. | Insert a repeater before the signal fades. |
 | W102 | warning | 2 (placement and wiring) | validator rule | A repeater or comparator outputs into air or a non-conducting block with no consumer. | Point it at a consumer, dust or a conducting block. |
 | W103 | warning | 2 (placement and wiring) | validator rule | Isolated dust with no source or consumer in reach. | Connect the dust or remove it. |
 | W104 | warning | 2 (placement and wiring) | validator rule | A torch sits on a block that is powered every tick in a loop (burnout risk). | Break the loop or add delay. |
-| W105 | warning | 2 (placement and wiring) | validator rule | The design relies on a Java-only mechanic, such as quasi-connectivity. | Power the piston directly; Bedrock has no quasi-connectivity. |
+| W105 | warning | 2 (placement and wiring) | validator rule (bedrock only) | The design relies on a Java-only mechanic, such as quasi-connectivity. | Power the piston directly; Bedrock has no quasi-connectivity. |
 | W106 | warning | 1 (structure) | parser | A legend key is not used by any layer. | Remove the key or use it. |
 | W107 | warning | 1 (structure) | validator rule | `meta.gameVersion` differs from the registry's pinned game version. | Re-verify the design in that version, or update `meta.gameVersion`. |
 | W108 | warning | 1 (structure) | validator rule | A block's mapping has not been proven in game yet (VERIFY-IN-GAME). | Check the block in a test world before relying on its orientation. |

@@ -25,7 +25,21 @@
         }
       ]
     },
-    "java": null
+    "java": {
+      "top": false,
+      "side": false,
+      "bottom": true,
+      "when": [
+        {
+          "states": {
+            "half": "top"
+          },
+          "top": true,
+          "side": false,
+          "bottom": false
+        }
+      ]
+    }
   },
   "conductsPower": false,
   "geometry": {
@@ -53,5 +67,22 @@
     }
   },
   "verified": null,
-  "java": null
+  "java": {
+    "id": "minecraft:stone_slab",
+    "states": {
+      "type": {
+        "from": "half",
+        "map": {
+          "bottom": "bottom",
+          "top": "top"
+        }
+      },
+      "waterlogged": {
+        "value": false
+      }
+    },
+    "checkedAgainst": {
+      "javaVersion": "26.3"
+    }
+  }
 }

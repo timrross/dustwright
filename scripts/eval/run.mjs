@@ -1,8 +1,9 @@
 // The M8 authoring eval: each fixed prompt goes to a fresh Claude Code agent (`claude -p`) that has only
 // AUTHORING.md and the CLI (`rsd`, through Bash) in an empty working directory, or (with --mcp) only the MCP tools of
 // `rsd mcp`. The harness then validates the agent's final design itself and logs the result per prompt.
-//   node scripts/eval/run.mjs [--mcp] [--only id,id] [--out docs/eval/<dir>]
-// Target (spec M8): at least 8 of 10 reach zero errors and passing tests within 6 validate rounds.
+//   node scripts/eval/run.mjs [--mcp] [--java] [--only id,id] [--out docs/eval/<dir>]
+// Target (spec M8): at least 8 of 10 reach zero errors and passing tests within 6 validate rounds. With --java (M9),
+// the same prompts ask for Java Edition designs, and a design only counts if its meta.edition is "java".
 import { execFileSync, spawn } from "node:child_process";
 import {
   chmodSync,
@@ -20,27 +21,35 @@ import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../..", import.meta.url));
 const args = process.argv.slice(2);
 const viaMcp = args.includes("--mcp");
+const java = args.includes("--java");
+const EDITION = java ? "Java" : "Bedrock";
 const only = args.includes("--only") ? args[args.indexOf("--only") + 1].split(",") : null;
 // --rescore: score the transcripts already in --out again, without running agents.
 const rescore = args.includes("--rescore");
 const outDir = args.includes("--out")
   ? args[args.indexOf("--out") + 1]
-  : join(root, "docs/eval", `${new Date().toISOString().slice(0, 10)}-${viaMcp ? "mcp" : "cli"}`);
+  : join(
+      root,
+      "docs/eval",
+      `${new Date().toISOString().slice(0, 10)}-${java ? "java-" : ""}${viaMcp ? "mcp" : "cli"}`,
+    );
 const prompts = JSON.parse(readFileSync(join(root, "scripts/eval/prompts.json"), "utf8")).filter(
   (p) => !only || only.includes(p.id),
 );
 const bin = join(root, "packages/cli/dist/bin.js");
 mkdirSync(outDir, { recursive: true });
 
-const CLI_TASK = (prompt) => `Design this Minecraft Bedrock redstone circuit: ${prompt}.
+const JAVA_NOTE = java ? `\nThe design is for Minecraft Java Edition: set meta.edition to "java".\n` : "";
 
+const CLI_TASK = (prompt) => `Design this Minecraft ${EDITION} redstone circuit: ${prompt}.
+${JAVA_NOTE}
 Read AUTHORING.md in this directory first; it is the only documentation. Write the design to design.rsd.json in this
 directory, with ports and tests for the job. Check it with \`rsd validate design.rsd.json --json\` and fix what the
 diagnostics say. Use at most 6 validate rounds. Never change ports or tests to make a failure go away. When done,
 reply with one line: DONE or GAVE UP, and why.`;
 
-const MCP_TASK = (prompt) => `Design this Minecraft Bedrock redstone circuit: ${prompt}.
-
+const MCP_TASK = (prompt) => `Design this Minecraft ${EDITION} redstone circuit: ${prompt}.
+${JAVA_NOTE}
 Use the dustwright tools. Make the design pass validate with zero errors and passing tests, in at most 6 validate
 rounds. When done, reply with one line: DONE or GAVE UP, and why.`;
 
@@ -159,8 +168,16 @@ function score(id, prompt, stream, cliDesign, seconds, exit) {
   const checks = calls.filter(isCheck);
   const firstClean = checks.findIndex((c) => isValidate(c) && /"ok":\s*true/.test(c.result ?? ""));
   const roundsToClean = firstClean < 0 ? null : firstClean + 1;
+  const edition = (() => {
+    try {
+      return JSON.parse(design ?? "{}").meta?.edition ?? "bedrock";
+    } catch {
+      return null;
+    }
+  })();
   const pass =
     design !== null &&
+    edition === (java ? "java" : "bedrock") &&
     verdict.ok &&
     errors.length === 0 &&
     tests > 0 &&
@@ -174,6 +191,7 @@ function score(id, prompt, stream, cliDesign, seconds, exit) {
     checkCalls: checks.length,
     validateCalls: validates.length,
     tests,
+    edition,
     errors,
     warnings: verdict.diagnostics.filter((d) => d.severity === "warning").map((d) => d.code),
     skipped: verdict.diagnostics.filter((d) => d.code === "T003").length,
@@ -257,6 +275,6 @@ for (const { id, prompt } of prompts) {
 const passed = results.filter((r) => r.pass).length;
 writeFileSync(
   join(outDir, "results.json"),
-  `${JSON.stringify({ when: new Date().toISOString(), mode: viaMcp ? "mcp" : "cli", passed, total: results.length, results }, null, 2)}\n`,
+  `${JSON.stringify({ when: new Date().toISOString(), mode: viaMcp ? "mcp" : "cli", edition: java ? "java" : "bedrock", passed, total: results.length, results }, null, 2)}\n`,
 );
 console.log(`${passed} of ${results.length} passed (${viaMcp ? "MCP" : "CLI"}); results in ${outDir}`);

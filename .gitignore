@@ -14,6 +14,8 @@ playwright-report/
 packs/redstone-designs-bp/functions/
 packs/redstone-designs-bp/structures/
 deploy/test-world/data/
+deploy/test-world-java/data/
+deploy/test-world-java/data-paper/
 .pnpm-store/
 # Copied into the site at build time (apps/site/scripts/sync-public.mjs)
 apps/site/public/schema/

@@ -30,7 +30,21 @@
         }
       ]
     },
-    "java": null
+    "java": {
+      "top": false,
+      "side": false,
+      "bottom": true,
+      "when": [
+        {
+          "states": {
+            "half": "top"
+          },
+          "top": true,
+          "side": false,
+          "bottom": false
+        }
+      ]
+    }
   },
   "conductsPower": false,
   "geometry": {
@@ -71,5 +85,44 @@
     }
   },
   "verified": null,
-  "java": null
+  "java": {
+    "id": "minecraft:stone_stairs",
+    "states": {
+      "facing": {
+        "from": "facing",
+        "map": {
+          "north": "north",
+          "south": "south",
+          "east": "east",
+          "west": "west"
+        },
+        "proven": {
+          "gameVersion": "26.3",
+          "date": "2026-10-09",
+          "by": "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)"
+        }
+      },
+      "half": {
+        "from": "half",
+        "map": {
+          "bottom": "bottom",
+          "top": "top"
+        }
+      },
+      "shape": {
+        "value": "straight"
+      },
+      "waterlogged": {
+        "value": false
+      }
+    },
+    "verified": {
+      "gameVersion": "26.3",
+      "date": "2026-10-09",
+      "by": "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)"
+    },
+    "checkedAgainst": {
+      "javaVersion": "26.3"
+    }
+  }
 }

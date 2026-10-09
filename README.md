@@ -2,7 +2,7 @@
 
 Dustwright lets a human or an LLM agent describe a Minecraft redstone build in a compact text format
 (`.rsd.json`, format `rsd/1`), check it, view it as an orbitable 3D model in the browser, and load it into a
-Bedrock world with one command. It ships as an npm CLI (`dustwright`, alias `rsd`), an MCP server and a static
+Bedrock world with one command, or (since M9) into a Java world as a WorldEdit or Litematica schematic. It ships as an npm CLI (`dustwright`, alias `rsd`), an MCP server and a static
 website. MIT licensed.
 
 > Status: under construction. See [PROGRESS.md](PROGRESS.md) for where each milestone stands.
@@ -26,6 +26,7 @@ pnpm rsd --help
 | `rsd export <file> --to mcfunction\|mcstructure --pack <dir>` | Write a design into a behavior pack  | M3 (mcfunction), M4 (mcstructure) |
 | `rsd bundle <file> -o <html>`                                 | Single-file viewer                   | M2                                |
 | `rsd sheets <file> -o <dir>`                                  | Layer sheet SVGs                     | M7                                |
+| `rsd export <file> --to schem\|litematic -o <dir>`            | A Java design as a schematic         | M9                                |
 | `rsd pack <file> -o <mcpack>`                                 | One-design behavior pack             | M7                                |
 | `rsd registry dump`                                           | Regenerate `docs/bedrock-mapping.md` | M1                                |
 | `rsd mcp`                                                     | MCP server over stdio (see below)    | M8                                |

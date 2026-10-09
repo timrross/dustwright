@@ -16,7 +16,12 @@
       "side": false,
       "bottom": false
     },
-    "java": null
+    "java": {
+      "top": true,
+      "side": false,
+      "bottom": false,
+      "topCenter": false
+    }
   },
   "conductsPower": false,
   "geometry": {
@@ -54,5 +59,35 @@
     }
   },
   "verified": null,
-  "java": null
+  "java": {
+    "id": "minecraft:hopper",
+    "states": {
+      "facing": {
+        "from": "facing",
+        "map": {
+          "down": "down",
+          "north": "north",
+          "south": "south",
+          "east": "east",
+          "west": "west"
+        },
+        "proven": {
+          "gameVersion": "26.3",
+          "date": "2026-10-09",
+          "by": "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)"
+        }
+      },
+      "enabled": {
+        "value": true
+      }
+    },
+    "verified": {
+      "gameVersion": "26.3",
+      "date": "2026-10-09",
+      "by": "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)"
+    },
+    "checkedAgainst": {
+      "javaVersion": "26.3"
+    }
+  }
 }

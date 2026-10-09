@@ -43,7 +43,7 @@ export type {
   RuleContext,
   SimMechanics,
 } from "./extension.js";
-export { DIAGNOSTIC_CODES, diag, diagnosticInfo, hasErrors } from "./diagnostics.js";
+export { DIAGNOSTIC_CODES, diag, diagnosticInfo, hasErrors, RETIRED_CODES } from "./diagnostics.js";
 export type { DiagnosticExtras, DiagnosticInfo, DiagnosticStage } from "./diagnostics.js";
 export { LIMITS } from "./limits.js";
 export { PINS } from "./pins.js";

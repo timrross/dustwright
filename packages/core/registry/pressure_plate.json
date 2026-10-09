@@ -21,7 +21,11 @@
       "side": false,
       "bottom": false
     },
-    "java": null
+    "java": {
+      "top": false,
+      "side": false,
+      "bottom": false
+    }
   },
   "conductsPower": false,
   "geometry": {
@@ -58,5 +62,25 @@
     }
   },
   "verified": null,
-  "java": null
+  "java": {
+    "id": {
+      "from": "material",
+      "map": {
+        "stone": "minecraft:stone_pressure_plate",
+        "wood": "minecraft:oak_pressure_plate"
+      }
+    },
+    "states": {
+      "powered": {
+        "from": "on",
+        "map": {
+          "false": false,
+          "true": true
+        }
+      }
+    },
+    "checkedAgainst": {
+      "javaVersion": "26.3"
+    }
+  }
 }

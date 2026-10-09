@@ -57,6 +57,12 @@ function update(): void {
   // The viewer renders whatever stage 1 accepts; a design with parse errors shows its diagnostics instead.
   // The markers on the blocks show the same findings as the list (the full validator, not only the static rules).
   if (viewer.load(text)) viewer.setDiagnostics(result.diagnostics);
+  // Downloads follow the design's edition: Bedrock packs and structures, or Java schematics.
+  const java = result.model?.meta.edition === "java";
+  for (const id of ["download-mcfunction", "download-mcstructure", "download-mcpack"])
+    document.querySelector<HTMLButtonElement>(`#${id}`)!.hidden = java;
+  for (const id of ["download-schem", "download-litematic"])
+    document.querySelector<HTMLButtonElement>(`#${id}`)!.hidden = !java;
   document.body.dataset.validated = String(Date.now());
 }
 
@@ -172,6 +178,27 @@ button("download-mcpack", async () => {
     model.meta.slug +
     ".";
 });
+for (const [id, ext] of [
+  ["download-schem", "schem"],
+  ["download-litematic", "litematic"],
+] as const) {
+  button(id, async () => {
+    const model = validModel();
+    if (!model) return;
+    const { litematicExporter, schemExporter } = await import("@dustwright/export");
+    const out = await (ext === "schem" ? schemExporter : litematicExporter).export(model, {});
+    const file = out.files[0];
+    if (!file) {
+      notice.textContent = out.diagnostics.map((d) => `${d.code}: ${d.message}`).join(" ");
+      return;
+    }
+    download(`${model.meta.slug}.${ext}`, file.bytes);
+    notice.textContent =
+      ext === "schem"
+        ? "Load it with WorldEdit: put it in the schematics folder, then //schem load and //paste."
+        : "Open it with the Litematica client mod: put it in the schematics folder and load it there.";
+  });
+}
 button("download-sheets", async () => {
   const result = validateText(editor.value);
   if (!result.model) {

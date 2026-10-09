@@ -167,6 +167,42 @@ test.describe("playground", () => {
     expect(Date.now() - started).toBeLessThan(1000);
   });
 
+  test("a Java design offers .schem and .litematic instead of the Bedrock downloads, equal to the CLI's", async ({
+    page,
+  }) => {
+    await page.goto("/play/?example=not-gate");
+    await page.waitForFunction(() => !!document.body.dataset.validated);
+    await expect(page.locator("#download-schem")).toBeHidden();
+    const java = JSON.parse(notGate) as { meta: Record<string, unknown> };
+    java.meta.edition = "java";
+    delete java.meta.gameVersion;
+    await page.locator("#editor").fill(JSON.stringify(java, null, 2));
+    await expect(page.locator("#download-schem")).toBeVisible();
+    await expect(page.locator("#download-litematic")).toBeVisible();
+    for (const id of ["download-mcfunction", "download-mcstructure", "download-mcpack"])
+      await expect(page.locator(`#${id}`)).toBeHidden();
+    const [download] = await Promise.all([
+      page.waitForEvent("download"),
+      page.locator("#download-schem").click(),
+    ]);
+    expect(download.suggestedFilename()).toBe("not-gate.schem");
+    const dir = mkdtempSync(join(tmpdir(), "rsd-site-"));
+    const file = join(dir, "not-gate.rsd.json");
+    writeFileSync(file, JSON.stringify(java, null, 2));
+    execFileSync("node", [
+      join(ROOT, "packages/cli/dist/bin.js"),
+      "export",
+      file,
+      "--to",
+      "schem",
+      "-o",
+      dir,
+    ]);
+    expect(
+      readFileSync((await download.path()) as string).equals(readFileSync(join(dir, "not-gate.schem"))),
+    ).toBe(true);
+  });
+
   test("downloads the design, its function, structure, pack and layer sheets", async ({ page }) => {
     await page.goto("/play/?example=not-gate");
     await page.waitForFunction(() => !!document.body.dataset.validated);

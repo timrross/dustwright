@@ -1,6 +1,6 @@
 import type { Edition, EditionProfile } from "@dustwright/core";
 import { EXPORTERS } from "@dustwright/export";
-import { BEDROCK_MECHANICS, JAVA_MECHANICS_STUB } from "@dustwright/sim";
+import { MECHANICS } from "@dustwright/sim";
 import { RULES } from "./rules/index.js";
 
 const rulesFor = (edition: Edition) => RULES.filter((r) => r.editions.includes(edition));
@@ -9,20 +9,20 @@ const rulesFor = (edition: Edition) => RULES.filter((r) => r.editions.includes(e
 export const BEDROCK_PROFILE: EditionProfile = {
   id: "bedrock",
   rules: rulesFor("bedrock"),
-  mechanics: BEDROCK_MECHANICS,
+  mechanics: MECHANICS.bedrock,
   mapping: "bedrock",
   exporters: EXPORTERS.filter((e) => e.target === "bedrock"),
   docs: "Bedrock Edition: no quasi-connectivity; see AUTHORING.md.",
 };
 
-/** The Java profile stub: its only rule reports E015, so Java designs parse and render but go no further. */
+/** The Java profile (M9): quasi-connectivity is a feature, so W105 is not among its rules; exports .schem and .litematic. */
 export const JAVA_PROFILE: EditionProfile = {
   id: "java",
   rules: rulesFor("java"),
-  mechanics: JAVA_MECHANICS_STUB,
+  mechanics: MECHANICS.java,
   mapping: "java",
-  exporters: [],
-  docs: "Java Edition is not supported yet (M9).",
+  exporters: EXPORTERS.filter((e) => e.target === "java"),
+  docs: "Java Edition: quasi-connectivity powers pistons; see the Java section of AUTHORING.md.",
 };
 
 /** Every edition profile by id. */

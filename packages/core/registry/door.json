@@ -30,7 +30,11 @@
       "side": false,
       "bottom": false
     },
-    "java": null
+    "java": {
+      "top": false,
+      "side": false,
+      "bottom": false
+    }
   },
   "occupies": [[0, 1, 0]],
   "conductsPower": false,
@@ -97,5 +101,56 @@
     }
   },
   "verified": null,
-  "java": null
+  "java": {
+    "id": {
+      "from": "material",
+      "map": {
+        "wood": "minecraft:oak_door",
+        "iron": "minecraft:iron_door"
+      }
+    },
+    "states": {
+      "facing": {
+        "from": "facing",
+        "map": {
+          "north": "north",
+          "south": "south",
+          "east": "east",
+          "west": "west"
+        },
+        "verify": "VERIFY-IN-GAME: Java door facing is the direction the placing player looked"
+      },
+      "hinge": {
+        "from": "hinge",
+        "map": {
+          "left": "left",
+          "right": "right"
+        }
+      },
+      "open": {
+        "from": "open",
+        "map": {
+          "false": false,
+          "true": true
+        }
+      },
+      "half": {
+        "value": "lower"
+      },
+      "powered": {
+        "value": false
+      }
+    },
+    "upper": {
+      "offset": [0, 1, 0],
+      "states": {
+        "half": {
+          "value": "upper"
+        }
+      }
+    },
+    "checkedAgainst": {
+      "javaVersion": "26.3"
+    }
+  }
 }

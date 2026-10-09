@@ -1,7 +1,8 @@
 # Authoring Dustwright designs
 
 A guide for LLM agents (and people) writing redstone designs in the `rsd/1` format for Minecraft **Bedrock
-Edition**. Read it once, then work in the loop at the end: write, validate, fix.
+Edition**, or Java Edition (see [Java Edition](#java-edition)). Read it once, then work in the loop at the end:
+write, validate, fix.
 
 ## The format in one minute
 
@@ -98,7 +99,8 @@ signal from west to east is `repeater facing=east`. Torches have no `ceiling` mo
 "Needs support" blocks must sit on a block that holds them (below), or on the block their `mount` names (E006).
 Measured on Bedrock: full blocks (stone, wool, concrete, lamps, pistons, observers, ...) and glass hold on every
 face; honey, hoppers and top-half slabs, stairs and trapdoors hold only on top; bottom-half slabs, stairs and closed
-trapdoors, and daylight sensors, hold only underneath; open trapdoors hold nothing. Levers attach to any block.
+trapdoors, and daylight sensors, hold only underneath; open trapdoors hold nothing. Levers attach to any block
+(Bedrock; Java differs, see below).
 Inputs are what a test can drive (`set`); outputs are what it can read (`expect`), with the values they report.
 
 - `door` occupies two cells: put it in the lower cell and leave the cell above as air (`.`); the upper half is
@@ -118,8 +120,8 @@ Inputs are what a test can drive (`set`); outputs are what it can read (`expect`
 - `steps`: build steps, `{ "title", "layers": [y, ...] }` or `{ "title", "positions": [[x,y,z], ...] }`. Default:
   one step per layer.
 - `meta`: `name` (1 to 80 printable characters), `slug` (optional; `a-z0-9` runs joined by `-`, at most 48, not a Windows device name such as `con` or `nul`;
-  derived from the name when omitted), `description` (at most 2,000), `edition` (`bedrock`, the default;
-  `java` is not supported yet), `gameVersion` (e.g. `1.26.50`).
+  derived from the name when omitted), `description` (at most 2,000), `edition` (`bedrock`, the default,
+  or `java`), `gameVersion` (e.g. `1.26.50`; Java `26.3`).
 
 ## Tests: how they run
 
@@ -135,7 +137,7 @@ Inputs are what a test can drive (`set`); outputs are what it can read (`expect`
   expected and actual per output. T002: `afterTicks` above 1,000, or the design is too big to simulate that long.
   T003 (info): the case was skipped because it needs something not modelled (a comparator reading a container, a
   daylight sensor, a piston moving a container or a slime or honey block); check it in game.
-- Delays the simulator uses: torch, comparator, lamp, door and piston 1 tick; repeater 1 tick per delay step;
+- Bedrock delays the simulator uses (Java: below): torch, comparator, lamp, door and piston 1 tick; repeater 1 tick per delay step;
   observer reacts after 1.5 ticks and pulses for 1 (inferred from the observer clock period measured in game). Leave a tick or two of margin in
   `afterTicks`. If a case passes in game but fails here, the game is right: report it.
 - The viewer's Power menu shows any test case tick by tick: dust brightness is its level.
@@ -150,6 +152,20 @@ Inputs are what a test can drive (`set`); outputs are what it can read (`expect`
 - A torch turns off when the block it hangs on is powered, and strongly powers the block above it.
 - A redstone block powers components and dust next to it, not solid blocks.
 - Patterns from Java tutorials often fail on Bedrock. If unsure, keep the circuit simple and test it.
+
+## Java Edition
+
+Set `"edition": "java"` (and `"gameVersion": "26.3"`). The format, orientation and block list are the same;
+the rules differ:
+
+- **Quasi-connectivity works**: a piston also fires from power at the block above it, but only when it gets a
+  block update. Prefer direct power; the simulator fires it at once, the game may not.
+- Measured delays, in game ticks (one `afterTicks` tick is 2): torch, comparator 2; repeater 2 per step; observer 2, pulse 2;
+  piston 3; lamps light at once and go dark after 4; doors at once.
+- Supports: levers need a solid face, like buttons; honey holds nothing; a hopper's top holds dust, repeaters and
+  plates, not torches, levers, buttons or doors. Slime conducts.
+- Export with `rsd export <file> --to schem -o <dir>` (WorldEdit: `//schem load`, `//paste`) or
+  `--to litematic` (Litematica). There is no `.mcfunction` or `.mcpack` for Java.
 
 ## Limits
 

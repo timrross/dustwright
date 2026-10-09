@@ -1,0 +1,28 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Lever to lamp 40 blocks away",
+    "edition": "java",
+    "gameVersion": "26.3",
+    "description": "A lever drives a dust line, refreshed by a repeater every 16 blocks, to a lamp 40 blocks east."
+  },
+  "legend": {
+    "#": "stone",
+    "L": "lever mount=floor",
+    "-": "dust",
+    ">": "repeater facing=east delay=1",
+    "*": "lamp"
+  },
+  "layers": [
+    ["#########################################"],
+    ["L--------------->--------------->-------*"]
+  ],
+  "ports": {
+    "inputs": [{ "name": "A", "pos": [0, 1, 0] }],
+    "outputs": [{ "name": "lamp", "pos": [40, 1, 0] }]
+  },
+  "tests": [
+    { "set": { "A": 0 }, "afterTicks": 10, "expect": { "lamp": 0 } },
+    { "set": { "A": 1 }, "afterTicks": 10, "expect": { "lamp": 1 } }
+  ]
+}

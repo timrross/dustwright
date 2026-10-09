@@ -1,7 +1,7 @@
 import { diag } from "@dustwright/core";
 import { BEDROCK_PROFILE, JAVA_PROFILE, profileFor, validateText } from "@dustwright/validator";
 import { readDesignFile } from "../io.js";
-import { PackWriteError, writeIntoPack } from "../pack-write.js";
+import { JAVA_PATH, PackWriteError, writeIntoPack } from "../pack-write.js";
 import type { RunIO, RunResult } from "../run.js";
 import { formatDiagnostic } from "./validate.js";
 
@@ -9,6 +9,8 @@ import { formatDiagnostic } from "./validate.js";
 export interface ExportCommandOptions {
   to: string | undefined;
   pack: string | undefined;
+  /** The output directory for Java exporters (`-o`). */
+  out?: string | undefined;
   clear: boolean;
   origin: readonly [number, number, number] | undefined;
   commandLimit: number | undefined;
@@ -26,7 +28,8 @@ export function exportListCommand(io: RunIO): RunResult {
 /**
  * `rsd export <file> --to <id> --pack <dir> [--clear] [--origin x y z] [--command-limit n]`. Validates the design,
  * runs the exporter from the design's edition profile, and writes only under `<pack>/functions/rsd/` or
- * `<pack>/structures/rsd/`. The pack root has no default: `--pack` or `RSD_PACK_DIR`.
+ * `<pack>/structures/rsd/`. The pack root has no default: `--pack` or `RSD_PACK_DIR`. Java designs export with
+ * `--to schem|litematic -o <dir>`: one `<slug>.schem` or `<slug>.litematic` in that directory.
  */
 export async function exportCommand(file: string, opts: ExportCommandOptions, io: RunIO): Promise<RunResult> {
   const fail = (message: string): RunResult => {
@@ -36,8 +39,15 @@ export async function exportCommand(file: string, opts: ExportCommandOptions, io
     return { exitCode: 2 };
   };
   if (!opts.to) return fail("export needs --to <exporter> (see rsd export --list)");
-  const packRoot = opts.pack ?? io.env?.RSD_PACK_DIR;
-  if (!packRoot) return fail("export needs --pack <dir> or RSD_PACK_DIR; there is no default pack location");
+  const javaTarget = opts.to === "schem" || opts.to === "litematic";
+  const packRoot = javaTarget ? opts.out : (opts.pack ?? io.env?.RSD_PACK_DIR);
+  if (!packRoot) {
+    return fail(
+      javaTarget
+        ? `export --to ${opts.to} needs -o <dir>, the directory to write into`
+        : "export needs --pack <dir> or RSD_PACK_DIR; there is no default pack location",
+    );
+  }
   const read = await readDesignFile(file);
   if (!read.ok && read.kind === "io") return fail(read.message);
   const result = read.ok
@@ -74,7 +84,7 @@ export async function exportCommand(file: string, opts: ExportCommandOptions, io
   }
   let written: string[];
   try {
-    written = await writeIntoPack(packRoot, out.files);
+    written = await writeIntoPack(packRoot, out.files, exporter.target === "java" ? JAVA_PATH : undefined);
   } catch (err) {
     if (err instanceof PackWriteError) return fail(err.message);
     return fail(`cannot write into ${packRoot}: ${(err as Error).message}`);

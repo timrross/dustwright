@@ -29,7 +29,11 @@
       "side": false,
       "bottom": false
     },
-    "java": null
+    "java": {
+      "top": false,
+      "side": false,
+      "bottom": false
+    }
   },
   "conductsPower": false,
   "geometry": {
@@ -71,5 +75,48 @@
     "date": "2026-10-08",
     "by": "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)"
   },
-  "java": null
+  "java": {
+    "id": {
+      "from": "mount",
+      "map": {
+        "floor": "minecraft:redstone_torch",
+        "north": "minecraft:redstone_wall_torch",
+        "south": "minecraft:redstone_wall_torch",
+        "east": "minecraft:redstone_wall_torch",
+        "west": "minecraft:redstone_wall_torch"
+      }
+    },
+    "states": {
+      "facing": {
+        "from": "mount",
+        "map": {
+          "floor": null,
+          "north": "south",
+          "south": "north",
+          "east": "west",
+          "west": "east"
+        },
+        "proven": {
+          "gameVersion": "26.3",
+          "date": "2026-10-09",
+          "by": "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)"
+        }
+      },
+      "lit": {
+        "from": "lit",
+        "map": {
+          "false": false,
+          "true": true
+        }
+      }
+    },
+    "verified": {
+      "gameVersion": "26.3",
+      "date": "2026-10-09",
+      "by": "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)"
+    },
+    "checkedAgainst": {
+      "javaVersion": "26.3"
+    }
+  }
 }

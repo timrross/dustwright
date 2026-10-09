@@ -32,7 +32,11 @@
       "side": true,
       "bottom": true
     },
-    "java": null
+    "java": {
+      "top": true,
+      "side": true,
+      "bottom": true
+    }
   },
   "conductsPower": true,
   "geometry": {
@@ -72,5 +76,36 @@
     }
   },
   "verified": null,
-  "java": null
+  "java": {
+    "id": {
+      "from": "color",
+      "map": {
+        "white": "minecraft:white_wool",
+        "orange": "minecraft:orange_wool",
+        "magenta": "minecraft:magenta_wool",
+        "light_blue": "minecraft:light_blue_wool",
+        "yellow": "minecraft:yellow_wool",
+        "lime": "minecraft:lime_wool",
+        "pink": "minecraft:pink_wool",
+        "gray": "minecraft:gray_wool",
+        "light_gray": "minecraft:light_gray_wool",
+        "cyan": "minecraft:cyan_wool",
+        "purple": "minecraft:purple_wool",
+        "blue": "minecraft:blue_wool",
+        "brown": "minecraft:brown_wool",
+        "green": "minecraft:green_wool",
+        "red": "minecraft:red_wool",
+        "black": "minecraft:black_wool"
+      }
+    },
+    "states": {},
+    "verified": {
+      "gameVersion": "26.3",
+      "date": "2026-10-09",
+      "by": "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)"
+    },
+    "checkedAgainst": {
+      "javaVersion": "26.3"
+    }
+  }
 }

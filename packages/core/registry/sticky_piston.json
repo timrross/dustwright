@@ -16,7 +16,11 @@
       "side": true,
       "bottom": true
     },
-    "java": null
+    "java": {
+      "top": true,
+      "side": true,
+      "bottom": true
+    }
   },
   "conductsPower": false,
   "geometry": {
@@ -56,5 +60,36 @@
     "date": "2026-10-08",
     "by": "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)"
   },
-  "java": null
+  "java": {
+    "id": "minecraft:sticky_piston",
+    "states": {
+      "facing": {
+        "from": "facing",
+        "map": {
+          "down": "down",
+          "up": "up",
+          "north": "north",
+          "south": "south",
+          "east": "east",
+          "west": "west"
+        },
+        "proven": {
+          "gameVersion": "26.3",
+          "date": "2026-10-09",
+          "by": "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)"
+        }
+      },
+      "extended": {
+        "value": false
+      }
+    },
+    "verified": {
+      "gameVersion": "26.3",
+      "date": "2026-10-09",
+      "by": "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)"
+    },
+    "checkedAgainst": {
+      "javaVersion": "26.3"
+    }
+  }
 }

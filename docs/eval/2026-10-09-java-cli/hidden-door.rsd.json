@@ -1,0 +1,43 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Hidden 2x2 piston door",
+    "edition": "java",
+    "gameVersion": "26.3",
+    "description": "A 2x2 doorway in a wall (z=2, x=3..4, y=2..3) closed by four sticky pistons held extended by two torches. A stone button on the floor on each side of the wall powers a dust loop under the floor that turns both torches off, so the pistons pull the blocks into the wall and the doorway opens for the button pulse, then closes."
+  },
+  "legend": {
+    "#": "stone",
+    "-": "dust",
+    "b": "button mount=floor material=stone",
+    "t": "torch mount=floor",
+    "P": "sticky_piston facing=east",
+    "Q": "sticky_piston facing=west"
+  },
+  "layers": [
+    ["########", "########", "########", "########", "########"],
+    ["---#----", "-######-", "########", "-######-", "---#----"],
+    ["...b....", "........", "tP#..#Qt", "........", "...b...."],
+    ["........", "........", "#P#..#Q#", "........", "........"],
+    ["........", "........", "########", "........", "........"]
+  ],
+  "ports": {
+    "inputs": [
+      { "name": "button_north", "pos": [3, 2, 0] },
+      { "name": "button_south", "pos": [3, 2, 4] }
+    ],
+    "outputs": [
+      { "name": "left_low", "pos": [1, 2, 2] },
+      { "name": "left_high", "pos": [1, 3, 2] },
+      { "name": "right_low", "pos": [6, 2, 2] },
+      { "name": "right_high", "pos": [6, 3, 2] }
+    ]
+  },
+  "tests": [
+    { "set": { "button_north": 0, "button_south": 0 }, "afterTicks": 4, "expect": { "left_low": 1, "left_high": 1, "right_low": 1, "right_high": 1 } },
+    { "set": { "button_north": 1 }, "afterTicks": 4, "expect": { "left_low": 0, "left_high": 0, "right_low": 0, "right_high": 0 } },
+    { "set": { "button_south": 1 }, "afterTicks": 4, "expect": { "left_low": 0, "left_high": 0, "right_low": 0, "right_high": 0 } },
+    { "set": { "button_north": 1 }, "afterTicks": 25, "expect": { "left_low": 1, "left_high": 1, "right_low": 1, "right_high": 1 } },
+    { "set": { "button_south": 1 }, "afterTicks": 25, "expect": { "left_low": 1, "left_high": 1, "right_low": 1, "right_high": 1 } }
+  ]
+}

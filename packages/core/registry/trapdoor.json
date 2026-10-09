@@ -47,7 +47,30 @@
         }
       ]
     },
-    "java": null
+    "java": {
+      "top": false,
+      "side": false,
+      "bottom": true,
+      "when": [
+        {
+          "states": {
+            "half": "top",
+            "open": false
+          },
+          "top": true,
+          "side": false,
+          "bottom": false
+        },
+        {
+          "states": {
+            "open": true
+          },
+          "top": false,
+          "side": false,
+          "bottom": false
+        }
+      ]
+    }
   },
   "conductsPower": false,
   "geometry": {
@@ -100,5 +123,48 @@
     }
   },
   "verified": null,
-  "java": null
+  "java": {
+    "id": {
+      "from": "material",
+      "map": {
+        "wood": "minecraft:oak_trapdoor",
+        "iron": "minecraft:iron_trapdoor"
+      }
+    },
+    "states": {
+      "facing": {
+        "from": "facing",
+        "map": {
+          "north": "north",
+          "south": "south",
+          "east": "east",
+          "west": "west"
+        },
+        "verify": "VERIFY-IN-GAME: Java trapdoor facing: the hinge is on the edge opposite facing"
+      },
+      "half": {
+        "from": "half",
+        "map": {
+          "bottom": "bottom",
+          "top": "top"
+        }
+      },
+      "open": {
+        "from": "open",
+        "map": {
+          "false": false,
+          "true": true
+        }
+      },
+      "powered": {
+        "value": false
+      },
+      "waterlogged": {
+        "value": false
+      }
+    },
+    "checkedAgainst": {
+      "javaVersion": "26.3"
+    }
+  }
 }

@@ -237,7 +237,7 @@ describe("stage 1 errors carry the right code and position", () => {
     expect(diagnostics).toMatchObject([{ code: "W106", severity: "warning", path: "/legend/g" }]);
   });
 
-  it("parses a java design (E015 comes from the validator's java profile)", () => {
+  it("parses a java design", () => {
     const { model, diagnostics } = parse(design({ meta: { name: "j", edition: "java" } }));
     expect(diagnostics).toEqual([]);
     expect(model!.meta.edition).toBe("java");

@@ -10,6 +10,9 @@ import { join, sep } from "node:path";
 export const PACK_PATH =
   /^(functions\/rsd\/[a-z0-9]+(-[a-z0-9]+)*(_clear)?\.mcfunction|structures\/rsd\/[a-z0-9]+(-[a-z0-9]+)*\.mcstructure)$/;
 
+/** Java exporters write one file named from the slug into an output directory (no pack around it). */
+export const JAVA_PATH = /^[a-z0-9]+(-[a-z0-9]+)*\.(schem|litematic)$/;
+
 /** A refusal to write, reported with exit code 2. */
 export class PackWriteError extends Error {}
 
@@ -25,18 +28,21 @@ export class PackWriteError extends Error {}
 export async function writeIntoPack(
   packRoot: string,
   files: readonly { path: string; bytes: Uint8Array }[],
+  allowed: RegExp = PACK_PATH,
 ): Promise<string[]> {
   let root: string;
   try {
     root = await realpath(packRoot);
     if (!(await lstat(root)).isDirectory()) throw new Error("not a directory");
   } catch {
-    throw new PackWriteError(`pack root ${packRoot} does not exist or is not a directory`);
+    throw new PackWriteError(
+      `${allowed === PACK_PATH ? "pack root" : "output directory"} ${packRoot} does not exist or is not a directory`,
+    );
   }
   // Check every path first, so a refusal leaves the pack untouched.
   const plans: { dir: string; name: string; bytes: Uint8Array }[] = [];
   for (const file of files) {
-    if (!PACK_PATH.test(file.path))
+    if (!allowed.test(file.path))
       throw new PackWriteError(`refusing to write ${JSON.stringify(file.path)}: not an allowed pack path`);
     const segments = file.path.split("/");
     const name = segments.pop() as string;

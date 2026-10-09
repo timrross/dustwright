@@ -17,7 +17,11 @@
       "side": false,
       "bottom": false
     },
-    "java": null
+    "java": {
+      "top": false,
+      "side": false,
+      "bottom": false
+    }
   },
   "conductsPower": false,
   "geometry": {
@@ -65,5 +69,50 @@
     "date": "2026-10-08",
     "by": "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)"
   },
-  "java": null
+  "java": {
+    "id": "minecraft:redstone_wire",
+    "states": {
+      "power": {
+        "from": "power",
+        "map": {
+          "0": 0,
+          "1": 1,
+          "2": 2,
+          "3": 3,
+          "4": 4,
+          "5": 5,
+          "6": 6,
+          "7": 7,
+          "8": 8,
+          "9": 9,
+          "10": 10,
+          "11": 11,
+          "12": 12,
+          "13": 13,
+          "14": 14,
+          "15": 15
+        }
+      },
+      "north": {
+        "value": "none"
+      },
+      "south": {
+        "value": "none"
+      },
+      "east": {
+        "value": "none"
+      },
+      "west": {
+        "value": "none"
+      }
+    },
+    "verified": {
+      "gameVersion": "26.3",
+      "date": "2026-10-09",
+      "by": "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)"
+    },
+    "checkedAgainst": {
+      "javaVersion": "26.3"
+    }
+  }
 }

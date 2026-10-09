@@ -21,6 +21,7 @@ const host: McpHost = {
   writeFile: async (path, data) => void written.set(path, data),
   directory: async (dir, name) => `${dir}/${name}`,
   writeIntoPack: async (packRoot, files) => files.map((f) => `${packRoot}/${f.path}`),
+  writeJavaFiles: async (dir, files) => files.map((f) => `java:${dir}/${f.path}`),
 };
 
 let nextId = 1;
@@ -163,6 +164,22 @@ describe("MCP tools: the CLI's JSON shapes", () => {
       ok: true,
       files: ["/s/not-gate-layer-000.svg", "/s/not-gate-layer-001.svg"],
     });
+  });
+
+  it("exports a Java design as .schem or .litematic into a directory, through the Java writer", async () => {
+    const parsed = JSON.parse(notGate) as { meta: Record<string, unknown> };
+    parsed.meta.edition = "java";
+    delete parsed.meta.gameVersion;
+    const java = JSON.stringify(parsed);
+    for (const to of ["schem", "litematic"]) {
+      expect((await call("export", { design: java, to, pack: "/o" })).json).toMatchObject({
+        ok: true,
+        files: [`java:/o/not-gate.${to}`],
+      });
+    }
+    // A Bedrock exporter, or a .mcpack, for a Java design is a tool error.
+    expect((await call("export", { design: java, to: "mcfunction", pack: "/p" })).isError).toBe(true);
+    expect((await call("pack", { design: java, output: "/o/j.mcpack" })).isError).toBe(true);
   });
 
   it("writes only files of the tool's own type", async () => {

@@ -1,11 +1,11 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { DIAGNOSTIC_CODES } from "@dustwright/core";
+import { DIAGNOSTIC_CODES, RETIRED_CODES } from "@dustwright/core";
 import { mcfunctionExporter } from "@dustwright/export";
 import { validateText } from "../src/index.js";
 
-// Every diagnostic code has a passing and a failing fixture in packages/validator/fixtures/<code>/.
+// Every diagnostic code still in use has a passing and a failing fixture in packages/validator/fixtures/<code>/.
 const dir = fileURLToPath(new URL("../fixtures/", import.meta.url));
 const read = (code: string, kind: "pass" | "fail") => readFileSync(`${dir}${code}/${kind}.rsd.json`, "utf8");
 
@@ -18,7 +18,7 @@ async function codesFor(code: string, text: string): Promise<string[]> {
   return codes;
 }
 
-const allCodes = DIAGNOSTIC_CODES.map((d) => d.code);
+const allCodes = DIAGNOSTIC_CODES.map((d) => d.code).filter((c) => !RETIRED_CODES.includes(c));
 
 describe("diagnostic fixtures", () => {
   it("cover every code: stages 1 to 3 and the exporter's", () => {

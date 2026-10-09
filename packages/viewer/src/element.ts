@@ -1,6 +1,6 @@
 import { inBounds, LIMITS, parse, parseText, posKey } from "@dustwright/core";
 import type { Diagnostic, Model, Pos, Severity, StateValue } from "@dustwright/core";
-import { GAME_TICKS_PER_REDSTONE_TICK, SETTLE_TICKS, settle, Simulation } from "@dustwright/sim";
+import { GAME_TICKS_PER_REDSTONE_TICK, MECHANICS, SETTLE_TICKS, settle, Simulation } from "@dustwright/sim";
 import { checkStatic } from "@dustwright/validator/static";
 import { THEMES, type ThemeName } from "./palette.js";
 import { type BlockInfo, type SnapView, type ViewerMode, ViewerScene } from "./scene.js";
@@ -444,10 +444,10 @@ export class RedstoneViewer extends HTMLElement {
       this.controls.powerGroup.hidden = false;
       return false;
     }
-    const settleTicks = test === "free" ? 0 : settle(model).tick;
+    const settleTicks = test === "free" ? 0 : settle(model, MECHANICS[model.meta.edition]).tick;
     const maxTick = test === "free" ? FREE_RUN_TICKS : settleTicks + after;
     if (this.scene?.mode === "instructions") this.setMode("explore");
-    this.power = { test, sim: new Simulation(model), settleTicks, maxTick };
+    this.power = { test, sim: new Simulation(model, MECHANICS[model.meta.edition]), settleTicks, maxTick };
     this.controls.power.value = String(test);
     this.controls.powerTick.max = String(maxTick);
     this.controls.powerGroup.hidden = false;
@@ -470,7 +470,7 @@ export class RedstoneViewer extends HTMLElement {
     if (!power || !model || !this.scene || Number.isNaN(tick)) return;
     const target = Math.max(0, Math.min(power.maxTick, Math.round(tick)));
     // The run is deterministic, so going back means starting again; going forward continues.
-    if (power.sim.tick > target) power.sim = new Simulation(model);
+    if (power.sim.tick > target) power.sim = new Simulation(model, MECHANICS[model.meta.edition]);
     const test = power.test === "free" ? null : model.tests[power.test];
     const applySetAt = (sim: Simulation) => {
       if (test && sim.tick === power.settleTicks) {

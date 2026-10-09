@@ -120,11 +120,15 @@ test("the playground makes no requests beyond its own origin", async ({ page }) 
   expect(foreign).toEqual([]);
 });
 
-test("a java design renders and the playground reports E015", async ({ page }) => {
+test("a java design renders and validates against the Java profile (W107 for a Bedrock game version)", async ({
+  page,
+}) => {
   const java = JSON.parse(exampleText("not-gate")) as { meta: Record<string, unknown> };
   java.meta.edition = "java";
   await loadDesign(page, JSON.stringify(java));
-  await expect(page.locator("#diagnostics")).toContainText("E015");
+  await expect(page.locator("#diagnostics")).toContainText("W107");
+  await expect(page.locator("#diagnostics")).not.toContainText("E015");
+  await expect(page.locator("#status")).toContainText("No errors");
   expect(await page.locator("redstone-viewer").evaluate((v: RV) => v.visibleBlockCount())).toBeGreaterThan(0);
 });
 
@@ -243,6 +247,32 @@ test.describe("power view", () => {
     expect(levels.filter((l) => l > 0).length).toBeGreaterThan(5);
     expect(levels.filter((l) => l === 0).length).toBeGreaterThan(5);
   });
+});
+
+test("the power view simulates with the design's edition: the observer clock runs at 6 game ticks on Bedrock, 4 on Java", async ({
+  page,
+}) => {
+  const period = async () => {
+    const viewer = page.locator("redstone-viewer");
+    expect(await viewer.evaluate((v: RV) => v.setPowerView("free"))).toBe(true);
+    const levels = await viewer.evaluate((v: RV) => {
+      const out: number[] = [];
+      for (let t = 0; t <= 60; t++) {
+        v.setPowerTick(t);
+        out.push(Number(v.shownBlock([3, 1, 0])?.states.power ?? 0));
+      }
+      return out;
+    });
+    const rises = levels.flatMap((l, t) => (t > 0 && l > 0 && (levels[t - 1] ?? 0) === 0 ? [t] : []));
+    return [...new Set(rises.slice(1).map((t, i) => t - (rises[i] ?? 0)))];
+  };
+  const clock = JSON.parse(exampleText("observer-clock")) as { meta: Record<string, unknown> };
+  await loadDesign(page, JSON.stringify(clock));
+  expect(await period()).toEqual([6]);
+  clock.meta.edition = "java";
+  delete clock.meta.gameVersion;
+  await loadDesign(page, JSON.stringify(clock));
+  expect(await period()).toEqual([4]);
 });
 
 test("keyboard: [ and ] change the layer; the stage is focusable", async ({ page }) => {

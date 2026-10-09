@@ -31,13 +31,29 @@ describe("validate", () => {
     },
   );
 
-  it("a java design parses and renders (model present) but reports E015, and only the Bedrock profile has rules beyond the stub", () => {
-    const r = validate({ ...base, meta: { name: "j", edition: "java" } });
-    expect(r.model).toBeDefined();
-    expect(r.ok).toBe(false);
-    expect(r.diagnostics.map((d) => d.code)).toEqual(["E015"]);
-    expect(JAVA_PROFILE.rules.map((x) => x.code)).toEqual(["E015"]);
-    expect(BEDROCK_PROFILE.rules.map((x) => x.code)).not.toContain("E015");
+  it("the Java profile runs the edition-neutral rules but not W105, and no rule reports the retired E015", () => {
+    expect(JAVA_PROFILE.rules.map((x) => x.code)).toEqual([
+      "W107",
+      "W108",
+      "E006",
+      "W101",
+      "W102",
+      "W103",
+      "W104",
+    ]);
+    expect(BEDROCK_PROFILE.rules.map((x) => x.code)).toContain("W105");
+    expect([...JAVA_PROFILE.rules, ...BEDROCK_PROFILE.rules].map((x) => x.code)).not.toContain("E015");
+    expect(JAVA_PROFILE.exporters.map((e) => e.id)).toEqual(["schem", "litematic"]);
+    expect(BEDROCK_PROFILE.exporters.map((e) => e.id)).toEqual(["mcfunction", "mcstructure"]);
+  });
+
+  it("W107 for a Java design compares with the Java pin", () => {
+    const java = (gameVersion: string) =>
+      validate({ ...base, meta: { name: "j", edition: "java", gameVersion } }).diagnostics.some(
+        (d) => d.code === "W107",
+      );
+    expect(java(PINS.javaVersion)).toBe(false);
+    expect(java(PINS.gameVersion)).toBe(true);
   });
 
   it("W108 once per unverified type; W107 on a differing game version", () => {

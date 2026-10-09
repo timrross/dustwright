@@ -30,6 +30,12 @@ export async function packCommand(file: string, out: string | undefined, io: Run
   }
   const loaded = await loadValid(file, io);
   if ("exitCode" in loaded) return loaded;
+  if (loaded.model.meta.edition !== "bedrock") {
+    io.stderr(
+      `rsd: pack makes a Bedrock behavior pack, and this is a ${loaded.model.meta.edition} design; export it with --to schem or --to litematic\n`,
+    );
+    return { exitCode: 2 };
+  }
   const result = await buildMcpack(loaded.model);
   for (const d of result.diagnostics) io.stderr(`${formatDiagnostic(file, d)}\n`);
   if (!result.bytes) return { exitCode: 1 };

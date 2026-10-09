@@ -463,3 +463,91 @@ Deviations and findings:
 - `examples/observer-clock.rsd.json` gained two tests (pulse timing, measured in M6) so the pattern carries tests.
 - Not done: the eval was not re-run after the harness change (it spends model calls, and the run above is honest
   about what happened).
+
+## M9: Java edition profile (2026-10-09)
+
+Scope: `docs/m9-java.md`. Environment: two local Java 26.3 servers in Docker (`deploy/test-world-java/`): Fabric with
+no gameplay mods (vanilla logic) for probes, supports, timings and patterns, and Paper with WorldEdit only to load
+and save `.schem` files. Commands over RCON, answers read directly. Evidence in `docs/ingame/`:
+`2026-10-09-java.json` (probes and patterns), `2026-10-09-java-supports.json`, `2026-10-09-java-timing.json`,
+`2026-10-09-java-schem-roundtrip.json`, `2026-10-09-java-conductivity.json`. The full Java check (probes and
+patterns): **114 passed, 0 failed** (63 probes, 51 pattern checks).
+
+Checks: `pnpm build`, `lint`, `typecheck`, `test` (731 passed), `gen:check`, `docs:check` and `check:licenses` pass;
+e2e 50 passed on macOS and in the Linux Playwright image (screenshot baselines unchanged). The first Linux run
+crashed Chromium for want of memory while both Java servers ran in the same Docker VM; with them stopped, all passed. The Bedrock side is unchanged (its mappings, generated registry and orientation test are byte-identical;
+`gen:check`), so the Bedrock in-game suite was not re-run.
+
+| Item                                                                             | How                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Result                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Every v1 pattern has a Java verification entry or a documented reason it differs | Each pattern, as a Java design, is built in the Fabric world with `/setblock` from the registry's Java mapping; every test case runs on a fresh build, the RS latch and T flip-flop run their sequences, the clocks must keep changing and the hopper sorter sorts real items. Every wire with air above it (105 of the 106 in the patterns) must have the connections our `dustShape` gives it (what the `.schem` and `.litematic` carry) after an update that makes the game work them out again. Entries per pattern: `docs/patterns-java.md` | **Pass:** 13 of 13, 51 checks passed, 0 failed. None needed a Java change; the observer clock runs faster on Java (noted)                                                                                                                                                                                                                                                                                                                         |
+| The M3 orientation test design round-trips through `.schem` into a Java world    | `deploy/test-world-java/schem-roundtrip.mjs`: our `.schem` of the orientation test is loaded by WorldEdit on the Paper server and pasted from the console (block updates off, so the world holds exactly the file); every block is checked by ID and full state with `execute if block`; WorldEdit then copies the area and saves its own `.schem`, which is decoded (prismarine-nbt) and compared block by block with ours                                                                                                                      | **Pass:** 230 of 230 blocks in the world; WorldEdit's file equals ours (Sponge v3, data version 5023)                                                                                                                                                                                                                                                                                                                                             |
+| The M8 eval re-run in Java mode reaches the same 8 of 10                         | `scripts/eval/run.mjs --java`: the same ten prompts and harness, the agent told the design is for Java Edition; a design counts only if its `meta.edition` is `java`. `docs/eval/2026-10-09-java-cli/`                                                                                                                                                                                                                                                                                                                                           | **9 of 10** (target 8), clean within 1 to 3 rounds; every design is a Java design. The failure (NOR) wrote a valid design but never validated it: its first command bundled writing the file with `rsd validate`, which the harness's allow-list denied, and the agent gave up instead of retrying `rsd validate` alone. Beyond their tests, the Java toggle lamp toggles on every press and the memory cell holds set and reset in the simulator |
+
+How the Java profile was proven, piece by piece:
+
+- **Block data.** The registry's 28 `java` mappings are checked by a test against the block report from 26.3's own
+  data generator (`pnpm fetch:java-data`: server jar by pinned SHA-1, report by pinned SHA-256, built twice with the
+  same hash; data version 5023 read from the jar). Every ID exists, every state the game defines is set and nothing
+  else, every value is in its domain. Like Bedrock's metadata, the report is never committed.
+- **Orientation**, 63 probes in game, each with a negative control (the opposite orientation must fail the same
+  probe): wall torches turn off when their support is powered (4); levers and buttons on walls, floors and ceilings
+  power the block they hang on (12); repeaters and comparators exit on `facing` (8); stairs hold a wall torch on
+  their tall back only (4); pistons and sticky pistons push to `facing` (12); observers pulse the opposite side (6, a copper bulb as the
+  latch); droppers and dispensers act on `facing` (12); hoppers feed the chest on `facing` (5). Java's `facing` is
+  the input side for repeaters and comparators and points away from the support for wall-mounted blocks; both are
+  now proven. Door and trapdoor `facing` are not probed and stay VERIFY-IN-GAME (W108 on Java).
+- **Support faces** (`faces.java`), measured like M5's: most blocks hold everything, as on Bedrock. Differences
+  found: honey blocks hold nothing; a hopper's top holds dust, repeaters, comparators and plates but not floor
+  torches, levers, buttons or doors (the registry gained `topCenter` for this); Java levers need a sturdy face like
+  buttons (on Bedrock any standing block holds a lever). A test replays every measured row through the support
+  rule and must agree with all of them (`test/java-measured.test.ts`; it caught a floor lever counted as held on a
+  hopper, found by the review).
+- **Conductivity** (`2026-10-09-java-conductivity.json`): a repeater powers the block and a lamp beyond it must
+  light, with an unpowered control (a redstone block and a daylight sensor light the lamp alone, so they are not
+  judged). Every block matches the registry except slime, which conducts on Java; the Java mapping now overrides it
+  (`conductsPower`), and the validator, simulator and dust shapes ask by edition. A test pins the table.
+- **Timings**, measured with the game frozen (`/tick freeze`) and stepped one game tick at a time, so with no
+  console slack (five runs each, all equal): torch 2, repeater 2 per delay step, comparator 2, observer 2 with a
+  2-tick pulse (Bedrock 3), piston 3 until its head stands, doors and trapdoors 0, lamps 0 to light and 4 to go dark
+  (the simulator gained `lampOff`). These are `JAVA_MECHANICS`; a test checks them against the table, and unit
+  tests pin quasi-connectivity (fires on Java, not on Bedrock), the lamp and the piston. The simulator applies a
+  change at the end of a game tick, so a 0-tick delay shows as 1 there.
+- **Quasi-connectivity** is in the simulator (a piston also counts power at the block above it, not from its own
+  cell). VERIFY-IN-GAME: the game fires such a piston only on a block update, the simulator at once; no pattern
+  relies on it (W105 finds none).
+
+Deviations and findings:
+
+- **Two Java servers.** WorldEdit on Fabric offers the console no world (`//world` accepted no name, and commands
+  run through a Carpet fake player had no effect), so `.schem` loading runs on Paper, where `//world world` works
+  from the console. Paper is used only to load and save files, with WorldEdit's neighbour and block updates off.
+  Carpet was tried and removed.
+- **Java's `/setblock` differs from Bedrock's, measured:** it updates neighbours, so dust works its shape out as it
+  is placed; but a powered lever or button set by `/setblock` does not update the neighbours of the block it hangs
+  on (as on Bedrock), and a lamp set by `/setblock` checks its power only when a neighbour changes. Dust checks its
+  support as it is placed (in mid-air it pops at once) while torches, buttons, levers and diodes are checked only
+  on an update from their support's side, and a diode with nothing under it is removed on its first neighbour
+  update. Each probe and measurement is built around these, and the first versions that were not (a support
+  measurement where a wall torch "held" on a bottom slab, probes that failed both ways) were discarded.
+- **Java exporters write dust connections**, which Java stores in the block and structure tools place as stored.
+  `dustShape` follows the game's wire logic as understood and is checked in game against the game's own shape for
+  every wire with air above it (105 of 106). The one wire with a block above it (in the T flip-flop) is not checked, so the
+  branch for a conducting block above a wire is not proven in game. Stair corner shapes are not computed (`straight`); designs with
+  touching stairs may show a different corner until the game updates them.
+- **Litematica** is a client mod, so its exporter is proven by decoding with an independent reader (prismarine-nbt),
+  not in a world. **Waiting on Tim (optional):** open one `.litematic` in Litematica.
+- **Patterns are built with `/setblock`, not from their `.schem`** as the scope first said: WorldEdit on Fabric
+  cannot load from the console, and Paper is not trusted for redstone behaviour. The `.schem` is proven by the
+  round trip instead.
+- **Goldens:** the Java exporters have golden files for two patterns, holding the NBT inside the gzip (the gzip
+  header names the OS, so the compressed bytes differ between macOS and Linux while the content is identical).
+- **Review fixes:** the viewer's power view simulated Java designs with Bedrock mechanics (now by edition, e2e:
+  the observer clock runs at 6 game ticks as Bedrock, 4 as Java); `rsd pack` and the MCP `pack` tool turned a Java
+  design into a Bedrock `.mcpack` (now refused, as is `buildMcpack`); slime's Java conductivity (also where dust links a step up, found in round two, with a unit test) and the hopper
+  lever above; AUTHORING.md's Java section gained the measured delays and support differences (2,955 words).
+- **E015 is retired**: kept in the catalogue (codes are stable), reported by nothing, with no fixture.
+- The `javaVersion`, data version, jar and report pins live with the Bedrock pins in `packages/core/src/pins.ts`;
+  CI builds the report too (`RSD_REQUIRE_JAVA_DATA`).
+- **Eval method:** as M8 (one run per prompt, one model, Claude Code 2.1.295), with `rsd mcp` refused in CLI mode
+  from the start. AUTHORING.md gained a short Java section (2,884 words) before the run; the review's additions came after it.

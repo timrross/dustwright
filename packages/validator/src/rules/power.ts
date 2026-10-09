@@ -43,7 +43,7 @@ const str = (v: unknown) => (typeof v === "string" ? v : undefined);
  * lever or button is attached to it.
  */
 export function stronglyPowered(model: Model, p: Pos): boolean {
-  if (!conducts(blockAt(model, p))) return false;
+  if (!conducts(blockAt(model, p), model.meta.edition)) return false;
   for (const f of ALL_FACES) {
     const n = blockAt(model, step(p, f));
     if (!n) continue;
@@ -70,11 +70,12 @@ export function feedsDust(model: Model, p: Pos): boolean {
 }
 
 /** Dust cells connected to `p`: same level, or one step up or down a staircase. */
-export const dustNeighbours = (model: Model, p: Pos): Pos[] => coreDustNeighbours(lookup(model), p);
+export const dustNeighbours = (model: Model, p: Pos): Pos[] =>
+  coreDustNeighbours(lookup(model), p, model.meta.edition);
 
 /** Whether dust at `p` powers the block next to it in direction `f`: dust pointing that way, or a lone dot. */
 export const dustPointsInto = (model: Model, p: Pos, f: Face): boolean =>
-  coreDustPointsInto(lookup(model), p, f);
+  coreDustPointsInto(lookup(model), p, f, model.meta.edition);
 
 /** Dust networks: connected groups of dust cells. */
 export function dustNetworks(model: Model): Pos[][] {
@@ -127,7 +128,7 @@ export function dustReachesConsumer(model: Model, p: Pos): boolean {
     if (!n || n.type === "dust") continue;
     if (registryEntry(n.type)?.category === "consumer") return true;
     if ((n.type === "repeater" || n.type === "comparator") && str(n.states.facing) === f) return true;
-    if (!conducts(n) || (f !== "down" && !dustPointsInto(model, p, f))) continue;
+    if (!conducts(n, model.meta.edition) || (f !== "down" && !dustPointsInto(model, p, f))) continue;
     if (ALL_FACES.some((g) => g !== OPPOSITE[f] && takesFromBlock(model, step(q, g), g))) return true;
   }
   return false;

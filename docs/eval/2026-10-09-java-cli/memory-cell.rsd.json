@@ -1,0 +1,39 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "1-bit memory cell",
+    "edition": "java",
+    "gameVersion": "26.3",
+    "description": "Torch RS-NOR latch. Set button on the west block, reset button on the east block; the lamp holds the last state."
+  },
+  "legend": {
+    "#": "stone",
+    "S": "button mount=south",
+    "R": "button mount=south",
+    "t": "torch mount=west",
+    "-": "dust",
+    "*": "lamp"
+  },
+  "layers": [
+    ["#########", "#########", "#########", "#########"],
+    ["..S...R..", "..#t--#t*", "..-....-.", "..------."]
+  ],
+  "blocks": [
+    { "pos": [7, 1, 1], "block": "torch mount=west lit=false" },
+    { "pos": [4, 1, 1], "block": "dust power=15" },
+    { "pos": [5, 1, 1], "block": "dust power=14" }
+  ],
+  "ports": {
+    "inputs": [
+      { "name": "set", "pos": [2, 1, 0] },
+      { "name": "reset", "pos": [6, 1, 0] }
+    ],
+    "outputs": [{ "name": "lamp", "pos": [8, 1, 1] }]
+  },
+  "tests": [
+    { "set": { "set": 0, "reset": 0 }, "afterTicks": 4, "expect": { "lamp": 0 } },
+    { "set": { "set": 1 }, "afterTicks": 4, "expect": { "lamp": 1 } },
+    { "set": { "set": 1 }, "afterTicks": 40, "expect": { "lamp": 1 } },
+    { "set": { "reset": 1 }, "afterTicks": 40, "expect": { "lamp": 0 } }
+  ]
+}

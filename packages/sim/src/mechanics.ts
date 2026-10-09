@@ -1,4 +1,4 @@
-import type { SimMechanics } from "@dustwright/core";
+import type { Edition, SimMechanics } from "@dustwright/core";
 
 /**
  * Bedrock redstone mechanics: no quasi-connectivity, push limit 12 (per the architecture spec). Delays are in game
@@ -20,10 +20,32 @@ export const BEDROCK_MECHANICS: SimMechanics = {
   timing: { torch: 2, repeater: 2, comparator: 2, observer: 3, observerPulse: 2, piston: 2, consumer: 2 },
 };
 
-/** Placeholder for the Java mechanics, which arrive with the Java profile in M9. Never simulated before then. */
-export const JAVA_MECHANICS_STUB: SimMechanics = {
+/**
+ * Java redstone mechanics (M9): quasi-connectivity (a piston also counts power at the block above it), push limit
+ * 12. Delays in game ticks, measured on 26.3 with the game frozen and stepped one tick at a time
+ * (`deploy/test-world-java/measure-timing.mjs`, `docs/ingame/2026-10-09-java-timing.json`, five runs each, all
+ * equal): torch 2, repeater 2 per delay step, comparator 2, observer 2 with a 2-tick pulse, piston 3 until its head
+ * stands, doors and trapdoors 0, lamps 0 to light and 4 to go dark. VERIFY-IN-GAME: the push limit and the
+ * quasi-connectivity rule (the game waits for a block update; this does not).
+ */
+export const JAVA_MECHANICS: SimMechanics = {
   id: "java",
   quasiConnectivity: true,
   pushLimit: 12,
-  timing: { torch: 2, repeater: 2, comparator: 2, observer: 2, observerPulse: 2, piston: 2, consumer: 2 },
+  timing: {
+    torch: 2,
+    repeater: 2,
+    comparator: 2,
+    observer: 2,
+    observerPulse: 2,
+    piston: 3,
+    consumer: 0,
+    lampOff: 4,
+  },
+};
+
+/** The mechanics of each edition: what the edition profiles and the viewer's power view simulate with. */
+export const MECHANICS: Readonly<Record<Edition, SimMechanics>> = {
+  bedrock: BEDROCK_MECHANICS,
+  java: JAVA_MECHANICS,
 };

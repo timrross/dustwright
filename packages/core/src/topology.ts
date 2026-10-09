@@ -56,9 +56,15 @@ export const simClass = (b: Block | undefined): SimClass | undefined =>
 const isDust = (b: Block | undefined) => simClass(b) === "dust";
 const isDiode = (b: Block | undefined) => simClass(b) === "repeater" || simClass(b) === "comparator";
 
-/** True when a full block conducts power (stone, wool, lamps, droppers...). */
-export const conducts = (b: Block | undefined): boolean =>
-  !!b && (registryEntry(b.type)?.conductsPower ?? false);
+/**
+ * True when a full block conducts power (stone, wool, lamps, droppers...) in `edition`. The Java mapping may
+ * override the entry's value where Java differs (measured: slime conducts on Java).
+ */
+export const conducts = (b: Block | undefined, edition: Edition = "bedrock"): boolean => {
+  const e = b ? registryEntry(b.type) : undefined;
+  if (!e) return false;
+  return (edition === "java" ? e.java?.conductsPower : undefined) ?? e.conductsPower;
+};
 
 /**
  * Blocks that can give power by themselves: torches, levers, buttons, plates, daylight sensors, redstone blocks.
@@ -93,8 +99,9 @@ export const faceKind = (dir: Face): "top" | "side" | "bottom" =>
   dir === "down" ? "top" : dir === "up" ? "bottom" : "side";
 
 /**
- * Whether a mounted block has the support it needs: the measured faces, or for a lever any block that stands by
- * itself (the game would not place components as supports in the measurement, so they do not count).
+ * Whether a mounted block has the support it needs: the measured faces, or on Bedrock for a lever any block that
+ * stands by itself (the game would not place components as supports in the measurement, so they do not count).
+ * Java levers need a sturdy face like buttons (measured: they break on honey, hoppers, bottom slabs and stairs).
  */
 export function isSupported(at: BlockLookup, p: Pos, b: Block, edition: Edition = "bedrock"): boolean {
   const rule = registryEntry(b.type)?.needsSupport;
@@ -102,12 +109,13 @@ export function isSupported(at: BlockLookup, p: Pos, b: Block, edition: Edition 
   if (!rule || !dir) return true;
   const support = at(stepPos(p, dir));
   if (!support) return false;
-  if ("byState" in rule && rule.anyBlock === true) return !registryEntry(support.type)?.needsSupport;
-  return holdsOnFace(support, faceKind(dir), edition);
+  if ("byState" in rule && rule.anyBlock === true && edition === "bedrock")
+    return !registryEntry(support.type)?.needsSupport;
+  return holdsOnFace(support, faceKind(dir), edition, b.type);
 }
 
 /** Dust cells connected to dust at `p`: same level, or one step up or down a staircase. */
-export function dustNeighbours(at: BlockLookup, p: Pos): Pos[] {
+export function dustNeighbours(at: BlockLookup, p: Pos, edition: Edition = "bedrock"): Pos[] {
   const out: Pos[] = [];
   const above = at(stepPos(p, "up"));
   for (const f of HORIZONTAL) {
@@ -115,9 +123,9 @@ export function dustNeighbours(at: BlockLookup, p: Pos): Pos[] {
     const s = at(side);
     if (isDust(s)) out.push(side);
     const up = stepPos(side, "up");
-    if (isDust(at(up)) && !conducts(above)) out.push(up);
+    if (isDust(at(up)) && !conducts(above, edition)) out.push(up);
     const down = stepPos(side, "down");
-    if (isDust(at(down)) && !conducts(s)) out.push(down);
+    if (isDust(at(down)) && !conducts(s, edition)) out.push(down);
   }
   return out;
 }
@@ -126,9 +134,9 @@ export function dustNeighbours(at: BlockLookup, p: Pos): Pos[] {
  * The horizontal directions dust at `p` connects in: to other dust (on its level or a step up or down), to a
  * source, or to a diode's front or back.
  */
-export function dustConnections(at: BlockLookup, p: Pos): Set<Face> {
+export function dustConnections(at: BlockLookup, p: Pos, edition: Edition = "bedrock"): Set<Face> {
   const dirs = new Set<Face>();
-  for (const q of dustNeighbours(at, p)) {
+  for (const q of dustNeighbours(at, p, edition)) {
     for (const f of HORIZONTAL) if (q[0] - p[0] === DIRS[f][0] && q[2] - p[2] === DIRS[f][2]) dirs.add(f);
   }
   for (const f of HORIZONTAL) {
@@ -145,7 +153,7 @@ export function dustConnections(at: BlockLookup, p: Pos): Set<Face> {
  * Whether dust at `p` powers the block next to it in direction `f` (horizontal): dust whose connections all lie
  * on that axis (pointing at it, or a line through it), or a lone dot.
  */
-export function dustPointsInto(at: BlockLookup, p: Pos, f: Face): boolean {
-  for (const d of dustConnections(at, p)) if (d !== f && d !== OPPOSITE[f]) return false;
+export function dustPointsInto(at: BlockLookup, p: Pos, f: Face, edition: Edition = "bedrock"): boolean {
+  for (const d of dustConnections(at, p, edition)) if (d !== f && d !== OPPOSITE[f]) return false;
   return true;
 }

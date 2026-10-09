@@ -63,6 +63,8 @@ export interface SimMechanics {
     piston: number;
     /** Lamps, doors, trapdoors and note blocks. */
     consumer: number;
+    /** A lamp going dark, when it differs from `consumer` (Java: a lamp lights at once and goes dark later). */
+    lampOff?: number;
   }>;
 }
 

@@ -1,0 +1,33 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Pulse extender 3s",
+    "edition": "java",
+    "gameVersion": "26.3",
+    "description": "A button pulse runs down a repeater delay line (8 ticks per stage). Each stage taps through a south-facing repeater (diode) into a collector dust line that lights the lamp, so the lamp stays lit for about 3.5 s."
+  },
+  "legend": {
+    "#": "stone",
+    "B": "button mount=floor material=stone",
+    "-": "dust",
+    "R": "repeater facing=east delay=4",
+    "v": "repeater facing=south delay=1",
+    "*": "lamp"
+  },
+  "layers": [
+    ["#############", "#############", "#############"],
+    ["B-RR-RR-RR-..", ".v..v..v..v..", ".-----------*"]
+  ],
+  "ports": {
+    "inputs": [{ "name": "press", "pos": [0, 1, 0] }],
+    "outputs": [{ "name": "lamp", "pos": [12, 1, 2] }]
+  },
+  "tests": [
+    { "set": { "press": 0 }, "afterTicks": 10, "expect": { "lamp": 0 } },
+    { "set": { "press": 1 }, "afterTicks": 4, "expect": { "lamp": 1 } },
+    { "set": { "press": 1 }, "afterTicks": 15, "expect": { "lamp": 1 } },
+    { "set": { "press": 1 }, "afterTicks": 25, "expect": { "lamp": 1 } },
+    { "set": { "press": 1 }, "afterTicks": 31, "expect": { "lamp": 1 } },
+    { "set": { "press": 1 }, "afterTicks": 60, "expect": { "lamp": 0 } }
+  ]
+}

@@ -17,4 +17,12 @@ export const PINS = {
   blockStateVersion: "1.21.60.33",
   /** SHA-256 of that `mojang-blocks.json`, so the cached copy is the pinned one. */
   mojangBlocksSha256: "044d494af33347eb1f0e76bab64ce04f44261ec3dac7d1938549a41cf0a770ba",
+  /** The Java Edition version the registry's `java` mappings target (M9). */
+  javaVersion: "26.3",
+  /** SHA-1 of that version's server jar, from Mojang's version manifest; its data generator makes the block report. */
+  javaServerJarSha1: "33680f5f2ac32864d6d7cf5e56a705fdb3e05f4c",
+  /** The data version of that release (`world_version` in the jar's version.json), written into .schem and .litematic. */
+  javaDataVersion: 5023,
+  /** SHA-256 of the generated `reports/blocks.json` (Java block IDs, state names and value domains). */
+  javaBlocksSha256: "7a0de8aaf7b04d00c40b8ffdc4cfe75184cff2e821d336a020573201867105a4",
 } as const;

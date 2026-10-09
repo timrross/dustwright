@@ -15,7 +15,11 @@
       "side": true,
       "bottom": true
     },
-    "java": null
+    "java": {
+      "top": true,
+      "side": true,
+      "bottom": true
+    }
   },
   "conductsPower": true,
   "geometry": {
@@ -47,5 +51,24 @@
     "date": "2026-10-08",
     "by": "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)"
   },
-  "java": null
+  "java": {
+    "id": "minecraft:redstone_lamp",
+    "states": {
+      "lit": {
+        "from": "lit",
+        "map": {
+          "false": false,
+          "true": true
+        }
+      }
+    },
+    "verified": {
+      "gameVersion": "26.3",
+      "date": "2026-10-09",
+      "by": "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)"
+    },
+    "checkedAgainst": {
+      "javaVersion": "26.3"
+    }
+  }
 }

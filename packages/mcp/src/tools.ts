@@ -20,6 +20,8 @@ export interface McpHost {
   directory(dir: string, name: string): Promise<string>;
   /** The pack writer `rsd export` uses: only functions/rsd and structures/rsd, no symlinks. Returns the paths written. */
   writeIntoPack(packRoot: string, files: readonly { path: string; bytes: Uint8Array }[]): Promise<string[]>;
+  /** The same writer for Java exports: only `<slug>.schem` or `<slug>.litematic` in an existing directory. */
+  writeJavaFiles(dir: string, files: readonly { path: string; bytes: Uint8Array }[]): Promise<string[]>;
 }
 
 /** A tool's JSON result, and whether it is an error the agent should read as one. */
@@ -205,13 +207,16 @@ export const TOOLS: readonly Tool[] = [
   {
     name: "export",
     description:
-      'Exports the design into a behavior pack, like `rsd export --json`: to is "mcfunction" (functions/rsd/<slug>.mcfunction, built in game with /function rsd/<slug>) or "mcstructure" (structures/rsd/<slug>.mcstructure, /structure load rsd:<slug>). pack is the pack root directory, which must exist. clear also writes a function that empties the build area. Returns {ok, files, diagnostics}.',
+      'Exports the design, like `rsd export --json`. Bedrock designs: to is "mcfunction" (functions/rsd/<slug>.mcfunction, built in game with /function rsd/<slug>) or "mcstructure" (structures/rsd/<slug>.mcstructure, /structure load rsd:<slug>), and pack is the behavior pack root, which must exist; clear also writes a function that empties the build area. Java designs (meta.edition "java"): to is "schem" (Sponge schematic, for WorldEdit) or "litematic" (Litematica), and pack is the directory to write <slug>.schem or <slug>.litematic into. Returns {ok, files, diagnostics}.',
     inputSchema: {
       type: "object",
       properties: {
         design: DESIGN,
-        to: { type: "string", enum: ["mcfunction", "mcstructure"] },
-        pack: { type: "string", description: "The behavior pack root directory." },
+        to: { type: "string", enum: ["mcfunction", "mcstructure", "schem", "litematic"] },
+        pack: {
+          type: "string",
+          description: "The behavior pack root directory (Bedrock), or the output directory (Java).",
+        },
         clear: { type: "boolean" },
         origin: { type: "array", items: { type: "integer" }, minItems: 3, maxItems: 3 },
       },
@@ -243,14 +248,18 @@ export const TOOLS: readonly Tool[] = [
       const out = await exporter.export(model, opts);
       if (hasErrors(out.diagnostics))
         return { result: { ok: false, files: [], diagnostics: out.diagnostics } };
-      const files = await host.writeIntoPack(str(args, "pack") as string, out.files);
+      const dir = str(args, "pack") as string;
+      const files =
+        exporter.target === "java"
+          ? await host.writeJavaFiles(dir, out.files)
+          : await host.writeIntoPack(dir, out.files);
       return { result: { ok: true, files, diagnostics: [...checked.diagnostics, ...out.diagnostics] } };
     },
   },
   {
     name: "pack",
     description:
-      "Writes a one-design behavior pack (.mcpack: manifest, function and structure) to output, like `rsd pack`. Opening it on any Bedrock device imports it. Returns {ok, file, diagnostics}.",
+      "Writes a one-design behavior pack (.mcpack: manifest, function and structure) to output, like `rsd pack`. Opening it on any Bedrock device imports it. Bedrock designs only (for Java, use export). Returns {ok, file, diagnostics}.",
     inputSchema: {
       type: "object",
       properties: {
@@ -266,6 +275,10 @@ export const TOOLS: readonly Tool[] = [
       const model = checked.model;
       if (!model || hasErrors(checked.diagnostics))
         return { result: { ok: false, diagnostics: checked.diagnostics } };
+      if (model.meta.edition !== "bedrock")
+        throw new ArgumentError(
+          `pack makes a Bedrock behavior pack; this is a ${model.meta.edition} design (use export)`,
+        );
       const pack = await buildMcpack(model);
       if (!pack.bytes) return { result: { ok: false, diagnostics: pack.diagnostics } };
       await host.writeFile(output, pack.bytes);

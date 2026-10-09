@@ -187,7 +187,7 @@ export class Simulation {
     this.work += this.cells.size;
     const strong = new Map<string, number>();
     const raise = (m: Map<string, number>, p: Pos, level: number) => {
-      if (level <= 0 || !conducts(this.at(p))) return;
+      if (level <= 0 || !conducts(this.at(p), this.mechanics.id)) return;
       const k = posKey(p);
       if ((m.get(k) ?? 0) < level) m.set(k, level);
     };
@@ -233,7 +233,7 @@ export class Simulation {
     for (let level = 15; level > 1; level--) {
       for (const c of buckets[level] as Cell[]) {
         if (c.level !== level) continue;
-        for (const q of dustNeighbours(this.at, c.pos)) {
+        for (const q of dustNeighbours(this.at, c.pos, this.mechanics.id)) {
           const n = this.cells.get(posKey(q)) as Cell;
           if (n.level < level - 1) {
             n.level = level - 1;
@@ -254,7 +254,7 @@ export class Simulation {
       const p = c.pos;
       raise(weak, stepPos(p, "down"), c.level);
       // Connections once per dust: it powers a side block when every connection lies on that axis (or none).
-      const dirs = [...dustConnections(this.at, p)];
+      const dirs = [...dustConnections(this.at, p, this.mechanics.id)];
       for (const f of HORIZONTAL) {
         if (dirs.every((d) => d === f || d === OPPOSITE[f])) raise(weak, stepPos(p, f), c.level);
       }
@@ -293,7 +293,7 @@ export class Simulation {
     if (n.cls === "dust") return n.level;
     if (outputFace(n) === OPPOSITE[f]) return this.emitted(n);
     if (sideOnly) return typeof n.params.constant === "number" ? n.params.constant : 0;
-    if (conducts(n)) return this.blockPower(q);
+    if (conducts(n, this.mechanics.id)) return this.blockPower(q);
     return this.sourceLevel(n);
   }
 
@@ -312,10 +312,11 @@ export class Simulation {
       if (this.sourceLevel(n) > 0) return true;
       if (outputFace(n) === OPPOSITE[f] && this.emitted(n) > 0) return true;
       if (n.cls === "dust" && n.level > 0) {
-        if (f === "up" || (f !== "down" && dustPointsInto(this.at, q, OPPOSITE[f]))) return true;
+        if (f === "up" || (f !== "down" && dustPointsInto(this.at, q, OPPOSITE[f], this.mechanics.id)))
+          return true;
         continue;
       }
-      if (conducts(n) && this.blockPower(q) > 0) return true;
+      if (conducts(n, this.mechanics.id) && this.blockPower(q) > 0) return true;
     }
     return false;
   }
@@ -442,15 +443,19 @@ export class Simulation {
           ];
           const on = cells.some((q) => this.poweredAt(q)) ? 1 : 0;
           const key = c.outState;
-          if (key)
-            want(c, c.states[key] === true ? 1 : 0, on, timing.consumer, (v) => (c.states[key] = v === 1));
-          else want(c, c.level, on, timing.consumer, (v) => (c.level = v));
+          // A lamp may go dark later than it lights (Java: 0 to light, 4 to go dark).
+          const delay = on === 0 && c.type === "lamp" ? (timing.lampOff ?? timing.consumer) : timing.consumer;
+          if (key) want(c, c.states[key] === true ? 1 : 0, on, delay, (v) => (c.states[key] = v === 1));
+          else want(c, c.level, on, delay, (v) => (c.level = v));
           break;
         }
         case "piston": {
           this.work += POWER_CHECK_WORK;
           const front = str(c.states.facing) as Face;
-          const on = this.poweredAt(p, front) ? 1 : 0;
+          // Java's quasi-connectivity: power at the block above counts too (not from the piston's own cell below).
+          // VERIFY-IN-GAME: the game reacts only when the piston gets a block update; this reacts at once.
+          const qc = this.mechanics.quasiConnectivity && this.poweredAt(stepPos(p, "up"), "down");
+          const on = this.poweredAt(p, front) || qc ? 1 : 0;
           want(c, c.extended ? 1 : 0, on, timing.piston, (v) =>
             pistons.push({ cell: c, key: posKey(p), extend: v === 1 }),
           );
@@ -622,7 +627,7 @@ export class Simulation {
     const c = this.cells.get(posKey(pos));
     if (!c) return 0;
     if (c.cls === "dust" || c.cls === "comparator") return c.level;
-    if (conducts(c)) return this.blockPower(pos);
+    if (conducts(c, this.mechanics.id)) return this.blockPower(pos);
     return this.sourceLevel(c) || this.emitted(c);
   }
 

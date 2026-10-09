@@ -20,7 +20,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       byState: "mount",
       map: { floor: "down", ceiling: "up", north: "north", south: "south", east: "east", west: "west" },
     },
-    faces: { bedrock: { top: false, side: false, bottom: false }, java: null },
+    faces: {
+      bedrock: { top: false, side: false, bottom: false },
+      java: { top: false, side: false, bottom: false },
+    },
     conductsPower: false,
     geometry: { builder: "button", color: "by_material" },
     sim: { class: "source", params: { input: "pulse", pulseTicks: { stone: 10, wood: 15 } } },
@@ -42,7 +45,45 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       date: "2026-10-08",
       by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
     },
-    java: null,
+    java: {
+      id: { from: "material", map: { stone: "minecraft:stone_button", wood: "minecraft:oak_button" } },
+      states: {
+        face: {
+          from: "mount",
+          map: {
+            floor: "floor",
+            ceiling: "ceiling",
+            north: "wall",
+            south: "wall",
+            east: "wall",
+            west: "wall",
+          },
+        },
+        facing: {
+          from: "mount",
+          map: {
+            floor: "north",
+            ceiling: "north",
+            north: "south",
+            south: "north",
+            east: "west",
+            west: "east",
+          },
+          proven: {
+            gameVersion: "26.3",
+            date: "2026-10-09",
+            by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+          },
+        },
+        powered: { from: "pressed", map: { false: false, true: true } },
+      },
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "comparator",
@@ -54,7 +95,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       powered: { values: [false, true], default: false },
     },
     needsSupport: { face: "down" },
-    faces: { bedrock: { top: false, side: false, bottom: false }, java: null },
+    faces: {
+      bedrock: { top: false, side: false, bottom: false },
+      java: { top: false, side: false, bottom: false },
+    },
     conductsPower: false,
     geometry: { builder: "comparator", color: "redstone" },
     sim: { class: "comparator", params: { output: "level" } },
@@ -91,7 +135,28 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: "minecraft:comparator",
+      states: {
+        facing: {
+          from: "facing",
+          map: { north: "south", south: "north", east: "west", west: "east" },
+          proven: {
+            gameVersion: "26.3",
+            date: "2026-10-09",
+            by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+          },
+        },
+        mode: { from: "mode", map: { compare: "compare", subtract: "subtract" } },
+        powered: { from: "powered", map: { false: false, true: true } },
+      },
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "concrete",
@@ -121,7 +186,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       },
     },
     needsSupport: null,
-    faces: { bedrock: { top: true, side: true, bottom: true }, java: null },
+    faces: {
+      bedrock: { top: true, side: true, bottom: true },
+      java: { top: true, side: true, bottom: true },
+    },
     conductsPower: true,
     geometry: { builder: "cube", color: "by_color" },
     sim: { class: "solid", params: {} },
@@ -151,7 +219,36 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: {
+        from: "color",
+        map: {
+          white: "minecraft:white_concrete",
+          orange: "minecraft:orange_concrete",
+          magenta: "minecraft:magenta_concrete",
+          light_blue: "minecraft:light_blue_concrete",
+          yellow: "minecraft:yellow_concrete",
+          lime: "minecraft:lime_concrete",
+          pink: "minecraft:pink_concrete",
+          gray: "minecraft:gray_concrete",
+          light_gray: "minecraft:light_gray_concrete",
+          cyan: "minecraft:cyan_concrete",
+          purple: "minecraft:purple_concrete",
+          blue: "minecraft:blue_concrete",
+          brown: "minecraft:brown_concrete",
+          green: "minecraft:green_concrete",
+          red: "minecraft:red_concrete",
+          black: "minecraft:black_concrete",
+        },
+      },
+      states: {},
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "daylight_sensor",
@@ -159,7 +256,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
     editions: ["bedrock", "java"],
     states: { inverted: { values: [false, true], default: false } },
     needsSupport: null,
-    faces: { bedrock: { top: false, side: false, bottom: true }, java: null },
+    faces: {
+      bedrock: { top: false, side: false, bottom: true },
+      java: { top: false, side: false, bottom: true },
+    },
     conductsPower: false,
     geometry: { builder: "daylight_sensor", color: "wood" },
     sim: { class: "source", params: { input: "none" } },
@@ -172,7 +272,11 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: "minecraft:daylight_detector",
+      states: { inverted: { from: "inverted", map: { false: false, true: true } }, power: { value: 0 } },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "dispenser",
@@ -186,7 +290,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       },
     },
     needsSupport: null,
-    faces: { bedrock: { top: true, side: true, bottom: true }, java: null },
+    faces: {
+      bedrock: { top: true, side: true, bottom: true },
+      java: { top: true, side: true, bottom: true },
+    },
     conductsPower: true,
     geometry: { builder: "cube_faced", color: "dispenser" },
     sim: { class: "consumer", params: { container: false, output: "none" } },
@@ -204,7 +311,27 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: "minecraft:dispenser",
+      states: {
+        facing: {
+          from: "facing",
+          map: { down: "down", up: "up", north: "north", south: "south", east: "east", west: "west" },
+          proven: {
+            gameVersion: "26.3",
+            date: "2026-10-09",
+            by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+          },
+        },
+        triggered: { value: false },
+      },
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "door",
@@ -217,7 +344,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       material: { values: ["wood", "iron"], default: "wood" },
     },
     needsSupport: { face: "down" },
-    faces: { bedrock: { top: false, side: false, bottom: false }, java: null },
+    faces: {
+      bedrock: { top: false, side: false, bottom: false },
+      java: { top: false, side: false, bottom: false },
+    },
     occupies: [[0, 1, 0]],
     conductsPower: false,
     geometry: { builder: "door", color: "by_material" },
@@ -252,7 +382,22 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: { from: "material", map: { wood: "minecraft:oak_door", iron: "minecraft:iron_door" } },
+      states: {
+        facing: {
+          from: "facing",
+          map: { north: "north", south: "south", east: "east", west: "west" },
+          verify: "VERIFY-IN-GAME: Java door facing is the direction the placing player looked",
+        },
+        hinge: { from: "hinge", map: { left: "left", right: "right" } },
+        open: { from: "open", map: { false: false, true: true } },
+        half: { value: "lower" },
+        powered: { value: false },
+      },
+      upper: { offset: [0, 1, 0], states: { half: { value: "upper" } } },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "dropper",
@@ -266,7 +411,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       },
     },
     needsSupport: null,
-    faces: { bedrock: { top: true, side: true, bottom: true }, java: null },
+    faces: {
+      bedrock: { top: true, side: true, bottom: true },
+      java: { top: true, side: true, bottom: true },
+    },
     conductsPower: true,
     geometry: { builder: "cube_faced", color: "dropper" },
     sim: { class: "consumer", params: { container: true, output: "none" } },
@@ -284,7 +432,27 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: "minecraft:dropper",
+      states: {
+        facing: {
+          from: "facing",
+          map: { down: "down", up: "up", north: "north", south: "south", east: "east", west: "west" },
+          proven: {
+            gameVersion: "26.3",
+            date: "2026-10-09",
+            by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+          },
+        },
+        triggered: { value: false },
+      },
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "dust",
@@ -292,7 +460,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
     editions: ["bedrock", "java"],
     states: { power: { values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], default: 0 } },
     needsSupport: { face: "down" },
-    faces: { bedrock: { top: false, side: false, bottom: false }, java: null },
+    faces: {
+      bedrock: { top: false, side: false, bottom: false },
+      java: { top: false, side: false, bottom: false },
+    },
     conductsPower: false,
     geometry: { builder: "dust", color: "redstone" },
     sim: { class: "dust", params: { output: "level" } },
@@ -328,7 +499,42 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       date: "2026-10-08",
       by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
     },
-    java: null,
+    java: {
+      id: "minecraft:redstone_wire",
+      states: {
+        power: {
+          from: "power",
+          map: {
+            "0": 0,
+            "1": 1,
+            "2": 2,
+            "3": 3,
+            "4": 4,
+            "5": 5,
+            "6": 6,
+            "7": 7,
+            "8": 8,
+            "9": 9,
+            "10": 10,
+            "11": 11,
+            "12": 12,
+            "13": 13,
+            "14": 14,
+            "15": 15,
+          },
+        },
+        north: { value: "none" },
+        south: { value: "none" },
+        east: { value: "none" },
+        west: { value: "none" },
+      },
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "glass",
@@ -336,7 +542,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
     editions: ["bedrock", "java"],
     states: {},
     needsSupport: null,
-    faces: { bedrock: { top: true, side: true, bottom: true }, java: null },
+    faces: {
+      bedrock: { top: true, side: true, bottom: true },
+      java: { top: true, side: true, bottom: true },
+    },
     conductsPower: false,
     geometry: { builder: "cube", color: "glass" },
     sim: { class: "solid", params: {} },
@@ -346,7 +555,16 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: "minecraft:glass",
+      states: {},
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "honey_block",
@@ -354,7 +572,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
     editions: ["bedrock", "java"],
     states: {},
     needsSupport: null,
-    faces: { bedrock: { top: true, side: false, bottom: false }, java: null },
+    faces: {
+      bedrock: { top: true, side: false, bottom: false },
+      java: { top: false, side: false, bottom: false },
+    },
     conductsPower: false,
     geometry: { builder: "cube", color: "honey" },
     sim: { class: "solid", params: { sticky: true } },
@@ -364,7 +585,7 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: { id: "minecraft:honey_block", states: {}, checkedAgainst: { javaVersion: "26.3" } },
   },
   {
     type: "hopper",
@@ -374,7 +595,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       facing: { values: ["down", "north", "south", "east", "west"], default: "down", directional: true },
     },
     needsSupport: null,
-    faces: { bedrock: { top: true, side: false, bottom: false }, java: null },
+    faces: {
+      bedrock: { top: true, side: false, bottom: false },
+      java: { top: true, side: false, bottom: false, topCenter: false },
+    },
     conductsPower: false,
     geometry: { builder: "hopper", color: "iron" },
     sim: { class: "consumer", params: { container: true, output: "none" } },
@@ -392,7 +616,27 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: "minecraft:hopper",
+      states: {
+        facing: {
+          from: "facing",
+          map: { down: "down", north: "north", south: "south", east: "east", west: "west" },
+          proven: {
+            gameVersion: "26.3",
+            date: "2026-10-09",
+            by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+          },
+        },
+        enabled: { value: true },
+      },
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "lamp",
@@ -400,7 +644,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
     editions: ["bedrock", "java"],
     states: { lit: { values: [false, true], default: false } },
     needsSupport: null,
-    faces: { bedrock: { top: true, side: true, bottom: true }, java: null },
+    faces: {
+      bedrock: { top: true, side: true, bottom: true },
+      java: { top: true, side: true, bottom: true },
+    },
     conductsPower: true,
     geometry: { builder: "cube", color: "lamp" },
     sim: { class: "consumer", params: { output: "binary" } },
@@ -414,7 +661,16 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       date: "2026-10-08",
       by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
     },
-    java: null,
+    java: {
+      id: "minecraft:redstone_lamp",
+      states: { lit: { from: "lit", map: { false: false, true: true } } },
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "lever",
@@ -433,7 +689,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       map: { floor: "down", ceiling: "up", north: "north", south: "south", east: "east", west: "west" },
       anyBlock: true,
     },
-    faces: { bedrock: { top: false, side: false, bottom: false }, java: null },
+    faces: {
+      bedrock: { top: false, side: false, bottom: false },
+      java: { top: false, side: false, bottom: false },
+    },
     conductsPower: false,
     geometry: { builder: "lever", color: "wood" },
     sim: { class: "source", params: { input: "hold" } },
@@ -467,7 +726,45 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       date: "2026-10-08",
       by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
     },
-    java: null,
+    java: {
+      id: "minecraft:lever",
+      states: {
+        face: {
+          from: "mount",
+          map: {
+            floor: "floor",
+            ceiling: "ceiling",
+            north: "wall",
+            south: "wall",
+            east: "wall",
+            west: "wall",
+          },
+        },
+        facing: {
+          from: "mount",
+          map: {
+            floor: "north",
+            ceiling: "north",
+            north: "south",
+            south: "north",
+            east: "west",
+            west: "east",
+          },
+          proven: {
+            gameVersion: "26.3",
+            date: "2026-10-09",
+            by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+          },
+        },
+        powered: { from: "on", map: { false: false, true: true } },
+      },
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "note_block",
@@ -475,7 +772,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
     editions: ["bedrock", "java"],
     states: {},
     needsSupport: null,
-    faces: { bedrock: { top: true, side: true, bottom: true }, java: null },
+    faces: {
+      bedrock: { top: true, side: true, bottom: true },
+      java: { top: true, side: true, bottom: true },
+    },
     conductsPower: true,
     geometry: { builder: "cube", color: "note_block" },
     sim: { class: "consumer", params: { output: "binary" } },
@@ -485,7 +785,11 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: "minecraft:note_block",
+      states: { instrument: { value: "harp" }, note: { value: 0 }, powered: { value: false } },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "observer",
@@ -500,7 +804,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       powered: { values: [false, true], default: false },
     },
     needsSupport: null,
-    faces: { bedrock: { top: true, side: true, bottom: true }, java: null },
+    faces: {
+      bedrock: { top: true, side: true, bottom: true },
+      java: { top: true, side: true, bottom: true },
+    },
     conductsPower: false,
     geometry: { builder: "observer", color: "observer" },
     sim: { class: "observer", params: {} },
@@ -518,7 +825,27 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: "minecraft:observer",
+      states: {
+        facing: {
+          from: "facing",
+          map: { down: "down", up: "up", north: "north", south: "south", east: "east", west: "west" },
+          proven: {
+            gameVersion: "26.3",
+            date: "2026-10-09",
+            by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+          },
+        },
+        powered: { from: "powered", map: { false: false, true: true } },
+      },
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "piston",
@@ -528,7 +855,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       facing: { values: ["down", "up", "north", "south", "east", "west"], default: "up", directional: true },
     },
     needsSupport: null,
-    faces: { bedrock: { top: true, side: true, bottom: true }, java: null },
+    faces: {
+      bedrock: { top: true, side: true, bottom: true },
+      java: { top: true, side: true, bottom: true },
+    },
     conductsPower: false,
     geometry: { builder: "piston", color: "piston" },
     sim: { class: "piston", params: { sticky: false, output: "binary" } },
@@ -549,7 +879,27 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       date: "2026-10-08",
       by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
     },
-    java: null,
+    java: {
+      id: "minecraft:piston",
+      states: {
+        facing: {
+          from: "facing",
+          map: { down: "down", up: "up", north: "north", south: "south", east: "east", west: "west" },
+          proven: {
+            gameVersion: "26.3",
+            date: "2026-10-09",
+            by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+          },
+        },
+        extended: { value: false },
+      },
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "pressure_plate",
@@ -560,7 +910,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       on: { values: [false, true], default: false },
     },
     needsSupport: { face: "down" },
-    faces: { bedrock: { top: false, side: false, bottom: false }, java: null },
+    faces: {
+      bedrock: { top: false, side: false, bottom: false },
+      java: { top: false, side: false, bottom: false },
+    },
     conductsPower: false,
     geometry: { builder: "plate", color: "by_material" },
     sim: { class: "source", params: { input: "hold" } },
@@ -580,7 +933,14 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: {
+        from: "material",
+        map: { stone: "minecraft:stone_pressure_plate", wood: "minecraft:oak_pressure_plate" },
+      },
+      states: { powered: { from: "on", map: { false: false, true: true } } },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "redstone_block",
@@ -588,7 +948,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
     editions: ["bedrock", "java"],
     states: {},
     needsSupport: null,
-    faces: { bedrock: { top: true, side: true, bottom: true }, java: null },
+    faces: {
+      bedrock: { top: true, side: true, bottom: true },
+      java: { top: true, side: true, bottom: true },
+    },
     conductsPower: false,
     geometry: { builder: "cube", color: "redstone_block" },
     sim: { class: "source", params: { constant: 15 } },
@@ -602,7 +965,16 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       date: "2026-10-08",
       by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
     },
-    java: null,
+    java: {
+      id: "minecraft:redstone_block",
+      states: {},
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "repeater",
@@ -614,7 +986,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       powered: { values: [false, true], default: false },
     },
     needsSupport: { face: "down" },
-    faces: { bedrock: { top: false, side: false, bottom: false }, java: null },
+    faces: {
+      bedrock: { top: false, side: false, bottom: false },
+      java: { top: false, side: false, bottom: false },
+    },
     conductsPower: false,
     geometry: { builder: "repeater", color: "redstone" },
     sim: { class: "repeater", params: {} },
@@ -645,7 +1020,29 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: "minecraft:repeater",
+      states: {
+        facing: {
+          from: "facing",
+          map: { north: "south", south: "north", east: "west", west: "east" },
+          proven: {
+            gameVersion: "26.3",
+            date: "2026-10-09",
+            by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+          },
+        },
+        delay: { from: "delay", map: { "1": 1, "2": 2, "3": 3, "4": 4 } },
+        locked: { value: false },
+        powered: { from: "powered", map: { false: false, true: true } },
+      },
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "slab",
@@ -660,7 +1057,12 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
         bottom: true,
         when: [{ states: { half: "top" }, top: true, side: false, bottom: false }],
       },
-      java: null,
+      java: {
+        top: false,
+        side: false,
+        bottom: true,
+        when: [{ states: { half: "top" }, top: true, side: false, bottom: false }],
+      },
     },
     conductsPower: false,
     geometry: { builder: "slab", color: "stone" },
@@ -671,7 +1073,14 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: "minecraft:stone_slab",
+      states: {
+        type: { from: "half", map: { bottom: "bottom", top: "top" } },
+        waterlogged: { value: false },
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "slime",
@@ -679,7 +1088,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
     editions: ["bedrock", "java"],
     states: {},
     needsSupport: null,
-    faces: { bedrock: { top: true, side: true, bottom: true }, java: null },
+    faces: {
+      bedrock: { top: true, side: true, bottom: true },
+      java: { top: true, side: true, bottom: true },
+    },
     conductsPower: false,
     geometry: { builder: "cube", color: "slime" },
     sim: { class: "solid", params: { sticky: true } },
@@ -689,7 +1101,12 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: "minecraft:slime_block",
+      states: {},
+      conductsPower: true,
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "stairs",
@@ -707,7 +1124,12 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
         bottom: true,
         when: [{ states: { half: "top" }, top: true, side: false, bottom: false }],
       },
-      java: null,
+      java: {
+        top: false,
+        side: false,
+        bottom: true,
+        when: [{ states: { half: "top" }, top: true, side: false, bottom: false }],
+      },
     },
     conductsPower: false,
     geometry: { builder: "stairs", color: "stone" },
@@ -727,7 +1149,29 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: "minecraft:stone_stairs",
+      states: {
+        facing: {
+          from: "facing",
+          map: { north: "north", south: "south", east: "east", west: "west" },
+          proven: {
+            gameVersion: "26.3",
+            date: "2026-10-09",
+            by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+          },
+        },
+        half: { from: "half", map: { bottom: "bottom", top: "top" } },
+        shape: { value: "straight" },
+        waterlogged: { value: false },
+      },
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "sticky_piston",
@@ -737,7 +1181,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       facing: { values: ["down", "up", "north", "south", "east", "west"], default: "up", directional: true },
     },
     needsSupport: null,
-    faces: { bedrock: { top: true, side: true, bottom: true }, java: null },
+    faces: {
+      bedrock: { top: true, side: true, bottom: true },
+      java: { top: true, side: true, bottom: true },
+    },
     conductsPower: false,
     geometry: { builder: "piston", color: "sticky_piston" },
     sim: { class: "piston", params: { sticky: true, output: "binary" } },
@@ -758,7 +1205,27 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       date: "2026-10-08",
       by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
     },
-    java: null,
+    java: {
+      id: "minecraft:sticky_piston",
+      states: {
+        facing: {
+          from: "facing",
+          map: { down: "down", up: "up", north: "north", south: "south", east: "east", west: "west" },
+          proven: {
+            gameVersion: "26.3",
+            date: "2026-10-09",
+            by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+          },
+        },
+        extended: { value: false },
+      },
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "stone",
@@ -766,7 +1233,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
     editions: ["bedrock", "java"],
     states: {},
     needsSupport: null,
-    faces: { bedrock: { top: true, side: true, bottom: true }, java: null },
+    faces: {
+      bedrock: { top: true, side: true, bottom: true },
+      java: { top: true, side: true, bottom: true },
+    },
     conductsPower: true,
     geometry: { builder: "cube", color: "stone" },
     sim: { class: "solid", params: {} },
@@ -780,7 +1250,16 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       date: "2026-10-08",
       by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
     },
-    java: null,
+    java: {
+      id: "minecraft:stone",
+      states: {},
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "target",
@@ -788,7 +1267,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
     editions: ["bedrock", "java"],
     states: {},
     needsSupport: null,
-    faces: { bedrock: { top: true, side: true, bottom: true }, java: null },
+    faces: {
+      bedrock: { top: true, side: true, bottom: true },
+      java: { top: true, side: true, bottom: true },
+    },
     conductsPower: true,
     geometry: { builder: "cube", color: "target" },
     sim: { class: "solid", params: {} },
@@ -798,7 +1280,11 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: "minecraft:target",
+      states: { power: { value: 0 } },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "torch",
@@ -812,7 +1298,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       byState: "mount",
       map: { floor: "down", north: "north", south: "south", east: "east", west: "west" },
     },
-    faces: { bedrock: { top: false, side: false, bottom: false }, java: null },
+    faces: {
+      bedrock: { top: false, side: false, bottom: false },
+      java: { top: false, side: false, bottom: false },
+    },
     conductsPower: false,
     geometry: { builder: "torch", color: "redstone" },
     sim: { class: "torch", params: {} },
@@ -833,7 +1322,36 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       date: "2026-10-08",
       by: "automated in-game check (deploy/test-world/ingame-check.mjs, docs/ingame/2026-10-08-m3.json)",
     },
-    java: null,
+    java: {
+      id: {
+        from: "mount",
+        map: {
+          floor: "minecraft:redstone_torch",
+          north: "minecraft:redstone_wall_torch",
+          south: "minecraft:redstone_wall_torch",
+          east: "minecraft:redstone_wall_torch",
+          west: "minecraft:redstone_wall_torch",
+        },
+      },
+      states: {
+        facing: {
+          from: "mount",
+          map: { floor: null, north: "south", south: "north", east: "west", west: "east" },
+          proven: {
+            gameVersion: "26.3",
+            date: "2026-10-09",
+            by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+          },
+        },
+        lit: { from: "lit", map: { false: false, true: true } },
+      },
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "trapdoor",
@@ -856,7 +1374,15 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
           { states: { open: true }, top: false, side: false, bottom: false },
         ],
       },
-      java: null,
+      java: {
+        top: false,
+        side: false,
+        bottom: true,
+        when: [
+          { states: { half: "top", open: false }, top: true, side: false, bottom: false },
+          { states: { open: true }, top: false, side: false, bottom: false },
+        ],
+      },
     },
     conductsPower: false,
     geometry: { builder: "trapdoor", color: "by_material" },
@@ -876,7 +1402,21 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: { from: "material", map: { wood: "minecraft:oak_trapdoor", iron: "minecraft:iron_trapdoor" } },
+      states: {
+        facing: {
+          from: "facing",
+          map: { north: "north", south: "south", east: "east", west: "west" },
+          verify: "VERIFY-IN-GAME: Java trapdoor facing: the hinge is on the edge opposite facing",
+        },
+        half: { from: "half", map: { bottom: "bottom", top: "top" } },
+        open: { from: "open", map: { false: false, true: true } },
+        powered: { value: false },
+        waterlogged: { value: false },
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
   {
     type: "wool",
@@ -906,7 +1446,10 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       },
     },
     needsSupport: null,
-    faces: { bedrock: { top: true, side: true, bottom: true }, java: null },
+    faces: {
+      bedrock: { top: true, side: true, bottom: true },
+      java: { top: true, side: true, bottom: true },
+    },
     conductsPower: true,
     geometry: { builder: "cube", color: "by_color" },
     sim: { class: "solid", params: {} },
@@ -936,6 +1479,35 @@ export const REGISTRY_ENTRIES: readonly RegistryEntry[] = [
       checkedAgainst: { vanillaData: "1.26.50", bedrockSamples: "v1.26.50.4" },
     },
     verified: null,
-    java: null,
+    java: {
+      id: {
+        from: "color",
+        map: {
+          white: "minecraft:white_wool",
+          orange: "minecraft:orange_wool",
+          magenta: "minecraft:magenta_wool",
+          light_blue: "minecraft:light_blue_wool",
+          yellow: "minecraft:yellow_wool",
+          lime: "minecraft:lime_wool",
+          pink: "minecraft:pink_wool",
+          gray: "minecraft:gray_wool",
+          light_gray: "minecraft:light_gray_wool",
+          cyan: "minecraft:cyan_wool",
+          purple: "minecraft:purple_wool",
+          blue: "minecraft:blue_wool",
+          brown: "minecraft:brown_wool",
+          green: "minecraft:green_wool",
+          red: "minecraft:red_wool",
+          black: "minecraft:black_wool",
+        },
+      },
+      states: {},
+      verified: {
+        gameVersion: "26.3",
+        date: "2026-10-09",
+        by: "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)",
+      },
+      checkedAgainst: { javaVersion: "26.3" },
+    },
   },
 ];

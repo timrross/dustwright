@@ -26,7 +26,7 @@ export const E006: Rule = {
   code: "E006",
   stage: 2,
   severity: "error",
-  editions: ["bedrock"],
+  editions: ["bedrock", "java"],
   run(model, ctx) {
     const out: Diagnostic[] = [];
     for (const [key, b] of model.blocks) {
@@ -61,7 +61,7 @@ export const W101: Rule = {
   code: "W101",
   stage: 2,
   severity: "warning",
-  editions: ["bedrock"],
+  editions: ["bedrock", "java"],
   run(model) {
     const out: Diagnostic[] = [];
     for (const net of dustNetworks(model)) {
@@ -107,7 +107,7 @@ export const W102: Rule = {
   code: "W102",
   stage: 2,
   severity: "warning",
-  editions: ["bedrock"],
+  editions: ["bedrock", "java"],
   run(model) {
     const out: Diagnostic[] = [];
     for (const [key, b] of model.blocks) {
@@ -121,7 +121,7 @@ export const W102: Rule = {
       const takes =
         t !== undefined &&
         (t.type === "dust" ||
-          conducts(t) ||
+          conducts(t, model.meta.edition) ||
           category === "consumer" ||
           ((t.type === "repeater" || t.type === "comparator") && outputFace(t) !== OPPOSITE[face]));
       if (takes) continue;
@@ -146,7 +146,7 @@ export const W103: Rule = {
   code: "W103",
   stage: 2,
   severity: "warning",
-  editions: ["bedrock"],
+  editions: ["bedrock", "java"],
   run(model) {
     const out: Diagnostic[] = [];
     for (const net of dustNetworks(model)) {
@@ -175,7 +175,7 @@ export const W104: Rule = {
   code: "W104",
   stage: 2,
   severity: "warning",
-  editions: ["bedrock"],
+  editions: ["bedrock", "java"],
   run(model) {
     const out: Diagnostic[] = [];
     const { of } = dustNetworkIndex(model);
@@ -194,7 +194,7 @@ export const W104: Rule = {
         if (id !== undefined) fed.add(id);
       }
       const above = step(pos, "up");
-      if (conducts(blockAt(model, above))) {
+      if (conducts(blockAt(model, above), model.meta.edition)) {
         const id = net(step(above, "up"));
         if (id !== undefined) fed.add(id);
       }
@@ -237,7 +237,7 @@ function powersAt(model: Model, p: Pos, exclude?: string): boolean {
     const o = outputFace(n);
     if (o && o === OPPOSITE[f]) return true;
     if (
-      conducts(n) &&
+      conducts(n, model.meta.edition) &&
       (stronglyPowered(model, q) ||
         ALL.some((g) => isSource(blockAt(model, step(q, g))) || blockAt(model, step(q, g))?.type === "dust"))
     )
@@ -262,7 +262,7 @@ export const W105: Rule = {
       );
       if (powersAt(model, pos, front)) continue;
       const above = step(pos, "up");
-      if (blockAt(model, above) && !conducts(blockAt(model, above))) continue;
+      if (blockAt(model, above) && !conducts(blockAt(model, above), model.meta.edition)) continue;
       if (!powersAt(model, above, posKey(pos))) continue;
       out.push(
         diag(

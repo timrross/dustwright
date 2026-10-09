@@ -20,7 +20,7 @@ export interface StateDef {
 
 /** How one target-edition state is derived: from an abstract state through a value map, or a fixed value. */
 export type StateMapping =
-  | { from: string; map: Readonly<Record<string, StateValue>>; verify?: string; proven?: Verification }
+  | { from: string; map: Readonly<Record<string, StateValue | null>>; verify?: string; proven?: Verification }
   | { value: StateValue; verify?: string; proven?: Verification };
 
 /** How an abstract block maps to one edition's block ID and states. */
@@ -30,7 +30,12 @@ export interface EditionMapping {
   states: Readonly<Record<string, StateMapping>>;
   /** A second block placed at an offset (a door's upper half), with these state overrides. */
   upper?: { offset: readonly [number, number, number]; states: Readonly<Record<string, StateMapping>> };
-  checkedAgainst: { vanillaData: string; bedrockSamples: string };
+  /** Java only, where it differs from the entry's `conductsPower` (measured in the Java test world). */
+  conductsPower?: boolean;
+  /** Java only: who proved the mapping in game, and when (Bedrock records this on the entry, `verified`). */
+  verified?: Verification;
+  /** The pinned data the mapping was checked against: Bedrock's vanilla-data and samples, or Java's block report. */
+  checkedAgainst: { vanillaData: string; bedrockSamples: string } | { javaVersion: string };
 }
 
 /** Who proved a mapping in game, and when. */
@@ -52,6 +57,11 @@ export interface SturdyFaces {
   top: boolean;
   side: boolean;
   bottom: boolean;
+  /**
+   * Java only, when it differs from `top`: whether the top holds floor torches, levers and buttons and doors, which
+   * need the centre of the face (measured: a hopper's rim holds dust, repeaters and plates, but not those).
+   */
+  topCenter?: boolean;
   /** Overrides for state combinations; the first match wins. */
   when?: readonly ({ states: Readonly<Record<string, StateValue>> } & Omit<SturdyFaces, "when">)[];
 }

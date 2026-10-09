@@ -18,6 +18,9 @@ export interface McpackResult {
  * identical input. Importing it is a double-click on any Bedrock device.
  */
 export async function buildMcpack(model: Model): Promise<McpackResult> {
+  // A behavior pack is Bedrock's: a Java design's blocks would be mapped as Bedrock blocks.
+  if (model.meta.edition !== "bedrock")
+    throw new Error(`a .mcpack is for Bedrock designs, not ${model.meta.edition}`);
   const slug = model.meta.slug;
   const fileName = `${slug}.mcpack`;
   const fn = await mcfunctionExporter.export(model, {});

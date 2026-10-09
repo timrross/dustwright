@@ -1,6 +1,6 @@
 /**
  * @packageDocumentation
- * Approximate tick-based Bedrock redstone simulator: runs a design's truth-table tests (stage 3) and drives the
+ * Approximate tick-based redstone simulator (Bedrock and, since M9, Java mechanics): runs a design's truth-table tests (stage 3) and drives the
  * viewer's power view. The game is the ground truth; where they disagree, the game wins.
  */
 
@@ -9,7 +9,7 @@ import type { SimClass } from "@dustwright/core";
 /** Name of this package, exposed so consumers and tests can confirm the wiring. */
 export const PACKAGE_NAME = "@dustwright/sim";
 
-export { BEDROCK_MECHANICS, JAVA_MECHANICS_STUB } from "./mechanics.js";
+export { BEDROCK_MECHANICS, JAVA_MECHANICS, MECHANICS } from "./mechanics.js";
 export { PISTON_HEAD, Simulation } from "./simulation.js";
 export type { SimSnapshot } from "./simulation.js";
 export {

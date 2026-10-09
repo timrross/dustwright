@@ -67,7 +67,8 @@ function mapStates(
       const abstract = states[m.from];
       const mapped = abstract === undefined ? undefined : m.map[valueText(abstract)];
       if (mapped === undefined) throw new Error(`no ${name} mapping for ${m.from}=${String(abstract)}`);
-      out[name] = mapped;
+      // null: the target block has no such state for this value (a Java floor torch has no facing).
+      if (mapped !== null) out[name] = mapped;
     }
   }
   return out;
@@ -109,10 +110,23 @@ export type FaceKind = "top" | "side" | "bottom";
  * Whether `block` can hold a component on its `kind` face in `edition`, from the faces measured in game. Unknown
  * types and editions without measurements hold nothing.
  */
-export function holdsOnFace(block: Block, kind: FaceKind, edition: Edition = "bedrock"): boolean {
+export function holdsOnFace(
+  block: Block,
+  kind: FaceKind,
+  edition: Edition = "bedrock",
+  component?: string,
+): boolean {
   const entry = BY_TYPE.get(block.type);
   const faces = edition === "bedrock" ? entry?.faces.bedrock : entry?.faces.java;
   if (!faces) return false;
   const match = faces.when?.find((w) => Object.entries(w.states).every(([k, v]) => block.states[k] === v));
-  return (match ?? faces)[kind];
+  const f = match ?? faces;
+  // Floor torches, levers and buttons and doors need the centre of the top face, which some blocks lack (Java
+  // hoppers, measured).
+  if (kind === "top" && f.topCenter !== undefined && component !== undefined && CENTER_TYPES.has(component))
+    return f.topCenter;
+  return f[kind];
 }
+
+/** Components that stand on the centre of a block's top face. */
+const CENTER_TYPES = new Set(["torch", "lever", "button", "door"]);

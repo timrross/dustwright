@@ -26,7 +26,11 @@
       "side": false,
       "bottom": false
     },
-    "java": null
+    "java": {
+      "top": false,
+      "side": false,
+      "bottom": false
+    }
   },
   "conductsPower": false,
   "geometry": {
@@ -78,5 +82,50 @@
     }
   },
   "verified": null,
-  "java": null
+  "java": {
+    "id": "minecraft:repeater",
+    "states": {
+      "facing": {
+        "from": "facing",
+        "map": {
+          "north": "south",
+          "south": "north",
+          "east": "west",
+          "west": "east"
+        },
+        "proven": {
+          "gameVersion": "26.3",
+          "date": "2026-10-09",
+          "by": "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)"
+        }
+      },
+      "delay": {
+        "from": "delay",
+        "map": {
+          "1": 1,
+          "2": 2,
+          "3": 3,
+          "4": 4
+        }
+      },
+      "locked": {
+        "value": false
+      },
+      "powered": {
+        "from": "powered",
+        "map": {
+          "false": false,
+          "true": true
+        }
+      }
+    },
+    "verified": {
+      "gameVersion": "26.3",
+      "date": "2026-10-09",
+      "by": "automated in-game check (deploy/test-world-java/ingame-check.mjs, docs/ingame/2026-10-09-java.json)"
+    },
+    "checkedAgainst": {
+      "javaVersion": "26.3"
+    }
+  }
 }

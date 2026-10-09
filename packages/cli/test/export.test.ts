@@ -15,7 +15,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { run } from "../src/index.js";
-import { PACK_PATH, writeIntoPack } from "../src/pack-write.js";
+import { JAVA_PATH, PACK_PATH, writeIntoPack } from "../src/pack-write.js";
 
 const root = fileURLToPath(new URL("../../../", import.meta.url));
 const example = join(root, "examples/not-gate.rsd.json");
@@ -88,13 +88,44 @@ describe("rsd export --to mcfunction", () => {
     expect((await rsd(["export", "--list"])).stdout).toContain("mcfunction\tbedrock");
   });
 
-  it("refuses a java design (E015) and an unknown exporter", async () => {
+  it("refuses a Bedrock exporter for a java design, a Java exporter for a bedrock one, and an unknown exporter", async () => {
     const pack = fresh();
-    expect(
-      (await rsd(["export", design("j", { edition: "java" }), "--to", "mcfunction", "--pack", pack]))
-        .exitCode,
-    ).toBe(1);
+    const java = design("j", { edition: "java" });
+    expect((await rsd(["export", java, "--to", "mcfunction", "--pack", pack])).exitCode).toBe(2);
+    expect((await rsd(["export", example, "--to", "schem", "-o", pack])).exitCode).toBe(2);
     expect((await rsd(["export", example, "--to", "schematic", "--pack", pack])).exitCode).toBe(2);
+    expect(readdirSync(pack)).toEqual([]);
+  });
+});
+
+describe("rsd export --to schem|litematic (Java)", () => {
+  it("writes <slug>.schem and <slug>.litematic into -o, and needs -o", async () => {
+    const out = fresh();
+    const java = design("j gate", { edition: "java" });
+    const schem = await rsd(["export", java, "--to", "schem", "-o", out]);
+    expect(schem.exitCode).toBe(0);
+    expect(schem.stdout.trim()).toBe(join(realpathSync(out), "j-gate.schem"));
+    expect((await rsd(["export", java, "--to", "litematic", "-o", out])).exitCode).toBe(0);
+    expect(readdirSync(out).sort()).toEqual(["j-gate.litematic", "j-gate.schem"]);
+    // gzip magic: both are gzipped NBT.
+    expect([...readFileSync(join(out, "j-gate.schem")).subarray(0, 2)]).toEqual([0x1f, 0x8b]);
+    expect((await rsd(["export", java, "--to", "schem"])).exitCode).toBe(2);
+  });
+
+  it("rsd pack refuses a Java design (a .mcpack is Bedrock's) and writes nothing", async () => {
+    const out = fresh();
+    const r = await rsd(["pack", design("j", { edition: "java" }), "-o", join(out, "j.mcpack")]);
+    expect(r.exitCode).toBe(2);
+    expect(r.stderr).toMatch(/Bedrock behavior pack/);
+    expect(readdirSync(out)).toEqual([]);
+  });
+
+  it("the Java writer accepts only a slug file name with its extension", async () => {
+    const out = fresh();
+    for (const path of ["../x.schem", "functions/rsd/x.mcfunction", "x.html", "a/b.schem"]) {
+      await expect(writeIntoPack(out, [{ path, bytes: new Uint8Array([1]) }], JAVA_PATH)).rejects.toThrow();
+    }
+    expect(readdirSync(out)).toEqual([]);
   });
 });
 
@@ -275,6 +306,8 @@ describe("rsd export --to mcstructure", () => {
     expect(r.exitCode).toBe(0);
     expect(r.stdout.trim()).toMatch(/structures\/rsd\/not-gate\.mcstructure$/);
     expect(readFileSync(join(pack, "structures/rsd/not-gate.mcstructure")).length).toBeGreaterThan(100);
-    expect((await rsd(["export", "--list"])).stdout).toBe("mcfunction\tbedrock\nmcstructure\tbedrock\n");
+    expect((await rsd(["export", "--list"])).stdout).toBe(
+      "mcfunction\tbedrock\nmcstructure\tbedrock\nschem\tjava\nlitematic\tjava\n",
+    );
   });
 });
