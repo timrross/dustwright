@@ -22,3 +22,6 @@ apps/site/public/AUTHORING.md
 apps/site/public/llms.txt
 apps/site/public/redstone-viewer.js
 packages/export/test/golden/sheets/
+apps/site/public/patterns/
+# Eval outputs are kept exactly as the agents wrote them.
+docs/eval/

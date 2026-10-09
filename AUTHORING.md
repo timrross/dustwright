@@ -162,18 +162,19 @@ steps. Exceeding a limit is E013.
 1. **Brief:** restate the job as named inputs, outputs and a truth table; write `ports` and `tests` first.
 2. **Draft:** write `layers` and `legend`. Spread the circuit out; compact layouts come later.
 3. **Check:** `rsd validate design.rsd.json --json`. It prints `{ "ok": bool, "diagnostics": [...] }` and exits 0
-   (ok, warnings allowed), 1 (errors) or 2 (usage or file problem).
+   (ok, warnings allowed), 1 (errors) or 2 (usage or file problem). Through MCP (`rsd mcp`), the `validate` tool
+   returns the same JSON and `simulate` shows each test's actual outputs.
 4. **Fix:** each diagnostic has a `code`, a `pos` `[x,y,z]` (or a JSON Pointer `path`), a `message` and a `hint`
    naming the edit. Apply it and go to 3. Stop after 6 rounds and report what still fails. **Never edit ports or
    tests to make a failure go away**; if the brief was wrong, say so.
 5. **Show:** `rsd bundle design.rsd.json -o design.html` writes one self-contained HTML viewer (publish it as an
-   artifact or open it offline). Once the site is deployed, a link works too: `https://dustwright.dev/view/#json=`
-   followed by the URI-encoded design JSON (at most 64 KB). `rsd sheets design.rsd.json -o sheets/` writes printable A4 layer SVGs.
+   artifact or open it offline). With no tools at all, write a share link (see "Share link by hand").
+   `rsd sheets design.rsd.json -o sheets/` writes printable A4 layer SVGs.
 6. **Export:** `rsd export design.rsd.json --to mcfunction --pack <pack-dir> [--clear]` writes
    `functions/rsd/<slug>.mcfunction`. In game, stand at the build origin and run `/function rsd/<slug>`; the build
    lands one block east. `--clear` also writes `rsd/<slug>_clear`, which empties the bounding box. Run the clear
-   function before rebuilding in the same place if the design moves on its own once built (pistons that a torch
-   extends at rest): building over it pushes its blocks a second time.
+   function before rebuilding in the same place: building over a build pushes moving parts again, and leaves dust
+   that is powered at rest at signal 0 until something changes.
    `--to mcstructure` writes `structures/rsd/<slug>.mcstructure` instead; in game, `/structure load rsd:<slug> ~1 ~ ~`
    (add `90_degrees` and so on to turn it). Use it for builds over 10,000 blocks (E014).
    `rsd pack design.rsd.json -o <slug>.mcpack` zips both into a one-design behavior pack: open it on any Bedrock
@@ -229,4 +230,44 @@ A lever drives 15 dust; a repeater refreshes the signal for a lamp further on.
 Layer 0 is a stone floor; layer 1 holds the circuit. The lever is `[0,1,0]`, the repeater `[16,1,0]` facing east
 (the direction the signal leaves), and the lamp `[18,1,0]`.
 
-More examples live in `examples/`: a NOT gate, an observer clock, a T flip-flop and a 2x2 piston door.
+## Worked example: NOT gate
+
+The lever's dust points into a stone block; the torch on that block's east face goes out when the block is
+powered, and the lamp beside the torch follows it.
+
+```json
+{
+  "format": "rsd/1",
+  "meta": { "name": "NOT gate" },
+  "legend": { "#": "stone", "L": "lever mount=floor", "-": "dust", "t": "torch mount=west", "*": "lamp" },
+  "layers": [["#####"], ["L-#t*"]],
+  "ports": {
+    "inputs": [{ "name": "A", "pos": [0, 1, 0] }],
+    "outputs": [{ "name": "out", "pos": [4, 1, 0] }]
+  },
+  "tests": [
+    { "set": { "A": 0 }, "afterTicks": 4, "expect": { "out": 1 } },
+    { "set": { "A": 1 }, "afterTicks": 4, "expect": { "out": 0 } }
+  ]
+}
+```
+
+`mount=west` names where the torch's support is: the stone at `[2,1,0]`, west of the torch at `[3,1,0]`.
+
+## Share link by hand
+
+To show a design without any tools: write it as one line of minified JSON, then replace every `%` with `%25`,
+every space with `%20` and every `#` with `%23` (nothing else needs changing), and put the result after
+`https://dustwright.dev/view/#json=` (once the site is deployed; a local build serves the same `/view/`). The site
+accepts at most 64 KB of fragment as the browser sends it, and browsers encode `"`, `<` and `>` again (`%22`, `%3C`,
+`%3E`), so keep the JSON under about 20 KB. For the NOT gate it starts
+`https://dustwright.dev/view/#json={"format":"rsd/1","meta":{"name":"NOT%20gate"},"legend":{"%23":"stone",...`
+
+## Patterns
+
+Known-good designs, each built and tested in game, in `patterns/` (and through MCP: `list_patterns`,
+`get_pattern`). Start from one when it fits: `not-gate`, `or-gate`, `and-gate`, `xor-gate` (three torch NOR
+stages), `rs-latch` (set and reset levers), `repeater-line`, `pulse-extender` (a button press held about 2.6 s),
+`pulse-limiter` (a held lever gives one 4-tick pulse), `observer-clock` (3-tick period), `repeater-clock` (no
+torches, 16-tick period, started by a button), `t-flip-flop`, `piston-door-2x2` and `hopper-sorter` (load its
+filter hopper as its notes say; the simulator skips it with T003).

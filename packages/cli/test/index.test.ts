@@ -41,9 +41,9 @@ describe("version", () => {
     expect((await rsd("--version")).stdout.trim()).toBe(pkg.version);
   });
 
-  it("names the milestone for commands that are not built yet", async () => {
-    const r = await rsd("mcp");
+  it("refuses an unknown command with exit code 2", async () => {
+    const r = await rsd("frobnicate");
     expect(r.exitCode).toBe(2);
-    expect(r.stderr).toContain("not implemented yet (arrives in M8)");
+    expect(r.stderr).toContain('unknown command "frobnicate"');
   });
 });

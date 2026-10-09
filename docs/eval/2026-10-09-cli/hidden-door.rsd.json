@@ -1,0 +1,108 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Hidden 2x2 piston door",
+    "edition": "bedrock",
+    "gameVersion": "1.26.50",
+    "description": "A flush 2x2 stone door in an east-west wall (doorway x=5..6, y=3..4, z=3). Four sticky pistons hidden in the wall hold the door blocks closed, powered by two torches. A wooden button on the north face and one on the south face of the west support block power it, turning the west torch off; dust under the floor (with a repeater) carries the signal to the east support. The door opens for the button press (about 1.5 s) and closes itself."
+  },
+  "legend": {
+    "#": "stone",
+    "-": "dust",
+    ">": "repeater facing=east delay=1",
+    "t": "torch mount=west",
+    "u": "torch mount=east",
+    "P": "sticky_piston facing=east",
+    "Q": "sticky_piston facing=west",
+    "n": "button mount=south material=wood",
+    "s": "button mount=north material=wood"
+  },
+  "layers": [
+    [
+      "#############",
+      "#############",
+      "#############",
+      "#############",
+      "#############"
+    ],
+    [
+      "#############",
+      "------>------",
+      "#############",
+      "#############",
+      "#############"
+    ],
+    [
+      "#############",
+      ".###########.",
+      "-###########-",
+      "#############",
+      "#############"
+    ],
+    [
+      ".............",
+      ".............",
+      ".n...........",
+      "-#tP#..#Qu#--",
+      ".s..........."
+    ],
+    [
+      ".............",
+      ".............",
+      ".............",
+      "###P#..#Q####",
+      "............."
+    ],
+    [
+      ".............",
+      ".............",
+      ".............",
+      "#############",
+      "............."
+    ]
+  ],
+  "ports": {
+    "inputs": [
+      { "name": "north_button", "pos": [1, 3, 2] },
+      { "name": "south_button", "pos": [1, 3, 4] }
+    ],
+    "outputs": [
+      { "name": "west_low", "pos": [3, 3, 3] },
+      { "name": "west_high", "pos": [3, 4, 3] },
+      { "name": "east_low", "pos": [8, 3, 3] },
+      { "name": "east_high", "pos": [8, 4, 3] }
+    ]
+  },
+  "tests": [
+    {
+      "set": { "north_button": 0, "south_button": 0 },
+      "afterTicks": 4,
+      "expect": { "west_low": 1, "west_high": 1, "east_low": 1, "east_high": 1 }
+    },
+    {
+      "set": { "north_button": 1 },
+      "afterTicks": 6,
+      "expect": { "west_low": 0, "west_high": 0, "east_low": 0, "east_high": 0 }
+    },
+    {
+      "set": { "south_button": 1 },
+      "afterTicks": 6,
+      "expect": { "west_low": 0, "west_high": 0, "east_low": 0, "east_high": 0 }
+    },
+    {
+      "set": { "north_button": 1 },
+      "afterTicks": 30,
+      "expect": { "west_low": 1, "west_high": 1, "east_low": 1, "east_high": 1 }
+    },
+    {
+      "set": { "south_button": 1 },
+      "afterTicks": 30,
+      "expect": { "west_low": 1, "west_high": 1, "east_low": 1, "east_high": 1 }
+    }
+  ],
+  "annotations": [
+    { "pos": [1, 3, 3], "text": "West support: both buttons power this block, turning the west torch off." },
+    { "pos": [6, 1, 1], "text": "Repeater under the walkway refreshes the signal to the east side." },
+    { "pos": [11, 3, 3], "text": "Dust ends pointing west into the east support, turning the east torch off." }
+  ]
+}

@@ -353,3 +353,113 @@ Deviations and findings:
   in the public build.
 - Not done: very large designs exported in the browser may be slow (a 64 × 384 × 64 structure takes about 224 MB of
   heap, measured in M4); the site does not guard against it beyond the 50,000-block limit.
+
+## M8: LLM authoring (2026-10-09)
+
+Environment: as M6 (local BDS 1.26.52.3 test world in Docker, console only). Eval agents: Claude Code 2.1.295 in print
+mode (`claude -p`), a fresh session per prompt with no settings, memory or other MCP servers, run by
+`scripts/eval/run.mjs`. In-game evidence:
+
+- `docs/ingame/2026-10-09-m8.json`: the full suite on a cold start, **181 passed, 0 failed, 13 skipped** (probes 54,
+  examples 22, patterns 59, orientation 2, structures 44; every skip logged with its reason).
+- `docs/ingame/2026-10-09-patterns.json`: the patterns again after the review's RS latch fix, **60 passed, 0 failed,
+  6 skipped**.
+- `docs/ingame/2026-10-09-eval-builds.json`: the eval outputs (below).
+
+The in-game script changed between these runs: the full suite predates the RS latch sequence, the `--dir` layout
+and the pack check; the patterns rerun predates only `--dir` changes; the CLI eval-builds run used the final script.
+
+Checks: `pnpm build`, `lint`, `typecheck`, `test` (636 passed), `gen:check`, `docs:check` and `check:licenses` pass;
+e2e 48 passed on macOS and in the Linux Playwright image, with the screenshot baselines unchanged.
+
+| Item                                                                                                                                                                                     | How                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | Result                                                                                                                                                                                                                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AUTHORING.md` and `patterns/` complete; every pattern verified in-game and passing its tests                                                                                            | `AUTHORING.md` is 2,796 words (under the spec's 3,000): axes, grid rules, orientation, the block list, common mistakes, the loop with the CLI and MCP, the share-link recipe and two worked examples. 13 patterns (`patterns/`, listed in AUTHORING.md and on `/patterns`): NOT, AND, OR, XOR, RS latch, T flip-flop, repeater line, observer clock, repeater clock, pulse extender, pulse limiter, 2x2 piston door, hopper sorter. `test/patterns.test.ts`: each has ports, tests and a description, validates with no errors, only the hopper sorter skips its tests (T003), the five copied from `examples/` stay equal to them, and the RS latch goes through set, hold, reset, hold and set again in one simulation. In game every test case runs on a fresh build, with sequences for the RS latch and T flip-flop, rebuilds, the clocks running and the hopper sorter sorting | Pass: 60 passed, 0 failed, 6 skipped (rebuild in place, reason logged)                                                                                                                                                                                                                      |
+| **Eval (CLI):** 10 fixed prompts through the authoring loop by a fresh agent given only `AUTHORING.md` and the CLI; at least 8 of 10 reach zero errors and passing tests within 6 rounds | `scripts/eval/prompts.json` (3-input AND, hidden 2x2 door with a button on each side, NOR, XNOR, toggle lamp, switched clock, 40-block line, 3 s pulse extender, memory cell, exactly one of two). Each agent works in an empty directory holding only `AUTHORING.md`; `rsd` is its only pre-approved shell command and the file tools are limited to that directory. The harness validates the final file itself. `docs/eval/2026-10-09-cli/` holds, per prompt, the design and the full transcript, plus `results.json`                                                                                                                                                                                                                                                                                                                                                            | **10 of 10** reach zero errors and passing tests, within 1 to 3 rounds. One of them does not do what was asked (the toggle lamp, below)                                                                                                                                                     |
+| **Eval (MCP):** the same prompts through `@dustwright/mcp`, with the tool descriptions as the only extra prompt                                                                          | `rsd mcp` (stdio JSON-RPC: `authoring_guide`, `validate`, `simulate`, `list_patterns`, `get_pattern`, `bundle`, `export`, `pack`, `sheets`); the agent gets no file or shell tools, only the server. A round is a `validate` or `simulate` call. `docs/eval/2026-10-09-mcp/`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | **10 of 10**, within 1 to 5 rounds (7 in one round, 2 in two, 1 in five). 9 of 10 started from a pattern (`get_pattern`)                                                                                                                                                                    |
+| An agent with no tools writes a `/view#json=` link for the NOT gate from `AUTHORING.md` alone, and it opens correctly                                                                    | `scripts/eval/link.mjs`: a fresh agent with no tools gets `AUTHORING.md` in the prompt and replies with one link (`docs/eval/2026-10-09-link.json`). `e2e/eval-link.spec.ts` opens that link against the local build: the NOT gate loads with no diagnostics, and the power view shows the lamp lit with the lever off and out with it on. AUTHORING.md contains the NOT gate and the start of its link, so this is close to a copy task, as the spec intends                                                                                                                                                                                                                                                                                                                                                                                                                        | Pass                                                                                                                                                                                                                                                                                        |
+| The 3 best eval outputs are built in-game and work                                                                                                                                       | Four CLI outputs: the three most involved that work (hidden 2x2 door, memory cell, switched clock) and the toggle lamp, the largest. Each is exported with `rsd export` and run with `ingame-check.mjs --dir <dir> --pack <pack>`, which first checks that the pack's functions are that design's export. Then every truth-table case runs on a fresh build, and the memory cell goes through set, reset, set, reset in one build. The switched clock's lamp keeps changing while its lever is on. The toggle lamp gets four presses. The MCP toggle lamp was built too. All in `docs/ingame/2026-10-09-eval-builds.json`                                                                                                                                                                                                                                                            | **Pass** for the door, the memory cell and the switched clock: 43 passed, 1 failed, 4 skipped across the four CLI designs. The one failure is the CLI toggle lamp: 1, 1, 0, 0 over four presses, and the simulator shows the same. The MCP toggle lamp toggles in game (7 passed, 0 failed) |
+
+Deviations and findings:
+
+- **An eval output can pass its tests and miss the brief.** The format's tests start every case from a fresh build,
+  so they cannot express a sequence. The CLI toggle lamp tests only the first press, and its second press does not
+  turn the lamp off, in the simulator and in game. Counted by the spec's measure (zero errors, passing tests) the
+  CLI eval is 10 of 10; counted by the brief it is 9 of 10. Still within the target. Both memory cells hold set and
+  reset over a sequence in the simulator, and the MCP toggle lamp toggles. A sequence form for tests would close
+  this gap; it is a format change, for `docs/ideas.md`.
+- **Eval method, as run:**
+  - `results.json` was rescored from the transcripts (`--rescore`), so its `seconds` and `exit` fields are empty.
+  - A CLI round counts every Bash call that contains `rsd validate`, denied ones too, so the counts are
+    conservative. Counting only validate runs, 8 of 10 CLI agents were clean on their first and 2 on their second.
+  - Besides `rsd`, Claude Code ran a few read-only commands on its own (`ls`, `cat`, `which`).
+  - `rsd mcp` was not blocked in the CLI run. One CLI agent (toggle lamp) tried to call `get_pattern` through it;
+    the attempt failed (no `timeout` command on macOS) and its retry was denied. So no CLI agent saw a pattern, but
+    the harness did not guarantee it. It now does: in CLI mode the `rsd` wrapper refuses `mcp`, and
+    `Bash(rsd mcp:*)` is disallowed.
+  - One run per prompt (no repeats), on one model. The prompts were fixed before the runs. AUTHORING.md as the
+    agents read it was the file at the time; it has changed since only in the share-link size note (below).
+- **The MCP server is part of the CLI** (`rsd mcp`), with the transport-free core in `@dustwright/mcp`: tools and a
+  JSON-RPC line handler, tested with an in-memory host.
+  - Tool results are JSON text. Argument errors are tool errors (`isError`), not protocol errors.
+  - Every design goes through the same 2 MB guard as the CLI.
+  - `simulate` uses the validator's own run, so all cases share one simulation budget, as in `rsd validate`. The
+    review found it gave each case a fresh budget and simulated twice: a hostile 64-case design took about
+    5 minutes and blocked the server. The same design now takes 4.2 s, the time `rsd validate` takes. A test holds
+    the shared budget.
+  - `export` writes through the same pack writer as `rsd export` (only `functions/rsd` and `structures/rsd`, never
+    through a symlink). `bundle` writes only `.html` paths and `pack` only `.mcpack` paths. `sheets` writes SVGs
+    named from the slug into the directory given.
+  - The server runs with the user's rights, like any local MCP server. SECURITY.md has a row for it.
+- **The RS latch is built reset (Q off).** As first authored it rested set, so its "S sets Q" test passed even with
+  S wired to nothing (found by the review). Built reset, the S test means something. A sequence (simulator unit test
+  and in game) checks set, hold, reset and hold.
+- **Measured in game while testing patterns.** These are new findings, added as comments in `ingame-check.mjs`:
+  - `/setblock` replacing a block with the same block in another state does not notify its neighbours (dust,
+    buttons). So a button set pressed over a released one powers nothing; the check goes through air.
+  - A button or lever placed by `/setblock` does not update the neighbours of the block it hangs on, so a torch on
+    that block stays lit. The check swaps that block for another full block that conducts power, and back one tick
+    later. The first stand-in, glass, unpowered the block for that tick. A latch that holds its own button's block
+    powered (the eval memory cell, through a repeater) then lost its state on release. With a conducting stand-in
+    it holds.
+  - A button set pressed by `/setblock` never releases itself. The registry's pulse lengths (stone 10, wood 15
+    redstone ticks) therefore cannot be measured from the console. They are assumed, marked VERIFY-IN-GAME in
+    `packages/sim/src/mechanics.ts`, and the check releases the button after that length. Tim's optional
+    real-button check (PROGRESS) covers it.
+  - A design rebuilt in place over itself keeps dust that is powered at rest at a stale 0 (the same notification
+    gap). Such designs are rebuilt only after their clear function. The check finds them from the simulator's
+    settled state and logs the skip with its reason.
+  - The hopper sorter sorts, but the sorted item waits in the bottom hopper until the next one arrives. Its tests
+    are T003, because comparators reading containers are not simulated. Instead, the in-game check sends a
+    cobblestone (it passes through: lamp off) and two iron ingots (lamp lit).
+  - A torch left under the floor by an earlier run powered a build placed over it. Builds in the air band now clear
+    a one-block margin first.
+- **The test server's state broke power in some chunks.**
+  - After long runs, a lever stopped powering its block in 9 of the 20 chunks of the check area (dust beside it
+    read 0), while the lamp that `worldTicks` watches kept working. A cold start cleared it.
+  - Twice, a cold start came up with one chunk not loaded at all ("Cannot test for block outside of the world"),
+    and ticking areas added over it did not load it.
+  - Once, half the area stayed unpowered after a start until the build bands, full of clocks left running by
+    earlier runs, were cleared.
+  - The check now probes every chunk before a run (waiting up to a minute for loading) and after it: a lever, its
+    block and dust beside it, in the sky. Any failure makes the run invalid.
+- **Reading the game more carefully.**
+  - What follows a button press is a pulse, so tests that press a button are read from just before `afterTicks`,
+    like the pulse patterns. The door, open for about 1.5 s, was shut again by the first piston read.
+  - Emulated presses are timed from when the press landed, less one command's latency. Timed from the start of the
+    press, a stone button stayed pressed about 14 ticks, which filled the repeater clock's 16-tick loop.
+  - The observer clock gained tests in M8, which brought it into checks it skipped before. Its rebuild-in-place
+    comparison is meaningless on a free-running clock and is skipped with that reason. Its exact dust level, read
+    one query per level, was outrun by the clock. Dust reads now ask the expected level first and repeat a scan
+    that matched nothing, and a timed test on dust polls the expected level alone until its deadline (eight copies
+    of the clock then passed every test).
+  - The clock check samples for up to 8 seconds, until it sees both off and on, and samples dust with one query.
+  - These change when a value is read, not what counts as a pass: a reading must still match the expected value
+    exactly. Compared with M6's evidence, no earlier check changed status.
+- `--dir` places designs in one column by their real size and refuses a design that does not fit. The eval designs'
+  sequences and clock inputs are named in the script (`SEQUENCES`, `CLOCK_START`).
+- AUTHORING.md's share-link note was wrong about size: the site's 64 KB applies to the fragment as the browser
+  sends it, and browsers encode `"`, `<` and `>` again. It now says to keep the JSON under about 20 KB.
+- `examples/observer-clock.rsd.json` gained two tests (pulse timing, measured in M6) so the pattern carries tests.
+- Not done: the eval was not re-run after the harness change (it spends model calls, and the run above is honest
+  about what happened).

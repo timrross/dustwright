@@ -1,0 +1,38 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Switched clock",
+    "edition": "bedrock",
+    "gameVersion": "1.26.50",
+    "description": "Lever on: a torch-repeater loop blinks the lamp. Lever off: an inverter torch holds the clock block powered, so the lamp stays off."
+  },
+  "legend": {
+    "#": "stone",
+    "G": "stone",
+    "C": "concrete color=red",
+    "L": "lever mount=floor",
+    "i": "torch mount=west",
+    "t": "torch mount=west",
+    "-": "dust",
+    "v": "repeater facing=south delay=4",
+    "^": "repeater facing=north delay=4",
+    "*": "lamp"
+  },
+  "layers": [
+    ["######", "######", "######", "######"],
+    ["......", "Gi-Ct*", "...^v.", "...--."],
+    ["......", "L.....", "......", "......"]
+  ],
+  "ports": {
+    "inputs": [{ "name": "run", "pos": [0, 2, 1] }],
+    "outputs": [{ "name": "lamp", "pos": [5, 1, 1] }]
+  },
+  "tests": [
+    { "set": { "run": 1 }, "afterTicks": 7, "expect": { "lamp": 1 } },
+    { "set": { "run": 1 }, "afterTicks": 16, "expect": { "lamp": 0 } },
+    { "set": { "run": 1 }, "afterTicks": 25, "expect": { "lamp": 1 } },
+    { "set": { "run": 1 }, "afterTicks": 34, "expect": { "lamp": 0 } },
+    { "set": { "run": 0 }, "afterTicks": 7, "expect": { "lamp": 0 } },
+    { "set": { "run": 0 }, "afterTicks": 25, "expect": { "lamp": 0 } }
+  ]
+}

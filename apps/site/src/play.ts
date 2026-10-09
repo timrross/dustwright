@@ -2,7 +2,7 @@ import { defineRedstoneViewer } from "@dustwright/viewer/browser";
 import { validateText } from "@dustwright/validator";
 import type { Diagnostic } from "@dustwright/core";
 import { download } from "./download.js";
-import { EXAMPLES } from "./examples.js";
+import { DESIGNS as EXAMPLES } from "./examples.js";
 import { decodeFragment, shareFragment } from "./fragment.js";
 import "./site.css";
 

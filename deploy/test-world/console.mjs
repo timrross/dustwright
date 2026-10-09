@@ -140,6 +140,30 @@ export async function worldTicks(wait) {
   }
   return false;
 }
+/**
+ * Whether a lever powers its block in every chunk of the 80 x 64 check area. On BDS 1.26.52.3, after long runs of
+ * set-ups, the server was seen to stop powering blocks in some chunks only (a lever on, dust beside its block at 0)
+ * while the rest of the world, the lamp worldTicks uses among it, kept working; a cold start cleared it. Probed in
+ * the sky (y 200), at each chunk centre, so it touches nothing a check builds.
+ */
+export async function chunksPower() {
+  const bad = [];
+  for (let cz = 0; cz < 4; cz++) {
+    for (let cx = 0; cx < 5; cx++) {
+      const s = [cx * 16 + 8, 200, cz * 16 + 8];
+      const dust = add(s, OFF.south);
+      await cmd(`fill ${at(add(s, [-1, -1, -1]))} ${at(add(s, [1, 1, 1]))} minecraft:air`);
+      await cmd(`fill ${at(add(s, [-1, -1, -1]))} ${at(add(s, [1, -1, 1]))} minecraft:glass`);
+      await cmd(`setblock ${at(s)} minecraft:stone`);
+      await cmd(`setblock ${at(add(s, OFF.up))} ${spec(block("lever", { mount: "floor", on: true }))}`, 300);
+      await cmd(`setblock ${at(dust)} minecraft:redstone_wire`, 400);
+      const ok = await isBlock(dust, `minecraft:redstone_wire ["redstone_signal"=15]`).catch(() => false);
+      await cmd(`fill ${at(add(s, [-1, -1, -1]))} ${at(add(s, [1, 1, 1]))} minecraft:air`);
+      if (!ok) bad.push(`chunk ${cx},${cz}`);
+    }
+  }
+  return bad;
+}
 export const stalled = (when) => {
   console.error(
     `the world stopped ticking (${when}): this run is invalid. Stop and start the server (a cold start, not a restart) and run again.`,

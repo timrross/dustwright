@@ -1,5 +1,7 @@
 // In-game checks against a running test-world container, through the server console (no client needed).
-//   node deploy/test-world/ingame-check.mjs [container] [--only probes|examples|orientation|structures]
+//   node deploy/test-world/ingame-check.mjs [container] [--only probes|examples|patterns|orientation|structures]
+//   node deploy/test-world/ingame-check.mjs [container] --only none --dir <designs-dir> [--pack <pack-dir>]
+//     (functions exported first; with --pack, each design's functions in the pack are checked against its export)
 // Needs `pnpm build` (it imports the built core and export packages) and every example exported into the pack the
 // container mounts, with the server restarted after a new file appears (a reload picks up edits to existing
 // functions but does not discover new ones). It only touches an 80 x 64 area at the world origin.
@@ -10,14 +12,23 @@
 // Probes test what the VERIFY-IN-GAME mappings mean, in controlled set-ups, with negative controls (the mappings
 // used before the M1 review must fail the same probes). Examples are built with their own functions and their
 // truth-table tests run on fresh builds. The orientation test is built and every block checked by ID.
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { parseText, registryEntry, toEditionBlocks } from "../../packages/core/dist/index.js";
-import { formatStates } from "../../packages/export/dist/index.js";
+import {
+  attachedFace,
+  DIRS,
+  parseText,
+  REGISTRY,
+  registryEntry,
+  toEditionBlocks,
+} from "../../packages/core/dist/index.js";
+import { formatStates, mcfunctionExporter } from "../../packages/export/dist/index.js";
+import { settle } from "../../packages/sim/dist/index.js";
 import {
   add,
   at,
   block,
+  chunksPower,
   cmd,
   countGlass,
   filledCells,
@@ -25,6 +36,7 @@ import {
   itemsExist,
   OFF,
   query,
+  send,
   sleep,
   spec,
   stalled,
@@ -34,8 +46,11 @@ import {
 
 const args = process.argv.slice(2);
 const container =
-  args.find((a) => !a.startsWith("--") && args[args.indexOf(a) - 1] !== "--only") ?? "dustwright-test";
+  args.find((a, i) => !a.startsWith("--") && !["--only", "--dir", "--pack"].includes(args[i - 1])) ??
+  "dustwright-test";
 const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null;
+/** --pack <dir>: the behavior pack the container mounts; with --dir, each design's functions are checked against it. */
+const packDir = args.includes("--pack") ? args[args.indexOf("--pack") + 1] : null;
 const root = fileURLToPath(new URL("../..", import.meta.url));
 useContainer(container);
 
@@ -262,14 +277,71 @@ function inputCommand(model, port, value, o) {
   return `setblock ${o[0] + 1 + pos[0]} ${o[1] + pos[1]} ${o[2] + pos[2]} ${spec(block(b.type, { ...b.states, on: value === 1 }))}`;
 }
 
-/** Reads an output port: lamps by their lit ID, pistons by the arm on their facing side, dust as off (0) or on (1). */
-async function readOutput(model, port, o) {
+/**
+ * Drives an input. Levers and plates take the value. A button value of 1 is one press: the console cannot press a
+ * button, so it is set pressed and set released again after its pulse length (stone 10 ticks, wood 15), the timing
+ * the simulator uses; console timing makes that good to about a tick.
+ */
+async function driveInput(model, port, value, o, settleMs = 120) {
+  const pos = port.pos;
+  const b = model.blocks.get(`${pos[0]},${pos[1]},${pos[2]}`);
+  if (b.type !== "button") return cmd(inputCommand(model, port, value, o), settleMs);
+  if (value !== 1) return;
+  const where = `${o[0] + 1 + pos[0]} ${o[1] + pos[1]} ${o[2] + pos[2]}`;
+  const ticks = registryEntry("button").sim.params.pulseTicks[b.states.material] ?? 10;
+  // Replacing a button with the same button in another state does not update its neighbours (measured: a button
+  // set pressed over a released one powers nothing), so each change goes through air first. A real press also
+  // updates the neighbours of the block the button hangs on (a torch on that block must notice); setblock does not,
+  // so that block is swapped to another full block that conducts power and back a tick later, which notifies them
+  // (measured: without the gap the two changes cancel out and a torch on the block stays lit). The stand-in must
+  // conduct: glass, used first, unpowers the block for that tick, and a latch holding its own button's block powered
+  // (a torch latch's repeater) dropped its state on release.
+  const face = attachedFace(b);
+  const supportPos = face ? [pos[0] + DIRS[face][0], pos[1] + DIRS[face][1], pos[2] + DIRS[face][2]] : null;
+  const support = supportPos ? model.blocks.get(supportPos.join(",")) : undefined;
+  const standIn = REGISTRY.find(
+    (e) =>
+      e.sim.class === "solid" &&
+      e.conductsPower &&
+      e.type !== support?.type &&
+      Object.values(e.faces.bedrock ?? {}).every(Boolean),
+  );
+  const supportAt = supportPos
+    ? `${o[0] + 1 + supportPos[0]} ${o[1] + supportPos[1]} ${o[2] + supportPos[2]}`
+    : "";
+  // Each console command takes 100 to 200 ms to send, so the release is timed from when the press landed, less the
+  // time one command takes: timed from the start of the press, a stone button stayed pressed about 14 ticks, which
+  // filled the repeater clock's 16-tick loop and kept its lamp lit.
+  let landed = 0;
+  let latency = 0;
+  const put = async (pressed) => {
+    send(`setblock ${where} air`);
+    const sent = Date.now();
+    send(`setblock ${where} ${spec(block(b.type, { ...b.states, pressed }))}`);
+    landed = Date.now();
+    latency = landed - sent;
+    if (support) {
+      send(`setblock ${supportAt} ${spec(block(standIn.type, {}))}`);
+      await sleep(150);
+      send(`setblock ${supportAt} ${spec(block(support.type, support.states))}`);
+    }
+  };
+  await put(true);
+  setTimeout(() => void put(false), Math.max(0, landed + ticks * 100 - latency - Date.now()));
+  await sleep(settleMs);
+}
+
+/** Reads an output port: lamps by their lit ID, pistons by the arm on their facing side, dust by its signal level. */
+async function readOutput(model, port, o, expected) {
   const pos = port.pos;
   const b = model.blocks.get(`${pos[0]},${pos[1]},${pos[2]}`);
   const p = [o[0] + 1 + pos[0], o[1] + pos[1], o[2] + pos[2]];
   if (b.type === "lamp") {
-    if (await isBlock(p, "minecraft:lit_redstone_lamp")) return 1;
-    if (await isBlock(p, "minecraft:redstone_lamp")) return 0;
+    // Two queries: a clock's lamp can change between them, so a miss on both is retried before it counts.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      if (await isBlock(p, "minecraft:lit_redstone_lamp")) return 1;
+      if (await isBlock(p, "minecraft:redstone_lamp")) return 0;
+    }
     throw new Error(`no lamp at ${at(p)}`);
   }
   if (b.type === "piston" || b.type === "sticky_piston") {
@@ -279,8 +351,17 @@ async function readOutput(model, port, o) {
     return (await isBlock(add(p, OFF[b.states.facing]), arm)) ? 1 : 0;
   }
   if (b.type === "dust") {
-    if (await isBlock(p, 'minecraft:redstone_wire ["redstone_signal"=0]')) return 0;
-    if (await isBlock(p, "minecraft:redstone_wire")) return 1;
+    // Dust reports its signal level, 0 to 15, as the simulator does. One query per level: the expected level is
+    // asked first, then off and full, then the rest, and a scan that matches nothing (a clock's dust changed during
+    // it) is repeated before it counts.
+    const order = [...new Set([expected, 0, 15, ...Array.from({ length: 16 }, (_, k) => k)])].filter(
+      (k) => k !== undefined,
+    );
+    for (let attempt = 0; attempt < 5; attempt++) {
+      for (const level of order) {
+        if (await isBlock(p, `minecraft:redstone_wire ["redstone_signal"=${level}]`)) return level;
+      }
+    }
     throw new Error(`no dust at ${at(p)}`);
   }
   throw new Error(`cannot read ${b.type}`);
@@ -291,19 +372,53 @@ async function readOutput(model, port, o) {
  * commands land at no exact tick, so the read is a window from `afterTicks` to `afterTicks` plus 3 seconds rather
  * than one instant; a circuit that never reaches the value still fails.
  */
-async function readOutputUntil(model, port, o, expected, afterTicks) {
-  await sleep(afterTicks * 100 + 500);
+async function readOutputUntil(model, port, o, expected, afterTicks, early = false) {
+  // A transient output (a short pulse) is read from a little before afterTicks, or the window would miss it.
+  await sleep(early ? Math.max(100, afterTicks * 100 - 300) : afterTicks * 100 + 500);
   const deadline = Date.now() + 3000;
-  let actual = await readOutput(model, port, o);
+  if (model.blocks.get(port.pos.join(","))?.type === "dust") {
+    // Dust is polled for the expected level alone, one query at a time, until the deadline, and only then read in
+    // full for the report: an observer clock's dust is at 15 for 2 game ticks in 6, and reads that also asked for
+    // other levels missed it (about one run in ten).
+    const p = [o[0] + 1 + port.pos[0], o[1] + port.pos[1], o[2] + port.pos[2]];
+    const id = `minecraft:redstone_wire ["redstone_signal"=${expected}]`;
+    while (Date.now() < deadline) if (await isBlock(p, id)) return expected;
+    return readOutput(model, port, o, expected);
+  }
+  let actual = await readOutput(model, port, o, expected);
   while (actual !== expected && Date.now() < deadline) {
     await sleep(250);
-    actual = await readOutput(model, port, o);
+    actual = await readOutput(model, port, o, expected);
   }
   return actual;
 }
 
 /** Input sequences for designs with memory: each step sets inputs and the outputs that must follow, in order. */
 const SEQUENCES = {
+  "rs-latch": [
+    [{ S: 1 }, { Q: 1 }],
+    [{ S: 0 }, { Q: 1 }],
+    [{ R: 1 }, { Q: 0 }],
+    [{ R: 0 }, { Q: 0 }],
+  ],
+  // Eval outputs built with --dir (docs/eval/2026-10-09-cli): set and reset must hold, each press must toggle.
+  "1-bit-memory-cell": [
+    [{ set: 1 }, { lamp: 1 }],
+    [{ reset: 1 }, { lamp: 0 }],
+    [{ set: 1 }, { lamp: 1 }],
+    [{ reset: 1 }, { lamp: 0 }],
+  ],
+  // Both eval toggle lamps (CLI and MCP) have one input and one output, named differently.
+  "toggle-lamp": (m) => {
+    const press = { [m.ports.inputs[0].name]: 1 };
+    const lamp = (v) => ({ [m.ports.outputs[0].name]: v });
+    return [
+      [press, lamp(1)],
+      [press, lamp(0)],
+      [press, lamp(1)],
+      [press, lamp(0)],
+    ];
+  },
   "t-flip-flop": [
     [{ T: 1 }, { Q: 1 }],
     [{ T: 0 }, { Q: 1 }],
@@ -316,25 +431,97 @@ const SEQUENCES = {
  * pistons), so building again over them pushes their blocks a second time. They must be cleared before a rebuild.
  */
 const MOVES_AT_REST = new Set(["2x2-piston-door"]);
+/** Whether a design moves once built: any piston extended when the simulator settles it. */
+const movesAtRest = (model) =>
+  MOVES_AT_REST.has(model.meta.slug) ||
+  [...settle(model).snapshot().blocks.values()].some((b) => b.states.extended === true);
+/**
+ * Whether any dust is powered once the design settles. Rebuilding in place sets that dust back to signal 0, and
+ * Bedrock does not update a block replaced by the same block in another state (measured: dust, buttons), so it keeps
+ * the stale 0 until something changes; such designs, like moving ones, are rebuilt only after the clear function.
+ */
+function dustPoweredAtRest(model) {
+  for (const b of settle(model).snapshot().blocks.values())
+    if (b.type === "dust" && b.states.power > 0) return true;
+  return false;
+}
 /** Designs with no moving parts, used to check that a build never removes a block around it. */
 const STATIC = new Set(["not-gate", "repeater-line"]);
 
-async function examples() {
-  const files = readdirSync(`${root}/examples`)
+/** Outputs that are a pulse (short, or ending soon after afterTicks): read from just before afterTicks. */
+const TRANSIENT = new Set(["pulse-limiter", "pulse-extender"]);
+/**
+ * Whether a test presses a button: what follows a press is a pulse too (a stone button holds 10 ticks, wood 15), and
+ * reading only from afterTicks plus half a second, with piston reads taking a few hundred milliseconds each, missed
+ * a door that opened for the press and was shut again by the first read.
+ */
+const pressesButton = (model, t) =>
+  Object.entries(t.set).some(([input, value]) => {
+    const pos = model.ports.inputs.find((p) => p.name === input)?.pos;
+    return value === 1 && pos !== undefined && model.blocks.get(pos.join(","))?.type === "button";
+  });
+/** Clocks, with the inputs that start them: after those, the output must keep changing. */
+const CLOCK_START = { "observer-clock": {}, "repeater-clock": { start: 1 }, "switched-clock": { run: 1 } };
+
+/**
+ * Builds every design in a directory with its own function and checks it: no drops, every truth-table case on a
+ * fresh build, sequences, rebuilds, and clocks. Examples sit at y 4 from x 40; patterns in a band at y 100, two
+ * columns of rows, clear of the examples and of each other's rebuild checks (y + 20 and y + 40).
+ */
+async function designs(kind, dirOverride) {
+  const dir = dirOverride ?? (kind === "patterns" ? "patterns" : "examples");
+  const files = readdirSync(dir.startsWith("/") ? dir : `${root}/${dir}`)
     .filter((f) => f.endsWith(".rsd.json") && f !== "orientation-test.rsd.json")
     .sort();
   let z = 2;
-  for (const file of files) {
-    const model = parseText(readFileSync(`${root}/examples/${file}`, "utf8")).model;
+  for (const [index, file] of files.entries()) {
+    const model = parseText(
+      readFileSync(`${dir.startsWith("/") ? dir : `${root}/${dir}`}/${file}`, "utf8"),
+    ).model;
     const slug = model.meta.slug;
-    const area = `example ${slug}`;
-    const o = [40, 4, z];
-    z += model.size[2] + 4;
+    const area = `${kind === "examples" ? "example" : kind === "patterns" ? "pattern" : "design"} ${slug}`;
+    let o;
+    if (kind === "dir") {
+      // Designs from a directory can be any size: one column, each design's own depth plus a gap.
+      o = [2, 100, z];
+      z += model.size[2] + 4;
+      if (o[0] + model.size[0] + 1 > 79 || o[2] + model.size[2] > 63) {
+        throw new Error(`${file} does not fit in the check area at ${at(o)}: test fewer designs per run`);
+      }
+    } else if (kind !== "examples") {
+      o = [2 + (index % 2) * 38, 100, 2 + Math.floor(index / 2) * 9];
+    } else {
+      o = [40, 4, z];
+      z += model.size[2] + 4;
+    }
     const build = async () => {
+      // In the band in the air (patterns, eval outputs), clear a one-block margin too, below included: a block left
+      // by an earlier run next to the box (measured: a torch under the floor) would power the design.
+      if (kind !== "examples") {
+        const from = [o[0], o[1] - 1, o[2] - 1];
+        const to = [o[0] + model.size[0] + 1, o[1] + model.size[1], o[2] + model.size[2]];
+        await cmd(`fill ${at(from)} ${at(to)} minecraft:air`);
+      }
       await cmd(`execute positioned ${at(o)} run function rsd/${slug}_clear`);
       await cmd("kill @e[type=item]");
       await cmd(`execute positioned ${at(o)} run function rsd/${slug}`, 2500);
     };
+    if (kind === "dir" && packDir) {
+      // The functions the server runs must be this design's export (they are exported separately, before a restart).
+      await check(area, "the pack's functions are this design's export", async () => {
+        const out = mcfunctionExporter.export(model, { clear: true });
+        const wrong = out.files.filter((f) => {
+          const path = `${packDir}/${f.path}`;
+          return !existsSync(path) || !readFileSync(path).equals(Buffer.from(f.bytes));
+        });
+        return [
+          wrong.length === 0,
+          wrong.length
+            ? `differs: ${wrong.map((f) => f.path).join(", ")}`
+            : `${out.files.length} files match`,
+        ];
+      });
+    }
     await check(area, "builds without dropping items", async () => {
       await build();
       const items = await itemsExist();
@@ -345,13 +532,11 @@ async function examples() {
         await check(area, `test ${i}: set ${JSON.stringify(t.set)} expect ${name}=${expected}`, async () => {
           await build();
           for (const [input, value] of Object.entries(t.set)) {
-            await cmd(
-              inputCommand(
-                model,
-                model.ports.inputs.find((p) => p.name === input),
-                value,
-                o,
-              ),
+            await driveInput(
+              model,
+              model.ports.inputs.find((p) => p.name === input),
+              value,
+              o,
             );
           }
           const actual = await readOutputUntil(
@@ -360,12 +545,13 @@ async function examples() {
             o,
             expected,
             t.afterTicks,
+            TRANSIENT.has(slug) || pressesButton(model, t),
           );
           return [actual === expected, `actual ${actual}`];
         });
       }
     }
-    const sequence = SEQUENCES[slug];
+    const sequence = typeof SEQUENCES[slug] === "function" ? SEQUENCES[slug](model) : SEQUENCES[slug];
     if (sequence) {
       const label = `sequence ${sequence.map(([s, e]) => `${JSON.stringify(s)}->${JSON.stringify(e)}`).join(" ")}`;
       await check(area, label, async () => {
@@ -373,16 +559,16 @@ async function examples() {
         const seen = [];
         for (const [set, expect] of sequence) {
           for (const [name, value] of Object.entries(set)) {
-            await cmd(
-              inputCommand(
-                model,
-                model.ports.inputs.find((p) => p.name === name),
-                value,
-                o,
-              ),
+            await driveInput(
+              model,
+              model.ports.inputs.find((p) => p.name === name),
+              value,
+              o,
               1500,
             );
           }
+          // A press lasts up to 1.5 s (wood): read once it is over and the design has followed it.
+          if (pressesButton(model, { set })) await sleep(1500);
           for (const [name, value] of Object.entries(expect)) {
             seen.push(
               (await readOutput(
@@ -396,11 +582,23 @@ async function examples() {
         return [seen.every(Boolean), `steps ok: ${seen.join(",")}`];
       });
     }
-    if (model.tests.length > 0 && MOVES_AT_REST.has(slug)) {
+    if (model.tests.length > 0 && movesAtRest(model)) {
       skip(
         area,
         "clear, build, build equals clear, build",
         "moves at rest: rebuild only after the clear function",
+      );
+    } else if (model.tests.length > 0 && CLOCK_START[slug] && Object.keys(CLOCK_START[slug]).length === 0) {
+      skip(
+        area,
+        "clear, build, build equals clear, build",
+        "a free-running clock: its state changes between the two builds being compared",
+      );
+    } else if (model.tests.length > 0 && dustPoweredAtRest(model)) {
+      skip(
+        area,
+        "clear, build, build equals clear, build",
+        "dust powered at rest keeps a stale signal when rebuilt in place: rebuild only after the clear function",
       );
     } else if (model.tests.length > 0) {
       await check(area, "clear, build, build equals clear, build", async () => {
@@ -435,15 +633,72 @@ async function examples() {
         return [kept > 0 && lost === 0, `${kept} cells kept, ${lost} lost`];
       });
     }
-    if (model.tests.length === 0 && model.ports.outputs.length > 0) {
+    if (slug === "hopper-sorter") await sorter(model, o, area, build);
+    const start = CLOCK_START[slug];
+    if ((model.tests.length === 0 || start) && model.ports.outputs.length > 0) {
       await check(area, "output changes over time (clock)", async () => {
         await build();
+        for (const [name, value] of Object.entries(start ?? {})) {
+          await driveInput(
+            model,
+            model.ports.inputs.find((p) => p.name === name),
+            value,
+            o,
+            1500,
+          );
+        }
+        // Sampled for up to 8 seconds, until both off and on are seen: the repeater clock is off only 6 ticks of
+        // every 16, and a fixed 12 samples missed that window (measured: twelve 1s on a working clock).
+        // Dust is sampled as off or on with one query each (signal 0 or not), after one full read shows it is
+        // there: a full level scan takes many queries, an observer clock's 2-tick pulse ended during it, and every
+        // sample came back 0.
+        const port = model.ports.outputs[0];
+        const out = model.blocks.get(port.pos.join(","));
+        const p = [o[0] + 1 + port.pos[0], o[1] + port.pos[1], o[2] + port.pos[2]];
+        const sample =
+          out.type === "dust"
+            ? async () => ((await isBlock(p, 'minecraft:redstone_wire ["redstone_signal"=0]')) ? 0 : 1)
+            : () => readOutput(model, port, o);
+        if (out.type === "dust") await readOutput(model, port, o);
         const samples = [];
-        for (let k = 0; k < 12; k++) samples.push(await readOutput(model, model.ports.outputs[0], o));
-        return [samples.includes(0) && samples.includes(1), `samples ${samples.join("")}`];
+        const until = Date.now() + 8000;
+        const changed = () => samples.includes(0) && samples.some((v) => v > 0);
+        while (!changed() && Date.now() < until) samples.push(await sample());
+        return [changed(), `samples ${samples.join(",")}`];
       });
     }
   }
+}
+
+/**
+ * The hopper sorter, which the simulator skips (T003): load the filter with 18 iron ingots and one stick in each
+ * other slot, then put items into the stream. A cobblestone must pass by (the collector stays empty: lamp off); an
+ * iron ingot must be sorted out (the collector fills: lamp on).
+ */
+async function sorter(model, o, area, build) {
+  const cell = (p) => [o[0] + 1 + p[0], o[1] + p[1], o[2] + p[2]];
+  const filter = cell([2, 2, 0]);
+  const stream = cell([1, 3, 0]);
+  const lamp = model.ports.outputs.find((p) => p.name === "sorted");
+  await check(area, "sorts iron ingots out of the stream and lets cobblestone pass", async () => {
+    await build();
+    await cmd(`replaceitem block ${at(filter)} slot.container 0 iron_ingot 18`);
+    for (let slot = 1; slot <= 4; slot++)
+      await cmd(`replaceitem block ${at(filter)} slot.container ${slot} stick 1`);
+    await sleep(1500);
+    const idle = await readOutput(model, lamp, o);
+    await cmd(`replaceitem block ${at(stream)} slot.container 0 cobblestone 1`, 4000);
+    const afterCobble = await readOutput(model, lamp, o);
+    // The bottom hopper relocks before it passes an item on, so a sorted item waits there until the next one
+    // unlocks it: two ingots put at least one into the collector.
+    await cmd(`replaceitem block ${at(stream)} slot.container 0 iron_ingot 1`, 3000);
+    await cmd(`replaceitem block ${at(stream)} slot.container 0 iron_ingot 1`, 4000);
+    const afterIron = await readOutput(model, lamp, o);
+    return [
+      idle === 0 && afterCobble === 0 && afterIron === 1,
+      `collector lamp: loaded ${idle}, after cobblestone ${afterCobble}, after two iron ingots ${afterIron}`,
+    ];
+  });
 }
 
 /** Builds the orientation test and checks every block under test by its Bedrock ID, and that nothing dropped. */
@@ -707,13 +962,32 @@ await cmd("reload", 3000);
 await cmd("tickingarea add 0 0 0 79 0 63 dustwright-check");
 
 if (!(await worldTicks(true))) stalled("before the first check");
+// Right after a start the ticking area's chunks may still be loading (seen: half of them for over a minute), so the
+// first probe waits up to a minute; the last one does not.
+const dead = async (when, waitMs = 0) => {
+  let bad = await chunksPower();
+  for (const until = Date.now() + waitMs; bad.length && Date.now() < until; bad = await chunksPower()) {
+    await sleep(15_000);
+  }
+  if (bad.length) stalled(`${when}: a lever does not power its block in ${bad.join(", ")}`);
+};
+await dead("before the first check", 60_000);
 if (!only || only === "probes") {
   await probes();
   if (!(await worldTicks(false))) stalled("after probes");
 }
 if (!only || only === "examples") {
-  await examples();
+  await designs("examples");
   if (!(await worldTicks(false))) stalled("after examples");
+}
+if (!only || only === "patterns") {
+  await designs("patterns");
+  if (!(await worldTicks(false))) stalled("after patterns");
+}
+// --dir <path>: build and test every design in a directory (eval outputs), in the patterns' band.
+if (args.includes("--dir")) {
+  await designs("dir", args[args.indexOf("--dir") + 1]);
+  if (!(await worldTicks(false))) stalled("after the designs");
 }
 if (!only || only === "orientation") {
   await orientation();
@@ -723,6 +997,7 @@ if (!only || only === "structures") {
   await structures();
   if (!(await worldTicks(false))) stalled("after structures");
 }
+await dead("after the checks");
 const count = (s) => results.filter((r) => r.status === s).length;
 console.log(`\n${count("pass")} passed, ${count("fail")} failed, ${count("skipped")} skipped`);
 console.log(JSON.stringify({ when: new Date().toISOString(), container, results }));

@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../../../", import.meta.url));
 const pub = fileURLToPath(new URL("../public/", import.meta.url));
 
-for (const dir of ["schema", "examples"]) {
+for (const dir of ["schema", "examples", "patterns"]) {
   rmSync(`${pub}${dir}`, { recursive: true, force: true });
   mkdirSync(`${pub}${dir}`, { recursive: true });
 }
@@ -18,6 +18,10 @@ const examples = readdirSync(`${root}examples`)
   .filter((f) => f.endsWith(".rsd.json"))
   .sort();
 for (const f of examples) copyFileSync(`${root}examples/${f}`, `${pub}examples/${f}`);
+const patterns = readdirSync(`${root}patterns`)
+  .filter((f) => f.endsWith(".rsd.json"))
+  .sort();
+for (const f of patterns) copyFileSync(`${root}patterns/${f}`, `${pub}patterns/${f}`);
 const viewer = `${root}packages/viewer/dist/bundle/redstone-viewer.js`;
 if (existsSync(viewer)) copyFileSync(viewer, `${pub}redstone-viewer.js`);
 else
@@ -43,6 +47,10 @@ writeFileSync(
 
 - [rsd/1 design format](/schema/rsd-1.json): JSON Schema for .rsd.json files
 - [Diagnostics output](/schema/diagnostics.json): JSON Schema for \`rsd validate --json\`
+
+## Patterns (known-good, tested in game)
+
+${patterns.map((f) => `- [${f.replace(/\.rsd\.json$/, "")}](/patterns/${f})`).join("\n")}
 
 ## Examples
 

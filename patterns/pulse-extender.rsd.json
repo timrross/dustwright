@@ -1,0 +1,77 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Pulse extender",
+    "slug": "pulse-extender",
+    "description": "A stone button's 1-second pulse is joined with copies delayed by 0.8 and 1.6 seconds, so the lamp stays lit for about 2.6 seconds.",
+    "gameVersion": "1.26.50"
+  },
+  "legend": {
+    "#": "stone",
+    "b": "button mount=floor material=stone",
+    "-": "dust",
+    ">": "repeater facing=east delay=4",
+    "*": "lamp"
+  },
+  "layers": [
+    ["############", "############", "############", "############", "############"],
+    ["b-----------", "-..........-", "->>--------*", "-..........-", "->>>>-------"]
+  ],
+  "ports": {
+    "inputs": [
+      {
+        "name": "press",
+        "pos": [0, 1, 0]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "out",
+        "pos": [11, 1, 2]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "set": {
+        "press": 1
+      },
+      "afterTicks": 20,
+      "expect": {
+        "out": 1
+      }
+    },
+    {
+      "set": {
+        "press": 1
+      },
+      "afterTicks": 36,
+      "expect": {
+        "out": 0
+      }
+    },
+    {
+      "set": {
+        "press": 0
+      },
+      "afterTicks": 4,
+      "expect": {
+        "out": 0
+      }
+    }
+  ],
+  "annotations": [
+    {
+      "pos": [0, 1, 0],
+      "text": "Stone button: a 10-tick pulse."
+    },
+    {
+      "pos": [2, 1, 2],
+      "text": "Delayed 8 ticks."
+    },
+    {
+      "pos": [4, 1, 4],
+      "text": "Delayed 16 ticks."
+    }
+  ]
+}

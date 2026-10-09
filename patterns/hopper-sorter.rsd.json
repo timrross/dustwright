@@ -1,0 +1,64 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Hopper item sorter",
+    "slug": "hopper-sorter",
+    "description": "Sorts one item type out of a hopper stream. Load the filter hopper (under the second stream hopper) with 18 of the item to sort in its first slot and one item that never appears in the stream in each of its other four slots. A matching item tips the filter's comparator from 1 to 2, which turns the torch off and unlocks the hopper below for one pull; that hopper passes the item to the collector, and the lamp lights while the collector holds items.",
+    "gameVersion": "1.26.50"
+  },
+  "legend": {
+    "#": "stone",
+    "B": "hopper facing=east",
+    "c": "hopper facing=north",
+    "k": "comparator facing=east",
+    "*": "lamp",
+    "-": "dust",
+    "K": "comparator facing=west",
+    "F": "hopper facing=north",
+    "t": "torch mount=west",
+    ">": "hopper facing=east",
+    "v": "hopper facing=down"
+  },
+  "layers": [
+    ["######", "######", "######"],
+    ["##Bck*", "#.-...", "..#..."],
+    ["-KF...", "-.....", "#t-..."],
+    [".>>>v.", "......", "......"],
+    ["......", "......", "......"]
+  ],
+  "ports": {
+    "outputs": [
+      {
+        "name": "sorted",
+        "pos": [5, 1, 0]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "set": {},
+      "afterTicks": 4,
+      "expect": {
+        "sorted": 0
+      }
+    }
+  ],
+  "annotations": [
+    {
+      "pos": [2, 2, 0],
+      "text": "Filter hopper: 18 of the item to sort in slot 1, and one item that is never in the stream in each other slot (22 items: comparator signal 1)."
+    },
+    {
+      "pos": [1, 2, 2],
+      "text": "Locking torch: lit while the filter's signal is 1, so the hopper below stays locked."
+    },
+    {
+      "pos": [2, 1, 0],
+      "text": "Bottom hopper: unlocked for a moment when a matching item arrives (signal 2), it pulls that one item out of the filter. It relocks before passing it on, so each sorted item reaches the collector when the next one arrives."
+    },
+    {
+      "pos": [1, 3, 0],
+      "text": "Item stream: put items in here; anything that is not sorted ends in the last hopper."
+    }
+  ]
+}

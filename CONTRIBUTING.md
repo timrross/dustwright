@@ -68,8 +68,12 @@ stages 1 and 2 must import only core: the viewer bundles them through `@dustwrig
 
 ## Add a pattern
 
-Add `patterns/<name>.rsd.json` with `ports` and `tests`. It must validate with zero errors, pass its tests in the
-simulator, and be verified in-game before it is listed as known-good.
+Add `patterns/<name>.rsd.json` with `ports`, `tests`, a `description` and annotations that explain how it works.
+It must validate with zero errors and pass its tests in the simulator (`test/patterns.test.ts`), and pass in game
+before it is listed as known-good: export it into the test pack, restart the server and run
+`node deploy/test-world/ingame-check.mjs <container> --only patterns` (buttons are pressed through the console;
+anything the simulator skips, like the hopper sorter, needs its own check there). Add it to the pattern list in
+`AUTHORING.md` and to `SPEC_LIST` in the test.
 
 ## Sign-off gates
 

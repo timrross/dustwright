@@ -1,0 +1,257 @@
+{
+  "when": "2026-10-09T00:49:45.990Z",
+  "mode": "mcp",
+  "passed": 10,
+  "total": 10,
+  "results": [
+    {
+      "id": "and3",
+      "prompt": "a 3-input AND gate: three levers, and a lamp that lights only when all three are on",
+      "pass": true,
+      "roundsToClean": 1,
+      "checkCalls": 1,
+      "validateCalls": 1,
+      "tests": 8,
+      "errors": [],
+      "warnings": [],
+      "skipped": 0,
+      "tools": [
+        "get_pattern",
+        "authoring_guide",
+        "validate"
+      ],
+      "patternsUsed": [
+        "and-gate"
+      ],
+      "finalLine": "DONE: the 3-input AND gate passed validate on the first round with no errors or warnings, and all 8 truth-table tests passed in the simulator. Each lever goes through a torch that switches it off, the three torch outputs share one line of dust, and a last torch flips that again so the lamp lights only when all three levers are on.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "hidden-door",
+      "prompt": "a hidden 2x2 piston door with a button on each side",
+      "pass": true,
+      "roundsToClean": 2,
+      "checkCalls": 2,
+      "validateCalls": 2,
+      "tests": 5,
+      "errors": [],
+      "warnings": [
+        "W108"
+      ],
+      "skipped": 0,
+      "tools": [
+        "authoring_guide",
+        "list_patterns",
+        "get_pattern",
+        "get_pattern",
+        "validate",
+        "validate"
+      ],
+      "patternsUsed": [
+        "piston-door-2x2",
+        "pulse-extender"
+      ],
+      "finalLine": "DONE: the hidden 2x2 piston door passed validate on the second round with zero errors and all 5 tests passing. Four sticky pistons sit in the wall and two torches keep them closed; a stone button on either side cuts the torches off and opens the door for about a second. The only warning left is W108, meaning wool hasn't been checked in game yet, and I didn't write the design to a file.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "nor",
+      "prompt": "a NOR gate: two levers, and a lamp that is lit only when both are off",
+      "pass": true,
+      "roundsToClean": 1,
+      "checkCalls": 1,
+      "validateCalls": 1,
+      "tests": 4,
+      "errors": [],
+      "warnings": [],
+      "skipped": 0,
+      "tools": [
+        "get_pattern",
+        "get_pattern",
+        "validate"
+      ],
+      "patternsUsed": [
+        "or-gate",
+        "not-gate"
+      ],
+      "finalLine": "DONE: the NOR gate passed validation on the first round, with zero diagnostics and all 4 truth-table tests passing. Both levers feed one dust line that powers a stone block. A torch on the far side of the block inverts that signal, so the lamp is lit only when both levers are off.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "xnor",
+      "prompt": "an XNOR gate: a lamp that is lit when two levers are in the same position",
+      "pass": true,
+      "roundsToClean": 1,
+      "checkCalls": 1,
+      "validateCalls": 1,
+      "tests": 4,
+      "errors": [],
+      "warnings": [],
+      "skipped": 0,
+      "tools": [
+        "get_pattern",
+        "authoring_guide",
+        "validate"
+      ],
+      "patternsUsed": [
+        "xor-gate"
+      ],
+      "finalLine": "DONE: the XNOR gate passed validate on the first round, with no errors or warnings and all 4 truth-table tests passing. It's the tested XOR pattern with its output fed into one more torch, which flips the result so the lamp is lit when both levers match. Nothing was saved to disk.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "toggle-lamp",
+      "prompt": "a lamp that toggles on and off each time a button is pressed",
+      "pass": true,
+      "roundsToClean": 1,
+      "checkCalls": 1,
+      "validateCalls": 1,
+      "tests": 3,
+      "errors": [],
+      "warnings": [
+        "W108",
+        "W102"
+      ],
+      "skipped": 0,
+      "tools": [
+        "list_patterns",
+        "get_pattern",
+        "authoring_guide",
+        "validate"
+      ],
+      "patternsUsed": [
+        "t-flip-flop"
+      ],
+      "finalLine": "DONE. The design passed validate on the first round with no errors and all 3 tests passing: lamp off at rest, lamp on 15 ticks after one button press, and still on at 40 ticks after the button releases, so one press toggles it only once. I built it from the piston T flip-flop pattern with a stone button in place of the lever. Two warnings remain. W108 says the repeater's orientation hasn't been checked in game yet. W102 flags a repeater pointing into an empty cell, which the shuttling redstone block moves into. Each test starts fresh with a single press, so the simulator never checked that a second press turns the lamp off.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "switch-clock",
+      "prompt": "a clock that blinks a lamp while a lever is on and stops when it is off",
+      "pass": true,
+      "roundsToClean": 5,
+      "checkCalls": 5,
+      "validateCalls": 1,
+      "tests": 4,
+      "errors": [],
+      "warnings": [
+        "W108"
+      ],
+      "skipped": 0,
+      "tools": [
+        "list_patterns",
+        "authoring_guide",
+        "simulate",
+        "simulate",
+        "simulate",
+        "simulate",
+        "validate"
+      ],
+      "patternsUsed": [],
+      "finalLine": "The only warning is W108: the tool hasn't checked the repeater's orientation in game yet, so check that in a test world before you rely on it. I tested only in the approximate simulator (four earlier simulate runs while debugging), not in game, and saved no files.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "long-line",
+      "prompt": "a lever that lights a lamp 40 blocks away",
+      "pass": true,
+      "roundsToClean": 1,
+      "checkCalls": 1,
+      "validateCalls": 1,
+      "tests": 2,
+      "errors": [],
+      "warnings": [
+        "W108"
+      ],
+      "skipped": 0,
+      "tools": [
+        "get_pattern",
+        "authoring_guide",
+        "validate"
+      ],
+      "patternsUsed": [
+        "repeater-line"
+      ],
+      "finalLine": "The only warning was W108: the tool hasn't checked the repeater's direction in a real game yet. The guide says this is safe to ignore while designing.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "pulse-3s",
+      "prompt": "a pulse extender: a button press keeps a lamp lit for at least 3 seconds",
+      "pass": true,
+      "roundsToClean": 1,
+      "checkCalls": 1,
+      "validateCalls": 1,
+      "tests": 4,
+      "errors": [],
+      "warnings": [
+        "W108"
+      ],
+      "skipped": 0,
+      "tools": [
+        "get_pattern",
+        "authoring_guide",
+        "validate"
+      ],
+      "patternsUsed": [
+        "pulse-extender"
+      ],
+      "finalLine": "DONE: the design passed validate on the first round with no errors and all 4 tests passing. It's the library's pulse extender with a third delay branch added (6 repeaters at delay 4, so 24 ticks). That keeps the lamp lit about 3.4 s, and the tests confirm it's still on 3.1 s after the press and off by 4.6 s. The only warning is W108: the repeater orientation hasn't been checked in game yet.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "memory-cell",
+      "prompt": "a 1-bit memory cell: a set button turns a lamp on, a reset button turns it off, and it stays that way",
+      "pass": true,
+      "roundsToClean": 2,
+      "checkCalls": 2,
+      "validateCalls": 2,
+      "tests": 4,
+      "errors": [],
+      "warnings": [],
+      "skipped": 0,
+      "tools": [
+        "get_pattern",
+        "authoring_guide",
+        "validate",
+        "validate"
+      ],
+      "patternsUsed": [
+        "rs-latch"
+      ],
+      "finalLine": "I only validated and didn't export, so no files were written.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "one-of-two",
+      "prompt": "a lamp that lights only when exactly one of two levers is on",
+      "pass": true,
+      "roundsToClean": 1,
+      "checkCalls": 1,
+      "validateCalls": 1,
+      "tests": 4,
+      "errors": [],
+      "warnings": [],
+      "skipped": 0,
+      "tools": [
+        "get_pattern",
+        "validate"
+      ],
+      "patternsUsed": [
+        "xor-gate"
+      ],
+      "finalLine": "DONE: I adapted the library's XOR gate (three torch NOR stages) into a design where the lamp lights only when exactly one lever is on, and it passed validate on the first round with zero diagnostics and all 4 tests passing.",
+      "seconds": 0,
+      "exit": null
+    }
+  ]
+}

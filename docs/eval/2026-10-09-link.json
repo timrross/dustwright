@@ -1,0 +1,6 @@
+{
+  "when": "2026-10-09T00:30:54.181Z",
+  "tools": "none",
+  "reply": "https://dustwright.dev/view/#json={\"format\":\"rsd/1\",\"meta\":{\"name\":\"NOT%20gate\"},\"legend\":{\"%23\":\"stone\",\"L\":\"lever%20mount=floor\",\"-\":\"dust\",\"t\":\"torch%20mount=west\",\"*\":\"lamp\"},\"layers\":[[\"%23%23%23%23%23\"],[\"L-%23t*\"]],\"ports\":{\"inputs\":[{\"name\":\"A\",\"pos\":[0,1,0]}],\"outputs\":[{\"name\":\"out\",\"pos\":[4,1,0]}]},\"tests\":[{\"set\":{\"A\":0},\"afterTicks\":4,\"expect\":{\"out\":1}},{\"set\":{\"A\":1},\"afterTicks\":4,\"expect\":{\"out\":0}}]}",
+  "link": "https://dustwright.dev/view/#json={\"format\":\"rsd/1\",\"meta\":{\"name\":\"NOT%20gate\"},\"legend\":{\"%23\":\"stone\",\"L\":\"lever%20mount=floor\",\"-\":\"dust\",\"t\":\"torch%20mount=west\",\"*\":\"lamp\"},\"layers\":[[\"%23%23%23%23%23\"],[\"L-%23t*\"]],\"ports\":{\"inputs\":[{\"name\":\"A\",\"pos\":[0,1,0]}],\"outputs\":[{\"name\":\"out\",\"pos\":[4,1,0]}]},\"tests\":[{\"set\":{\"A\":0},\"afterTicks\":4,\"expect\":{\"out\":1}},{\"set\":{\"A\":1},\"afterTicks\":4,\"expect\":{\"out\":0}}]}"
+}

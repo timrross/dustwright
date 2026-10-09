@@ -1,11 +1,11 @@
-// The patterns page: the example designs, each with links to the playground and the viewer. Design text (names,
+// The patterns page: the pattern library, each with links to the playground and the viewer. Design text (names,
 // descriptions) goes in through textContent only.
 import { parseText } from "@dustwright/core";
-import { EXAMPLES } from "./examples.js";
+import { PATTERNS } from "./examples.js";
 import "./site.css";
 
 const list = document.querySelector<HTMLUListElement>("#patterns")!;
-for (const [slug, text] of EXAMPLES) {
+for (const [slug, text] of PATTERNS) {
   const model = parseText(text).model;
   if (!model) continue;
   const item = document.createElement("li");
@@ -21,7 +21,7 @@ for (const [slug, text] of EXAMPLES) {
   play.href = `/play/?example=${encodeURIComponent(slug)}`;
   play.textContent = "Open in the playground";
   const view = document.createElement("a");
-  view.href = `/view/?src=${encodeURIComponent(`/examples/${slug}.rsd.json`)}`;
+  view.href = `/view/?src=${encodeURIComponent(`/patterns/${slug}.rsd.json`)}`;
   view.textContent = "View";
   links.append(play, " · ", view);
   item.append(title, description, facts, links);

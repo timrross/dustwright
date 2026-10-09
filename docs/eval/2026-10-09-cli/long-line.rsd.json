@@ -1,0 +1,28 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Lever to lamp 40 blocks",
+    "edition": "bedrock",
+    "gameVersion": "1.26.50",
+    "description": "A lever drives a dust line, refreshed by two repeaters, to a lamp 40 blocks east."
+  },
+  "legend": {
+    "#": "stone",
+    "L": "lever mount=floor",
+    "-": "dust",
+    ">": "repeater facing=east delay=1",
+    "*": "lamp"
+  },
+  "layers": [
+    ["#########################################"],
+    ["L-------------->-------------->---------*"]
+  ],
+  "ports": {
+    "inputs": [{ "name": "A", "pos": [0, 1, 0] }],
+    "outputs": [{ "name": "out", "pos": [40, 1, 0] }]
+  },
+  "tests": [
+    { "set": { "A": 1 }, "afterTicks": 8, "expect": { "out": 1 } },
+    { "set": { "A": 0 }, "afterTicks": 8, "expect": { "out": 0 } }
+  ]
+}

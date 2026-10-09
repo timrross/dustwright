@@ -1,0 +1,64 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Pulse extender 3s",
+    "edition": "bedrock",
+    "gameVersion": "1.26.50",
+    "description": "A stone button pulse (10 ticks) is split into four delay lines (about 1, 9, 18 and 27 ticks) whose outputs are ORed on a dust bus into the lamp, keeping it lit for roughly 3.7 s."
+  },
+  "legend": {
+    "#": "stone",
+    "B": "button mount=floor material=stone",
+    "-": "dust",
+    "a": "repeater facing=south delay=1",
+    "b": "repeater facing=south delay=2",
+    "c": "repeater facing=south delay=3",
+    "d": "repeater facing=south delay=4",
+    "*": "lamp"
+  },
+  "layers": [
+    [
+      "#########",
+      "#########",
+      "#########",
+      "#########",
+      "#########",
+      "#########",
+      "#########",
+      "#########",
+      "#########",
+      "#########",
+      "#########"
+    ],
+    [
+      "B-------.",
+      ".-.d.d.d.",
+      ".-.d.d.d.",
+      ".-.-.d.d.",
+      ".-.-.d.d.",
+      ".-.-.-.d.",
+      ".-.-.-.d.",
+      ".-.-.-.-.",
+      ".-.-.-.-*",
+      ".a.a.b.c-",
+      ".--------"
+    ]
+  ],
+  "ports": {
+    "inputs": [{ "name": "press", "pos": [0, 1, 0] }],
+    "outputs": [{ "name": "lamp", "pos": [8, 1, 8] }]
+  },
+  "tests": [
+    { "set": { "press": 0 }, "afterTicks": 10, "expect": { "lamp": 0 } },
+    { "set": { "press": 1 }, "afterTicks": 3, "expect": { "lamp": 1 } },
+    { "set": { "press": 1 }, "afterTicks": 12, "expect": { "lamp": 1 } },
+    { "set": { "press": 1 }, "afterTicks": 20, "expect": { "lamp": 1 } },
+    { "set": { "press": 1 }, "afterTicks": 28, "expect": { "lamp": 1 } },
+    { "set": { "press": 1 }, "afterTicks": 31, "expect": { "lamp": 1 } },
+    { "set": { "press": 1 }, "afterTicks": 70, "expect": { "lamp": 0 } }
+  ],
+  "annotations": [
+    { "pos": [0, 1, 0], "text": "Stone button: 10-tick pulse" },
+    { "pos": [8, 1, 8], "text": "Lamp: lit from the press until about 37 ticks later" }
+  ]
+}

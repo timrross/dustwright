@@ -1,0 +1,261 @@
+{
+  "when": "2026-10-09T00:55:44.143Z",
+  "mode": "cli",
+  "passed": 10,
+  "total": 10,
+  "results": [
+    {
+      "id": "and3",
+      "prompt": "a 3-input AND gate: three levers, and a lamp that lights only when all three are on",
+      "pass": true,
+      "roundsToClean": 2,
+      "checkCalls": 2,
+      "validateCalls": 2,
+      "tests": 8,
+      "errors": [],
+      "warnings": [],
+      "skipped": 0,
+      "tools": [
+        "Read",
+        "Bash",
+        "Bash",
+        "Write",
+        "Bash"
+      ],
+      "patternsUsed": [],
+      "finalLine": "DONE: `design.rsd.json` passed `rsd validate` on the first round with no diagnostics, and all 8 truth-table cases pass in the simulator. Each lever's torch turns off when the lever is on, the three torch outputs join on one dust line, and a final torch lights the lamp only when that line is unpowered, which happens only when all three levers are on.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "hidden-door",
+      "prompt": "a hidden 2x2 piston door with a button on each side",
+      "pass": true,
+      "roundsToClean": 2,
+      "checkCalls": 2,
+      "validateCalls": 2,
+      "tests": 5,
+      "errors": [],
+      "warnings": [
+        "W108"
+      ],
+      "skipped": 0,
+      "tools": [
+        "Bash",
+        "Bash",
+        "Bash",
+        "Write",
+        "Bash",
+        "Bash"
+      ],
+      "patternsUsed": [],
+      "finalLine": "DONE — `design.rsd.json` passed validation on the first round, and all 5 tests passed in the simulator: the door starts closed, either wooden button opens all four sticky pistons within 6 ticks, and the door closes again by tick 30. The only warning was W108 (the repeater's in-game mapping isn't verified yet), and the door hasn't been built in game; it stays open only for the 1.5 s button press, with no pulse extender.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "nor",
+      "prompt": "a NOR gate: two levers, and a lamp that is lit only when both are off",
+      "pass": true,
+      "roundsToClean": 1,
+      "checkCalls": 1,
+      "validateCalls": 1,
+      "tests": 4,
+      "errors": [],
+      "warnings": [],
+      "skipped": 0,
+      "tools": [
+        "Read",
+        "Write",
+        "Bash"
+      ],
+      "patternsUsed": [],
+      "finalLine": "DONE: `design.rsd.json` passed `rsd validate` on the first round with no diagnostics, and all four truth-table tests pass (the lamp is lit only when A and B are both off). Both levers hang on one stone block, and a torch on that block's east face lights the lamp until either lever powers the block. It has only been checked in the approximate simulator, not built in game.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "xnor",
+      "prompt": "an XNOR gate: a lamp that is lit when two levers are in the same position",
+      "pass": true,
+      "roundsToClean": 2,
+      "checkCalls": 2,
+      "validateCalls": 2,
+      "tests": 4,
+      "errors": [],
+      "warnings": [
+        "W108"
+      ],
+      "skipped": 0,
+      "tools": [
+        "Read",
+        "Bash",
+        "Bash",
+        "Write",
+        "Bash"
+      ],
+      "patternsUsed": [],
+      "finalLine": "DONE: `design.rsd.json` passed `rsd validate` on the first round. It reported no errors, and all 4 tests passed: the lamp is lit when both levers are off or both are on, and dark otherwise. The validator uses an approximate simulator, so I haven't checked it in game. The only warning was W108, which says the repeater's orientation hasn't been checked in game yet; the guide says this can be ignored while designing. The design uses two torch gates beside the lamp: one lights it when both levers are off, the other when both are on.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "toggle-lamp",
+      "prompt": "a lamp that toggles on and off each time a button is pressed",
+      "pass": true,
+      "roundsToClean": 1,
+      "checkCalls": 1,
+      "validateCalls": 1,
+      "tests": 3,
+      "errors": [],
+      "warnings": [
+        "W108",
+        "W108"
+      ],
+      "skipped": 0,
+      "tools": [
+        "Read",
+        "Bash",
+        "Bash",
+        "Bash",
+        "Bash",
+        "Bash",
+        "Write",
+        "Bash"
+      ],
+      "patternsUsed": [],
+      "finalLine": "DONE — `design.rsd.json` passed `rsd validate` on the first round with no failing tests: it's a master-slave toggle circuit built from torch gates, and all 3 tests pass (no press keeps the lamp off; one press turns it on and it stays on at 30 and 150 ticks), with only W108 \"not verified in game\" warnings; the test format can't press twice, so turning off on the second press is untested.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "switch-clock",
+      "prompt": "a clock that blinks a lamp while a lever is on and stops when it is off",
+      "pass": true,
+      "roundsToClean": 2,
+      "checkCalls": 2,
+      "validateCalls": 2,
+      "tests": 6,
+      "errors": [],
+      "warnings": [
+        "W108",
+        "W108"
+      ],
+      "skipped": 0,
+      "tools": [
+        "Bash",
+        "Read",
+        "Bash",
+        "Write",
+        "Bash"
+      ],
+      "patternsUsed": [],
+      "finalLine": "DONE: `design.rsd.json` passed `rsd validate` on the first round, with all 6 tests passing in the simulator. The lever input is `run` and the lamp output is `lamp`. When the lever is on, a torch-and-repeater loop flashes the lamp on and off for 0.9 s each. When it's off, a torch under the lever keeps the clock stopped and the lamp dark. The only warnings were two W108s (concrete and repeater not yet checked in game), which the guide says are safe to ignore. I haven't tested it in game.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "long-line",
+      "prompt": "a lever that lights a lamp 40 blocks away",
+      "pass": true,
+      "roundsToClean": 2,
+      "checkCalls": 2,
+      "validateCalls": 2,
+      "tests": 2,
+      "errors": [],
+      "warnings": [
+        "W108"
+      ],
+      "skipped": 0,
+      "tools": [
+        "Bash",
+        "Bash",
+        "Write",
+        "Bash"
+      ],
+      "patternsUsed": [],
+      "finalLine": "DONE. `design.rsd.json` passed validation on the first round with both tests: the lamp turns on when the lever is on and off when it is off, checked 8 redstone ticks after each switch. The lever is at x=0 and the lamp at x=40, joined by a line of dust on a stone floor. Repeaters at x=15 and x=30 restore the signal before it fades out. The only warning is W108: the repeater's orientation hasn't been confirmed in game yet, and the guide says that's safe to ignore while designing.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "pulse-3s",
+      "prompt": "a pulse extender: a button press keeps a lamp lit for at least 3 seconds",
+      "pass": true,
+      "roundsToClean": 3,
+      "checkCalls": 3,
+      "validateCalls": 3,
+      "tests": 7,
+      "errors": [],
+      "warnings": [
+        "W108"
+      ],
+      "skipped": 0,
+      "tools": [
+        "Bash",
+        "Bash",
+        "Write",
+        "Bash",
+        "Bash",
+        "Edit",
+        "Bash"
+      ],
+      "patternsUsed": [],
+      "finalLine": "DONE. `design.rsd.json` passed validation on the second round, and all 7 tests pass in the simulator. The stone button's 1 s (10-tick) pulse is split into four repeater delay lines, delayed by about 1, 9, 18 and 27 ticks. Their outputs join on one dust line into the lamp, so it stays lit from the press for about 3.7 s (37 ticks). The tests confirm it is lit at ticks 3 through 31 and off by tick 70. The only warning left is W108 (the repeater orientation hasn't been confirmed in game yet), which the docs say is safe to ignore while authoring. Ports and tests were not changed.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "memory-cell",
+      "prompt": "a 1-bit memory cell: a set button turns a lamp on, a reset button turns it off, and it stays that way",
+      "pass": true,
+      "roundsToClean": 2,
+      "checkCalls": 2,
+      "validateCalls": 2,
+      "tests": 4,
+      "errors": [],
+      "warnings": [
+        "W108"
+      ],
+      "skipped": 0,
+      "tools": [
+        "Bash",
+        "Bash",
+        "Write",
+        "Bash"
+      ],
+      "patternsUsed": [],
+      "finalLine": "DONE: `design.rsd.json` (a torch-based set/reset latch with a set button, a reset button and a lamp) passed validation on the first round, and all 4 tests pass in the simulator: after a set press the lamp is on at 30 and 60 ticks, and after a reset press it is off at 30 and 60 ticks; the only warning is W108 (repeater orientation not yet checked in game), which the docs say is safe to ignore.",
+      "seconds": 0,
+      "exit": null
+    },
+    {
+      "id": "one-of-two",
+      "prompt": "a lamp that lights only when exactly one of two levers is on",
+      "pass": true,
+      "roundsToClean": 3,
+      "checkCalls": 3,
+      "validateCalls": 3,
+      "tests": 4,
+      "errors": [],
+      "warnings": [
+        "W108",
+        "W108"
+      ],
+      "skipped": 0,
+      "tools": [
+        "Bash",
+        "Bash",
+        "Write",
+        "Bash",
+        "Edit",
+        "Edit",
+        "Bash"
+      ],
+      "patternsUsed": [],
+      "finalLine": "DONE: `design.rsd.json` passed validation in 2 rounds, and all four lever combinations pass the simulator test, with the lamp on only when exactly one lever is on. The first round failed because a torch can't feed a comparator's side, so I added a repeater between them. The only warnings left say the comparator and repeater orientations haven't been checked in game yet, so check those in a test world before relying on it.",
+      "seconds": 0,
+      "exit": null
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "1-bit memory cell",
+    "edition": "bedrock",
+    "gameVersion": "1.26.50",
+    "description": "Torch RS NOR latch. Set button powers block B (its torch goes out, so torch A lights the lamp above it); reset button powers block A."
+  },
+  "legend": {
+    "#": "stone",
+    "A": "stone",
+    "B": "stone",
+    "r": "button mount=east material=stone",
+    "s": "button mount=west material=stone",
+    "t": "torch mount=west lit=false",
+    "u": "torch mount=north lit=true",
+    ">": "repeater facing=east delay=1",
+    "^": "repeater facing=north delay=1 powered=true",
+    "-": "dust",
+    "*": "lamp lit=false"
+  },
+  "layers": [
+    ["#######", "#######", "#######", "#######"],
+    [".......", "rAt->Bs", ".^...u.", ".-----."],
+    [".......", "..*....", ".......", "......."]
+  ],
+  "ports": {
+    "inputs": [
+      { "name": "set", "pos": [6, 1, 1] },
+      { "name": "reset", "pos": [0, 1, 1] }
+    ],
+    "outputs": [{ "name": "lamp", "pos": [2, 2, 1] }]
+  },
+  "tests": [
+    { "set": { "set": 1 }, "afterTicks": 30, "expect": { "lamp": 1 } },
+    { "set": { "reset": 1 }, "afterTicks": 30, "expect": { "lamp": 0 } },
+    { "set": { "set": 1 }, "afterTicks": 60, "expect": { "lamp": 1 } },
+    { "set": { "reset": 1 }, "afterTicks": 60, "expect": { "lamp": 0 } }
+  ]
+}

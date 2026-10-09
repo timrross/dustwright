@@ -1,0 +1,76 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Pulse limiter",
+    "slug": "pulse-limiter",
+    "description": "Holding the lever on gives one short pulse: the lever powers the block feeding a repeater and a sticky piston under that block, which lifts the block away a tick later. The delay-4 repeater stretches the cut-off input to a 4-tick pulse.",
+    "gameVersion": "1.26.50"
+  },
+  "legend": {
+    "#": "stone",
+    "U": "sticky_piston facing=up",
+    "L": "lever mount=floor on=false",
+    "-": "dust",
+    ">": "repeater facing=east delay=4",
+    "*": "lamp"
+  },
+  "layers": [
+    ["#####", "#####", "#####"],
+    ["U####", "#####", "#####"],
+    ["#>-*.", "-....", "L...."],
+    [".....", ".....", "....."]
+  ],
+  "ports": {
+    "inputs": [
+      {
+        "name": "A",
+        "pos": [0, 2, 2]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "out",
+        "pos": [3, 2, 0]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "set": {
+        "A": 1
+      },
+      "afterTicks": 6,
+      "expect": {
+        "out": 1
+      }
+    },
+    {
+      "set": {
+        "A": 1
+      },
+      "afterTicks": 14,
+      "expect": {
+        "out": 0
+      }
+    },
+    {
+      "set": {
+        "A": 0
+      },
+      "afterTicks": 6,
+      "expect": {
+        "out": 0
+      }
+    }
+  ],
+  "annotations": [
+    {
+      "pos": [0, 1, 0],
+      "text": "Sticky piston: lifts the feed block one tick after the lever turns on."
+    },
+    {
+      "pos": [1, 2, 0],
+      "text": "Delay 4: the 1-tick input becomes a 4-tick pulse."
+    }
+  ]
+}

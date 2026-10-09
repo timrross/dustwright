@@ -16,12 +16,13 @@ export {
   applySet,
   GAME_TICKS_PER_REDSTONE_TICK,
   runCase,
+  runTests,
   settle,
   SETTLE_TICKS,
   simulateTests,
   WORK_BUDGET,
 } from "./run.js";
-export type { CaseResult, RunOptions } from "./run.js";
+export type { CaseResult, RunOptions, TestsRun } from "./run.js";
 
 /**
  * The behaviour classes the simulator implements, one per registry `sim.class`. The registry test asserts every

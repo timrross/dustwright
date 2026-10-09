@@ -104,10 +104,29 @@ export function runCase(model: Model, test: TestCase, opts: RunOptions = {}): Ca
 const describeCase = (i: number, t: TestCase) =>
   `Test ${i + 1} (set ${JSON.stringify(t.set)}, after ${t.afterTicks} ticks)`;
 
+/** Every test case's result (null when the design's budget ran out before the case started), and their diagnostics. */
+export interface TestsRun {
+  cases: (CaseResult | null)[];
+  diagnostics: Diagnostic[];
+}
+
 /** Stage 3: runs every test case and reports T001 (failed), T002 (out of budget) and T003 (skipped). */
 export function simulateTests(model: Model, mechanics: SimMechanics = BEDROCK_MECHANICS): Diagnostic[] {
+  return runTests(model, mechanics).diagnostics;
+}
+
+/**
+ * Runs every test case against one budget for the whole design (`budget`, normally WORK_BUDGET), returning the
+ * cases with the stage 3 diagnostics.
+ */
+export function runTests(
+  model: Model,
+  mechanics: SimMechanics = BEDROCK_MECHANICS,
+  budget: number = WORK_BUDGET,
+): TestsRun {
   const out: Diagnostic[] = [];
-  let left = WORK_BUDGET;
+  const cases: (CaseResult | null)[] = [];
+  let left = budget;
   model.tests.forEach((test, i) => {
     let result: CaseResult | null = null;
     try {
@@ -122,6 +141,7 @@ export function simulateTests(model: Model, mechanics: SimMechanics = BEDROCK_ME
         reason: `the simulator failed (${(err as Error).message}; please report this design)`,
       };
     }
+    cases.push(result);
     // Every case's work is charged against the whole design's budget.
     left = Math.max(0, left - (result?.work ?? 0));
     if (!result || result.status === "budget") {
@@ -166,5 +186,5 @@ export function simulateTests(model: Model, mechanics: SimMechanics = BEDROCK_ME
       );
     }
   });
-  return out;
+  return { cases, diagnostics: out };
 }

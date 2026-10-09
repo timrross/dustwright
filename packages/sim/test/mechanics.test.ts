@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { DIRS, keyPos, parse, parseText } from "@dustwright/core";
 import type { Model, Pos } from "@dustwright/core";
-import { runCase, settle, Simulation, simulateTests } from "../src/index.js";
+import { runCase, runTests, settle, Simulation, simulateTests } from "../src/index.js";
 
 const ROOT = fileURLToPath(new URL("../../../", import.meta.url));
 
@@ -340,6 +340,20 @@ describe("test cases", () => {
     const diagnostics = simulateTests(clock);
     expect(performance.now() - t0).toBeLessThan(1000);
     expect(diagnostics.map((d) => d.code)).toEqual(["T002"]);
+  });
+
+  it("charges every case against one budget for the whole design", () => {
+    const m = parseText(readFileSync(`${ROOT}/examples/not-gate.rsd.json`, "utf8")).model as Model;
+    const full = runTests(m);
+    expect(full.cases.map((c) => c?.status)).toEqual(["pass", "pass"]);
+    // A budget that covers the first case but not both: the second runs out (T002) instead of getting a fresh one.
+    const first = full.cases[0]?.work ?? 0;
+    expect(first).toBeGreaterThan(0);
+    const short = runTests(m, undefined, first + 1);
+    expect(short.cases[0]?.status).toBe("pass");
+    expect(short.cases[1]?.status ?? "budget").toBe("budget");
+    expect(short.diagnostics.map((d) => [d.code, d.path])).toEqual([["T002", "/tests/1"]]);
+    expect(simulateTests(m)).toEqual(full.diagnostics);
   });
 
   it("runs a clock for 1,000 ticks within budget", () => {

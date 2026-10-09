@@ -162,6 +162,17 @@ nbtify, which runs in Node and in the browser without generating code; exporters
 this. The behavior pack in
 `packs/redstone-designs-bp/` is data only (one data module, no scripts) with UUIDs fixed in its manifest.
 
+## MCP server
+
+`@dustwright/mcp` speaks the Model Context Protocol over stdio (JSON-RPC 2.0, one message per line; no network
+transport), hand-written on the protocol's small core: `initialize`, `ping`, `tools/list`, `tools/call`. Its tools
+are `authoring_guide`, `validate`, `simulate`, `list_patterns`, `get_pattern`, `bundle`, `export`, `pack` and
+`sheets`, returning the CLI's JSON shapes. Designs travel as text. Everything that touches the machine (the
+guide, the patterns and the viewer script the CLI ships in `packages/cli/assets/`, file writes, and the pack writer
+with its symlink and path checks) comes from an `McpHost` the CLI provides, so `rsd mcp` and `rsd export` write
+packs the same way. The tool descriptions are written to be an agent's only instructions; the M8 eval runs agents
+that see nothing else.
+
 ## Public site
 
 `apps/site` is a static Vite build (`apps/site/dist`) of the same packages; there is no backend. Pages: `/` (landing

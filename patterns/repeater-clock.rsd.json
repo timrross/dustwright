@@ -1,0 +1,65 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Torch-free repeater clock",
+    "slug": "repeater-clock",
+    "description": "A loop of four delay-4 repeaters carries one pulse around for ever: the stone button's 10-tick press starts it, and the lamp flashes every 16 ticks (1.6 seconds). No torches, so nothing burns out.",
+    "gameVersion": "1.26.50"
+  },
+  "legend": {
+    "#": "stone",
+    "b": "button mount=floor material=stone",
+    "-": "dust",
+    ">": "repeater facing=east delay=4",
+    "<": "repeater facing=west delay=4",
+    "*": "lamp"
+  },
+  "layers": [
+    ["######", "######", "####*#", "######"],
+    ["......", ".->>-.", "b-..-.", ".-<<-."]
+  ],
+  "ports": {
+    "inputs": [
+      {
+        "name": "start",
+        "pos": [0, 1, 2]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "out",
+        "pos": [4, 0, 2]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "set": {
+        "start": 0
+      },
+      "afterTicks": 20,
+      "expect": {
+        "out": 0
+      }
+    },
+    {
+      "set": {
+        "start": 1
+      },
+      "afterTicks": 12,
+      "expect": {
+        "out": 1
+      }
+    }
+  ],
+  "annotations": [
+    {
+      "pos": [0, 1, 2],
+      "text": "Press once to start; the pulse then circles the loop."
+    },
+    {
+      "pos": [4, 1, 2],
+      "text": "This dust lies on the lamp."
+    }
+  ]
+}

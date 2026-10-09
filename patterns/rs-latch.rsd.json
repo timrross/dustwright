@@ -1,0 +1,74 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "RS latch",
+    "slug": "rs-latch",
+    "description": "Two torch NOR gates feed each other. Built reset (Q off). S sets the output on and R resets it off; with both inputs off the latch keeps its state (checked in a sequence in the simulator and in game).",
+    "gameVersion": "1.26.50"
+  },
+  "legend": {
+    "#": "stone",
+    "S": "lever mount=floor on=false",
+    "R": "lever mount=floor on=false",
+    "-": "dust",
+    "t": "torch mount=west lit=false",
+    "u": "torch mount=east lit=true",
+    "*": "lamp"
+  },
+  "layers": [
+    ["#######", "#######", "####*##", "#######", "#######"],
+    ["R-#t-..", "..-.-..", "..-.-..", "..-.-..", "..-u#-S"]
+  ],
+  "ports": {
+    "inputs": [
+      {
+        "name": "S",
+        "pos": [6, 1, 4]
+      },
+      {
+        "name": "R",
+        "pos": [0, 1, 0]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "Q",
+        "pos": [4, 0, 2]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "set": {
+        "S": 1
+      },
+      "afterTicks": 8,
+      "expect": {
+        "Q": 1
+      }
+    },
+    {
+      "set": {
+        "R": 1
+      },
+      "afterTicks": 8,
+      "expect": {
+        "Q": 0
+      }
+    }
+  ],
+  "annotations": [
+    {
+      "pos": [3, 1, 0],
+      "text": "Q torch: off while R or not-Q powers its block."
+    },
+    {
+      "pos": [3, 1, 4],
+      "text": "Not-Q torch: off while S or Q powers its block."
+    },
+    {
+      "pos": [4, 1, 2],
+      "text": "Q dust lies on the lamp below it."
+    }
+  ]
+}

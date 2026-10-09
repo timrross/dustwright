@@ -7,6 +7,12 @@ All notable user-facing changes are recorded here. The format follows
 
 ### Added
 
+- M8: the pattern library (`patterns/`, 13 designs: NOT, OR, AND, XOR, repeater line, pulse extender and limiter,
+  observer and repeater clocks, T flip-flop, RS latch, 2x2 piston door, hopper sorter), each passing its tests in
+  the simulator and in game; `rsd mcp`, an MCP server over stdio with the authoring guide, validate, simulate, the
+  patterns, bundle, export, pack and sheets; AUTHORING.md with a second worked example, the pattern list and a
+  recipe for share links written by hand; and the authoring eval (`scripts/eval/`).
+
 - M7: the public site, built and run locally: landing, `/view` (share links `#d=` and `#json=`, `?src=`, dropped
   files), the playground with Share and downloads (design, `.mcfunction`, `.mcstructure`, `.mcpack`, layer sheets),
   patterns, docs, `viewer.html` for iframes with origin-checked `postMessage` commands, an embedding example, and a

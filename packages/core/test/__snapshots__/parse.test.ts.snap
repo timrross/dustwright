@@ -245,7 +245,22 @@ exports[`examples > observer-clock.rsd.json parses and normalises > observer-clo
       "title": "Layer 1",
     },
   ],
-  "tests": [],
+  "tests": [
+    {
+      "afterTicks": 1,
+      "expect": {
+        "tick": 0,
+      },
+      "set": {},
+    },
+    {
+      "afterTicks": 2,
+      "expect": {
+        "tick": 15,
+      },
+      "set": {},
+    },
+  ],
 }
 `;
 

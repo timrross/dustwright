@@ -20,3 +20,7 @@ waits.
 - **Byte-identical structures to the game's.** Palette state keys follow the registry's order and the container is
   `format_version` 1; the game's own saves use format 2 and its own key order. Both load the same; matching the
   bytes exactly would need the format 2 layout.
+- **Sequence tests.** Every test case starts from a fresh build, so a design's tests cannot say "press twice, the
+  lamp is off again". The M8 eval found a toggle lamp that passed its tests and did not toggle. A `sequence` test
+  (steps of `set`, `afterTicks` and `expect` on one run) would let latches, toggles and counters prove themselves;
+  it is a format change.

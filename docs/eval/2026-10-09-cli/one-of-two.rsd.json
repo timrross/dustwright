@@ -1,0 +1,38 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "One of two (XOR) lamp",
+    "description": "Lamp lights only when exactly one of levers A and B is on. A comparator in subtract mode takes OR(A,B) at its rear and AND(A,B) (torch NOR of the inverted inputs) at its side.",
+    "edition": "bedrock",
+    "gameVersion": "1.26.50"
+  },
+  "legend": {
+    "#": "stone",
+    "L": "lever mount=floor",
+    "-": "dust",
+    "v": "repeater facing=south delay=1",
+    "^": "repeater facing=north delay=1",
+    "<": "repeater facing=west delay=1",
+    "t": "torch mount=west",
+    "a": "torch mount=east",
+    "C": "comparator facing=south mode=subtract",
+    "*": "lamp"
+  },
+  "layers": [
+    ["#######", "#######", "#######", "#######", "#######", "#######", "#######"],
+    ["L----#t", ".v....-", ".---..-", ".-.C<a#", ".-.*..-", ".^....-", "L----#t"]
+  ],
+  "ports": {
+    "inputs": [
+      { "name": "A", "pos": [0, 1, 0] },
+      { "name": "B", "pos": [0, 1, 6] }
+    ],
+    "outputs": [{ "name": "lamp", "pos": [3, 1, 4] }]
+  },
+  "tests": [
+    { "set": { "A": 0, "B": 0 }, "afterTicks": 10, "expect": { "lamp": 0 } },
+    { "set": { "A": 1, "B": 0 }, "afterTicks": 10, "expect": { "lamp": 1 } },
+    { "set": { "A": 0, "B": 1 }, "afterTicks": 10, "expect": { "lamp": 1 } },
+    { "set": { "A": 1, "B": 1 }, "afterTicks": 10, "expect": { "lamp": 0 } }
+  ]
+}

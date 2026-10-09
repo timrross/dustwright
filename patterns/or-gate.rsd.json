@@ -1,0 +1,86 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "OR gate",
+    "slug": "or-gate",
+    "description": "Two levers join on one dust line: the lamp lights when either input is on.",
+    "gameVersion": "1.26.50"
+  },
+  "legend": {
+    "#": "stone",
+    "A": "lever mount=floor on=false",
+    "B": "lever mount=floor on=false",
+    "-": "dust",
+    "*": "lamp"
+  },
+  "layers": [
+    ["####", "####", "####"],
+    ["A-..", ".--*", "B-.."]
+  ],
+  "ports": {
+    "inputs": [
+      {
+        "name": "A",
+        "pos": [0, 1, 0]
+      },
+      {
+        "name": "B",
+        "pos": [0, 1, 2]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "out",
+        "pos": [3, 1, 1]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "set": {
+        "A": 0,
+        "B": 0
+      },
+      "afterTicks": 4,
+      "expect": {
+        "out": 0
+      }
+    },
+    {
+      "set": {
+        "A": 0,
+        "B": 1
+      },
+      "afterTicks": 4,
+      "expect": {
+        "out": 1
+      }
+    },
+    {
+      "set": {
+        "A": 1,
+        "B": 0
+      },
+      "afterTicks": 4,
+      "expect": {
+        "out": 1
+      }
+    },
+    {
+      "set": {
+        "A": 1,
+        "B": 1
+      },
+      "afterTicks": 4,
+      "expect": {
+        "out": 1
+      }
+    }
+  ],
+  "annotations": [
+    {
+      "pos": [2, 1, 1],
+      "text": "Dust pointing straight into the lamp powers it; either input feeds this line."
+    }
+  ]
+}

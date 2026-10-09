@@ -9,6 +9,9 @@ import type { SimMechanics } from "@dustwright/core";
  * clock with a period of 6 game ticks (3 redstone ticks). VERIFY-IN-GAME: the other delays (torch, repeater step,
  * comparator, piston, lamps and doors: 2 game ticks each) are one redstone tick by assumption; the T flip-flop's
  * measured latency (7 to 10 game ticks, against 8 here) is consistent with them but does not prove each one.
+ * VERIFY-IN-GAME: button pulse lengths (registry `button` `sim.params.pulseTicks`: stone 10, wood 15 redstone ticks)
+ * are assumed. They cannot be measured from the console: a button set pressed by /setblock never releases itself
+ * (measured, M8), so the in-game check releases it after the registry's length and only checks what follows.
  */
 export const BEDROCK_MECHANICS: SimMechanics = {
   id: "bedrock",

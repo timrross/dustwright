@@ -1,0 +1,21 @@
+[
+  {
+    "id": "and3",
+    "prompt": "a 3-input AND gate: three levers, and a lamp that lights only when all three are on"
+  },
+  { "id": "hidden-door", "prompt": "a hidden 2x2 piston door with a button on each side" },
+  { "id": "nor", "prompt": "a NOR gate: two levers, and a lamp that is lit only when both are off" },
+  { "id": "xnor", "prompt": "an XNOR gate: a lamp that is lit when two levers are in the same position" },
+  { "id": "toggle-lamp", "prompt": "a lamp that toggles on and off each time a button is pressed" },
+  {
+    "id": "switch-clock",
+    "prompt": "a clock that blinks a lamp while a lever is on and stops when it is off"
+  },
+  { "id": "long-line", "prompt": "a lever that lights a lamp 40 blocks away" },
+  { "id": "pulse-3s", "prompt": "a pulse extender: a button press keeps a lamp lit for at least 3 seconds" },
+  {
+    "id": "memory-cell",
+    "prompt": "a 1-bit memory cell: a set button turns a lamp on, a reset button turns it off, and it stays that way"
+  },
+  { "id": "one-of-two", "prompt": "a lamp that lights only when exactly one of two levers is on" }
+]

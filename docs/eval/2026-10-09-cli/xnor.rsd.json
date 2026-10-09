@@ -1,0 +1,37 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "XNOR gate",
+    "edition": "bedrock",
+    "gameVersion": "1.26.50",
+    "description": "Lamp lit when levers A and B are in the same position. A NOR torch (both off) and an AND torch (both on) sit either side of the lamp."
+  },
+  "legend": {
+    "#": "stone",
+    "L": "lever mount=floor",
+    "-": "dust",
+    ">": "repeater facing=east delay=1",
+    "v": "repeater facing=south delay=1",
+    "^": "repeater facing=north delay=1",
+    "t": "torch mount=west",
+    "u": "torch mount=east",
+    "*": "lamp"
+  },
+  "layers": [
+    ["########", "########", "########", "########", "########"],
+    ["L--->#t-", "...v...-", "...#t*u#", "...^...-", "L--->#t-"]
+  ],
+  "ports": {
+    "inputs": [
+      { "name": "A", "pos": [0, 1, 0] },
+      { "name": "B", "pos": [0, 1, 4] }
+    ],
+    "outputs": [{ "name": "out", "pos": [5, 1, 2] }]
+  },
+  "tests": [
+    { "set": { "A": 0, "B": 0 }, "afterTicks": 10, "expect": { "out": 1 } },
+    { "set": { "A": 1, "B": 0 }, "afterTicks": 10, "expect": { "out": 0 } },
+    { "set": { "A": 0, "B": 1 }, "afterTicks": 10, "expect": { "out": 0 } },
+    { "set": { "A": 1, "B": 1 }, "afterTicks": 10, "expect": { "out": 1 } }
+  ]
+}

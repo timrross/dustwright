@@ -1,0 +1,348 @@
+{
+  "runs": [
+    {
+      "designs": "docs/eval/2026-10-09-cli: hidden-door, memory-cell, switch-clock, toggle-lamp",
+      "when": "2026-10-09T04:39:12.887Z",
+      "container": "dw-bds",
+      "results": [
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "the pack's functions are this design's export",
+          "status": "pass",
+          "detail": "2 files match"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "builds without dropping items",
+          "status": "pass",
+          "detail": "no items"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 0: set {\"north_button\":0,\"south_button\":0} expect west_low=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 0: set {\"north_button\":0,\"south_button\":0} expect west_high=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 0: set {\"north_button\":0,\"south_button\":0} expect east_low=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 0: set {\"north_button\":0,\"south_button\":0} expect east_high=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 1: set {\"north_button\":1} expect west_low=0",
+          "status": "pass",
+          "detail": "actual 0"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 1: set {\"north_button\":1} expect west_high=0",
+          "status": "pass",
+          "detail": "actual 0"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 1: set {\"north_button\":1} expect east_low=0",
+          "status": "pass",
+          "detail": "actual 0"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 1: set {\"north_button\":1} expect east_high=0",
+          "status": "pass",
+          "detail": "actual 0"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 2: set {\"south_button\":1} expect west_low=0",
+          "status": "pass",
+          "detail": "actual 0"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 2: set {\"south_button\":1} expect west_high=0",
+          "status": "pass",
+          "detail": "actual 0"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 2: set {\"south_button\":1} expect east_low=0",
+          "status": "pass",
+          "detail": "actual 0"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 2: set {\"south_button\":1} expect east_high=0",
+          "status": "pass",
+          "detail": "actual 0"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 3: set {\"north_button\":1} expect west_low=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 3: set {\"north_button\":1} expect west_high=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 3: set {\"north_button\":1} expect east_low=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 3: set {\"north_button\":1} expect east_high=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 4: set {\"south_button\":1} expect west_low=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 4: set {\"south_button\":1} expect west_high=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 4: set {\"south_button\":1} expect east_low=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "test 4: set {\"south_button\":1} expect east_high=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design hidden-2x2-piston-door",
+          "name": "clear, build, build equals clear, build",
+          "status": "skipped",
+          "detail": "moves at rest: rebuild only after the clear function"
+        },
+        {
+          "area": "design 1-bit-memory-cell",
+          "name": "the pack's functions are this design's export",
+          "status": "pass",
+          "detail": "2 files match"
+        },
+        {
+          "area": "design 1-bit-memory-cell",
+          "name": "builds without dropping items",
+          "status": "pass",
+          "detail": "no items"
+        },
+        {
+          "area": "design 1-bit-memory-cell",
+          "name": "test 0: set {\"set\":1} expect lamp=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design 1-bit-memory-cell",
+          "name": "test 1: set {\"reset\":1} expect lamp=0",
+          "status": "pass",
+          "detail": "actual 0"
+        },
+        {
+          "area": "design 1-bit-memory-cell",
+          "name": "test 2: set {\"set\":1} expect lamp=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design 1-bit-memory-cell",
+          "name": "test 3: set {\"reset\":1} expect lamp=0",
+          "status": "pass",
+          "detail": "actual 0"
+        },
+        {
+          "area": "design 1-bit-memory-cell",
+          "name": "sequence {\"set\":1}->{\"lamp\":1} {\"reset\":1}->{\"lamp\":0} {\"set\":1}->{\"lamp\":1} {\"reset\":1}->{\"lamp\":0}",
+          "status": "pass",
+          "detail": "steps ok: true,true,true,true"
+        },
+        {
+          "area": "design 1-bit-memory-cell",
+          "name": "clear, build, build equals clear, build",
+          "status": "skipped",
+          "detail": "dust powered at rest keeps a stale signal when rebuilt in place: rebuild only after the clear function"
+        },
+        {
+          "area": "design switched-clock",
+          "name": "the pack's functions are this design's export",
+          "status": "pass",
+          "detail": "2 files match"
+        },
+        {
+          "area": "design switched-clock",
+          "name": "builds without dropping items",
+          "status": "pass",
+          "detail": "no items"
+        },
+        {
+          "area": "design switched-clock",
+          "name": "test 0: set {\"run\":1} expect lamp=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design switched-clock",
+          "name": "test 1: set {\"run\":1} expect lamp=0",
+          "status": "pass",
+          "detail": "actual 0"
+        },
+        {
+          "area": "design switched-clock",
+          "name": "test 2: set {\"run\":1} expect lamp=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design switched-clock",
+          "name": "test 3: set {\"run\":1} expect lamp=0",
+          "status": "pass",
+          "detail": "actual 0"
+        },
+        {
+          "area": "design switched-clock",
+          "name": "test 4: set {\"run\":0} expect lamp=0",
+          "status": "pass",
+          "detail": "actual 0"
+        },
+        {
+          "area": "design switched-clock",
+          "name": "test 5: set {\"run\":0} expect lamp=0",
+          "status": "pass",
+          "detail": "actual 0"
+        },
+        {
+          "area": "design switched-clock",
+          "name": "clear, build, build equals clear, build",
+          "status": "skipped",
+          "detail": "dust powered at rest keeps a stale signal when rebuilt in place: rebuild only after the clear function"
+        },
+        {
+          "area": "design switched-clock",
+          "name": "output changes over time (clock)",
+          "status": "pass",
+          "detail": "samples 0,1"
+        },
+        {
+          "area": "design toggle-lamp",
+          "name": "the pack's functions are this design's export",
+          "status": "pass",
+          "detail": "2 files match"
+        },
+        {
+          "area": "design toggle-lamp",
+          "name": "builds without dropping items",
+          "status": "pass",
+          "detail": "no items"
+        },
+        {
+          "area": "design toggle-lamp",
+          "name": "test 0: set {\"button\":0} expect lamp=0",
+          "status": "pass",
+          "detail": "actual 0"
+        },
+        {
+          "area": "design toggle-lamp",
+          "name": "test 1: set {\"button\":1} expect lamp=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design toggle-lamp",
+          "name": "test 2: set {\"button\":1} expect lamp=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design toggle-lamp",
+          "name": "sequence {\"button\":1}->{\"lamp\":1} {\"button\":1}->{\"lamp\":0} {\"button\":1}->{\"lamp\":1} {\"button\":1}->{\"lamp\":0}",
+          "status": "fail",
+          "detail": "steps ok: true,false,false,false"
+        },
+        {
+          "area": "design toggle-lamp",
+          "name": "clear, build, build equals clear, build",
+          "status": "skipped",
+          "detail": "dust powered at rest keeps a stale signal when rebuilt in place: rebuild only after the clear function"
+        }
+      ]
+    },
+    {
+      "designs": "docs/eval/2026-10-09-mcp: toggle-lamp",
+      "when": "2026-10-09T04:21:24.918Z",
+      "container": "dw-bds",
+      "results": [
+        {
+          "area": "design toggle-lamp",
+          "name": "the pack's functions are this design's export",
+          "status": "pass",
+          "detail": "2 files match"
+        },
+        {
+          "area": "design toggle-lamp",
+          "name": "builds without dropping items",
+          "status": "pass",
+          "detail": "no items"
+        },
+        {
+          "area": "design toggle-lamp",
+          "name": "test 0: set {\"press\":0} expect lamp=0",
+          "status": "pass",
+          "detail": "actual 0"
+        },
+        {
+          "area": "design toggle-lamp",
+          "name": "test 1: set {\"press\":1} expect lamp=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design toggle-lamp",
+          "name": "test 2: set {\"press\":1} expect lamp=1",
+          "status": "pass",
+          "detail": "actual 1"
+        },
+        {
+          "area": "design toggle-lamp",
+          "name": "sequence {\"press\":1}->{\"lamp\":1} {\"press\":1}->{\"lamp\":0} {\"press\":1}->{\"lamp\":1} {\"press\":1}->{\"lamp\":0}",
+          "status": "pass",
+          "detail": "steps ok: true,true,true,true"
+        },
+        {
+          "area": "design toggle-lamp",
+          "name": "clear, build, build equals clear, build",
+          "status": "pass",
+          "detail": "144 blocks compared"
+        }
+      ]
+    }
+  ]
+}

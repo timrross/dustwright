@@ -1,0 +1,16 @@
+{"format":"rsd/1","meta":{"name":"Hidden 2x2 piston door","description":"Four sticky pistons hidden in a wall close a 2x2 doorway. Two torches keep the door shut; a stone button on either side (north on the wall, south on the floor) turns the torches off through the dust line and the door opens for about a second.","edition":"bedrock","gameVersion":"1.26.50"},
+"legend":{"#":"stone","E":"sticky_piston facing=east","W":"sticky_piston facing=west","w":"wool color=light_blue","t":"torch mount=south","-":"dust","N":"button mount=south material=stone","S":"button mount=floor material=stone"},
+"layers":[
+["##########","##########","##########","##########","##########","##########","##########"],
+["..........","N.........","##Ew..wW##","-.t....t..","-.#----#..","-...-S....","-----....."],
+["..........","..........","##Ew..wW##","..#....#..","..........","..........",".........."],
+["..........","..........","##########","..........","..........","..........",".........."]
+],
+"ports":{"inputs":[{"name":"north","pos":[0,1,1]},{"name":"south","pos":[5,1,5]}],"outputs":[{"name":"lower","pos":[2,1,2]},{"name":"upper","pos":[7,2,2]}]},
+"tests":[
+{"set":{"north":0,"south":0},"afterTicks":6,"expect":{"lower":1,"upper":1}},
+{"set":{"north":1},"afterTicks":5,"expect":{"lower":0,"upper":0}},
+{"set":{"south":1},"afterTicks":5,"expect":{"lower":0,"upper":0}},
+{"set":{"south":1},"afterTicks":30,"expect":{"lower":1,"upper":1}},
+{"set":{"north":1},"afterTicks":30,"expect":{"lower":1,"upper":1}}
+]}

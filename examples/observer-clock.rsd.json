@@ -22,6 +22,22 @@
       }
     ]
   },
+  "tests": [
+    {
+      "set": {},
+      "afterTicks": 1,
+      "expect": {
+        "tick": 0
+      }
+    },
+    {
+      "set": {},
+      "afterTicks": 2,
+      "expect": {
+        "tick": 15
+      }
+    }
+  ],
   "annotations": [
     {
       "pos": [1, 1, 0],

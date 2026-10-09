@@ -2,6 +2,7 @@ import { parseArgs } from "node:util";
 import { bundleCommand } from "./commands/bundle.js";
 import { packCommand, sheetsCommand } from "./commands/pack.js";
 import { exportCommand, exportListCommand } from "./commands/export.js";
+import { mcpCommand } from "./commands/mcp.js";
 import { registryDumpCommand } from "./commands/registry.js";
 import { validateCommand } from "./commands/validate.js";
 import { HELP_TEXT, VERSION } from "./help.js";
@@ -12,6 +13,8 @@ export interface RunIO {
   stderr: (text: string) => void;
   /** Environment variables the CLI reads (only RSD_PACK_DIR). */
   env?: Readonly<Record<string, string | undefined>>;
+  /** Input lines, for `rsd mcp` (the binary wires stdin). */
+  stdin?: AsyncIterable<string>;
 }
 
 /** Result of a CLI run: the process exit code (0 ok, 1 validation errors, 2 usage or I/O error). */
@@ -20,9 +23,7 @@ export interface RunResult {
 }
 
 /** Commands listed in the help that later milestones implement, with the milestone that brings each. */
-const PLANNED_COMMANDS: Readonly<Record<string, string>> = {
-  mcp: "M8",
-};
+const PLANNED_COMMANDS: Readonly<Record<string, string>> = {};
 
 function usage(io: RunIO, json: boolean, message: string): RunResult {
   io.stderr(`rsd: ${message}\nRun rsd --help for usage.\n`);
@@ -124,6 +125,10 @@ export async function run(argv: readonly string[], io: RunIO): Promise<RunResult
       case "bundle": {
         if (args.length !== 1) return usage(io, wantsJson, "bundle takes exactly one file and -o <html>");
         return await bundleCommand(args[0] as string, values.output, io);
+      }
+      case "mcp": {
+        if (args.length !== 0) return usage(io, wantsJson, "mcp takes no arguments");
+        return await mcpCommand(io);
       }
       case "registry": {
         if (args[0] !== "dump" || args.length !== 1)

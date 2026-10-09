@@ -28,7 +28,7 @@ pnpm rsd --help
 | `rsd sheets <file> -o <dir>`                                  | Layer sheet SVGs                     | M7                                |
 | `rsd pack <file> -o <mcpack>`                                 | One-design behavior pack             | M7                                |
 | `rsd registry dump`                                           | Regenerate `docs/bedrock-mapping.md` | M1                                |
-| `rsd mcp`                                                     | MCP server over stdio                | M8                                |
+| `rsd mcp`                                                     | MCP server over stdio (see below)    | M8                                |
 
 Exit codes: 0 ok, 1 validation errors, 2 usage or I/O error.
 
@@ -49,7 +49,20 @@ pnpm rsd sheets examples/not-gate.rsd.json -o sheets               # printable A
 pnpm --filter @dustwright/site dev                    # the site at http://localhost:5173/ (playground at /play/)
 ```
 
-A design is layers of character rows plus a legend; see [AUTHORING.md](AUTHORING.md) and `examples/`.
+A design is layers of character rows plus a legend; see [AUTHORING.md](AUTHORING.md), `examples/` and the pattern
+library in `patterns/`.
+
+### MCP server
+
+`rsd mcp` serves the toolchain to an MCP client over stdio: `authoring_guide`, `validate`, `simulate`,
+`list_patterns`, `get_pattern`, `bundle`, `export`, `pack` and `sheets`. For Claude Code, from a checkout after
+`pnpm build`:
+
+```sh
+claude mcp add dustwright -- node "$PWD/packages/cli/dist/bin.js" mcp
+```
+
+Other clients take the same command (`node <checkout>/packages/cli/dist/bin.js mcp`) in their MCP server settings.
 
 ## Development
 
