@@ -16,7 +16,7 @@ sign-off) are listed under "Waiting on Tim" and logged in `VERIFY.md`.
 | M7        | Public site, embedding, bundle, layer sheets               | Done: review approved; .mcpack built on the test server; artifact published; phone and print checks pending Tim                                   | 461e821 |
 | M8        | LLM authoring: AUTHORING.md, patterns, eval, MCP           | Done: review approved; CLI eval 10/10 (9/10 by the brief: the toggle lamp fails its sequence), MCP 10/10; patterns and 3 eval builds pass in game | d9497a5 |
 | M9        | Java edition profile                                       | Done: review approved; patterns 13/13 and 63 probes in a Java world, .schem round trip 230/230, Java eval 9/10                                    | 11c12ed |
-| M10       | Optional extensions                                        | Done: review approved; include (in game 9/9) and Script API loader (all patterns 60/0/6 in game); storage/gallery not built                       |         |
+| M10       | Optional extensions                                        | Done: review approved; include (in game 9/9) and Script API loader (all patterns 60/0/6 in game); storage/gallery not built                       | 30f951c |
 
 ## Waiting on Tim
 
