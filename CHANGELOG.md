@@ -7,6 +7,11 @@ All notable user-facing changes are recorded here. The format follows
 
 ### Added
 
+- M10: pattern `include` (stamp library patterns into a design at an offset with rotation) and the Script API
+  loader (`rsd loader <file...> -o <mcpack>`: one behavior pack that builds its designs with
+  `/scriptevent rsd:build <slug> <x> <y> <z>`, stable `@minecraft/server` only). Server-side storage and a gallery
+  were considered and not built (`docs/m10-extensions.md`).
+
 - M9: the Java edition profile. Java designs (`"edition": "java"`) validate with Java's measured support faces and
   without W105, simulate with quasi-connectivity and Java timings, and export as Sponge `.schem` and Litematica
   `.litematic` (`rsd export --to schem|litematic -o <dir>`, the MCP `export` tool, and the playground's downloads).

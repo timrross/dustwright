@@ -281,9 +281,11 @@ accepts at most 64 KB of fragment as the browser sends it, and browsers encode `
 
 ## Patterns
 
-Known-good designs, each built and tested in game, in `patterns/` (and through MCP: `list_patterns`,
-`get_pattern`). Start from one when it fits: `not-gate`, `or-gate`, `and-gate`, `xor-gate` (three torch NOR
-stages), `rs-latch` (set and reset levers), `repeater-line`, `pulse-extender` (a button press held about 2.6 s),
-`pulse-limiter` (a held lever gives one 4-tick pulse), `observer-clock` (3-tick period), `repeater-clock` (no
-torches, 16-tick period, started by a button), `t-flip-flop`, `piston-door-2x2` and `hopper-sorter` (load its
-filter hopper as its notes say; the simulator skips it with T003).
+Known-good designs, each built and tested in game, in `patterns/` (MCP: `list_patterns`, `get_pattern`):
+`not-gate`, `or-gate`, `and-gate`, `xor-gate`, `rs-latch`, `repeater-line`, `pulse-extender` (button held about
+2.6 s), `pulse-limiter` (one 4-tick pulse), `observer-clock`, `repeater-clock` (button starts it), `t-flip-flop`,
+`piston-door-2x2`, `hopper-sorter` (load its filter hopper as its notes say).
+
+Stamp them instead of copying: `"include": [{ "pattern": "not-gate", "at": [x,y,z], "rotate": 90 }]` puts the
+pattern's lowest corner at `at`, turned clockwise seen from above (0, 90, 180, 270). Leave those cells as air in
+the layers; write your own ports and tests at the stamped positions. A legend may then be empty.

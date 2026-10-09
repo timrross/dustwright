@@ -1,0 +1,61 @@
+{
+  "when": "2026-10-09T07:57:04.986Z",
+  "container": "dw-bds",
+  "results": [
+    {
+      "area": "design stamped-gates",
+      "name": "the pack's functions are this design's export",
+      "status": "pass",
+      "detail": "2 files match"
+    },
+    {
+      "area": "design stamped-gates",
+      "name": "builds without dropping items",
+      "status": "pass",
+      "detail": "no items"
+    },
+    {
+      "area": "design stamped-gates",
+      "name": "test 0: set {\"not_A\":0} expect not_out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "design stamped-gates",
+      "name": "test 1: set {\"not_A\":1} expect not_out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "design stamped-gates",
+      "name": "test 2: set {\"or_A\":0,\"or_B\":0} expect or_out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "design stamped-gates",
+      "name": "test 3: set {\"or_A\":0,\"or_B\":1} expect or_out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "design stamped-gates",
+      "name": "test 4: set {\"or_A\":1,\"or_B\":0} expect or_out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "design stamped-gates",
+      "name": "test 5: set {\"or_A\":1,\"or_B\":1} expect or_out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "design stamped-gates",
+      "name": "clear, build, build equals clear, build",
+      "status": "pass",
+      "detail": "70 blocks compared"
+    }
+  ],
+  "design": "test/fixtures/include-demo/stamped-gates.rsd.json"
+}

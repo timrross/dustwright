@@ -102,6 +102,21 @@ export async function generate() {
   out["schema.ts"] = await format(
     `${header("packages/core/schema/rsd-1.json")}\n/** The rsd/1 JSON Schema, as published at /schema/rsd-1.json. */\nexport const RSD_1_SCHEMA = ${JSON.stringify(schema)} as const;\n`,
   );
+  // The pattern library, for `include`: core carries it so every tool resolves the same patterns without file access.
+  const patterns = Object.fromEntries(
+    readdirSync(`${root}/patterns`)
+      .filter((f) => f.endsWith(".rsd.json"))
+      .sort()
+      .map((f) => [f.replace(/\.rsd\.json$/, ""), readJson(`${root}/patterns/${f}`)]),
+  );
+  // A pattern that included patterns could recurse without end when expanded; the library has none, and must not.
+  for (const [name, design] of Object.entries(patterns)) {
+    if (Object.hasOwn(design, "include"))
+      throw new Error(`patterns/${name}.rsd.json uses include; patterns may not`);
+  }
+  out["patterns.ts"] = await format(
+    `${header("patterns/*.rsd.json")}\n/** The pattern library by file name, for \`include\`. */\nexport const PATTERN_DESIGNS: Readonly<Record<string, unknown>> = ${JSON.stringify(patterns)};\n`,
+  );
   return out;
 }
 

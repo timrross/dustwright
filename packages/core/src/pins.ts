@@ -17,6 +17,11 @@ export const PINS = {
   blockStateVersion: "1.21.60.33",
   /** SHA-256 of that `mojang-blocks.json`, so the cached copy is the pinned one. */
   mojangBlocksSha256: "044d494af33347eb1f0e76bab64ce04f44261ec3dac7d1938549a41cf0a770ba",
+  /**
+   * The stable `@minecraft/server` the Script API loader (M10) declares. Measured: BDS 1.26.52.3 offers 0.1.0,
+   * 1.19.0, 2.10.0, 2.11.0-beta and 3.0.0-alpha (a probe pack asking for 99.0.0, 2026-10-09); 2.10.0 is the stable 2.x.
+   */
+  scriptApiServer: "2.10.0",
   /** The Java Edition version the registry's `java` mappings target (M9). */
   javaVersion: "26.3",
   /** SHA-1 of that version's server jar, from Mojang's version manifest; its data generator makes the block report. */

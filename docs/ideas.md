@@ -3,8 +3,11 @@
 Anything outside the architecture spec lands here first, not in the code. Each entry says what it is and why it
 waits.
 
-- **Server-side storage, a gallery and accounts.** The site is static by design. Revisit only if share links and
-  files prove insufficient (M10 at the earliest).
+- **Server-side storage, a gallery and accounts.** The site is static by design. Considered for M10 and not built
+  (`docs/m10-extensions.md`): no need has shown, share links and files carry designs. Revisit only if they prove
+  insufficient.
+- **Loading designs over HTTP in game.** The Script API loader (M10) reads designs from its pack. Fetching them
+  would need `@minecraft/server-net`, which is beta and dedicated-server only; it waits for Tim's explicit opt-in.
 - **Pack versioning by content hash.** `.mcpack` versions stay `[1, 0, 0]` until this is designed, so a changed
   design needs the old pack removed before re-import.
 - **Usage numbers.** No analytics in v1. If wanted later, a cookie-free counter is proposed here first.

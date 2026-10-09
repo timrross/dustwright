@@ -275,6 +275,17 @@ test("the power view simulates with the design's edition: the observer clock run
   expect(await period()).toEqual([4]);
 });
 
+test("a design built only from include renders the stamped patterns with no errors", async ({ page }) => {
+  const text = readFileSync(join(ROOT, "test/fixtures/include-demo/stamped-gates.rsd.json"), "utf8");
+  await loadDesign(page, text);
+  await expect(page.locator("#status")).toContainText("No errors");
+  const viewer = page.locator("redstone-viewer");
+  // The NOT gate turned 90 degrees: its lever at the origin, its lamp four cells south.
+  expect(await viewer.evaluate((v: RV) => v.shownBlock([0, 1, 0])?.type)).toBe("lever");
+  expect(await viewer.evaluate((v: RV) => v.shownBlock([0, 1, 4])?.type)).toBe("lamp");
+  expect(await viewer.evaluate((v: RV) => v.shownBlock([0, 1, 3])?.states.mount)).toBe("north");
+});
+
 test("keyboard: [ and ] change the layer; the stage is focusable", async ({ page }) => {
   await openExample(page, "t-flip-flop");
   const viewer = page.locator("redstone-viewer");

@@ -1,10 +1,12 @@
 import { diag, hasErrors } from "./diagnostics.js";
+import { PATTERN_DESIGNS } from "./generated/patterns.js";
 import { validate as generatedValidate } from "./generated/validate-rsd.js";
 import { scanJsonDepth, utf8Length, walkValue } from "./guard.js";
 import { LIMITS } from "./limits.js";
 import { PINS } from "./pins.js";
 import { inBounds, keyPos, offsetPos, posKey } from "./pos.js";
 import { registryEntry } from "./registry.js";
+import { rotateBlock, rotatePos } from "./rotate.js";
 import { deriveSlug, isValidSlug } from "./slug.js";
 import { parseSpec, printable } from "./spec.js";
 import type {
@@ -46,6 +48,7 @@ interface Design {
   legend: Record<string, string>;
   layers: string[][];
   blocks?: { pos: [number, number, number]; block: string }[];
+  include?: { pattern: string; at: [number, number, number]; rotate?: 0 | 90 | 180 | 270 }[];
   ports?: {
     inputs?: { name: string; pos: [number, number, number] }[];
     outputs?: { name: string; pos: [number, number, number] }[];
@@ -182,7 +185,18 @@ function parseUnsafe(json: unknown): ParseResult {
     }
     return { diagnostics: out.list };
   }
-  return buildModel(obj as unknown as Design, out);
+  // A design needs a legend entry, unless it is built from included patterns. Checked here, not in the schema: a
+  // schema condition on `include` was refused by Ajv's strict mode, so the published schema accepts an empty legend.
+  const design = obj as unknown as Design;
+  if (Object.keys(design.legend).length === 0 && !(design.include?.length ?? 0)) {
+    return fail(
+      diag("E001", "/legend must have at least one entry", {
+        path: "/legend",
+        hint: 'Map a character to a block, e.g. "#": "stone", or stamp patterns with include.',
+      }),
+    );
+  }
+  return buildModel(design, out);
 }
 
 function schemaDiagnostic(e: AjvError): Diagnostic {
@@ -436,6 +450,57 @@ function buildModel(d: Design, out: Collector): ParseResult {
     for (const dg of diagnostics) out.add({ ...dg, pos, path: `${path}/block` });
     if (block) blocks.set(key, block);
   });
+
+  // Included patterns, stamped after layers and overrides: each block must land inside the grid on air.
+  (d.include ?? []).forEach((inc, i) => {
+    const path = `/include/${i}`;
+    const parsed = parse(PATTERN_DESIGNS[inc.pattern]);
+    if (!parsed.model) {
+      out.add(internalError(new Error(`pattern ${inc.pattern} does not parse`)));
+      return;
+    }
+    const turns = (inc.rotate ?? 0) / 90;
+    const at: Pos = [inc.at[0], inc.at[1], inc.at[2]];
+    for (const key of parsed.model.blocks.keys()) {
+      const local = rotatePos(keyPos(key), parsed.model.size, turns);
+      const pos: Pos = [at[0] + local[0], at[1] + local[1], at[2] + local[2]];
+      if (!inBounds(pos, size)) {
+        out.add(
+          diag(
+            "E008",
+            `include[${i}] (${inc.pattern}) puts a block at [${pos.join(",")}], outside the grid`,
+            {
+              pos: at,
+              path: `${path}/at`,
+              hint: `${outsideHint(size)} Move \`at\`, or make the layers big enough for the pattern.`,
+            },
+          ),
+        );
+        return;
+      }
+      if (blocks.has(posKey(pos))) {
+        out.add(
+          diag(
+            "E009",
+            `include[${i}] (${inc.pattern}) puts a block at [${pos.join(",")}], which already holds one`,
+            {
+              pos,
+              path,
+              related: [at],
+              hint: 'Leave the pattern\'s cells as air (".") in the layers, or move `at`.',
+            },
+          ),
+        );
+        return;
+      }
+    }
+    for (const [key, b] of parsed.model.blocks) {
+      const local = rotatePos(keyPos(key), parsed.model.size, turns);
+      blocks.set(posKey([at[0] + local[0], at[1] + local[1], at[2] + local[2]]), rotateBlock(b, turns));
+    }
+    if (blocks.size > LIMITS.nonAirBlocks) out.add(tooMany());
+  });
+  if (blocks.size > LIMITS.nonAirBlocks) return { diagnostics: out.list };
 
   // Extra cells (a door's upper half) must be inside the grid and air.
   for (const [key, block] of [...blocks]) {

@@ -85,3 +85,12 @@ Restart the server so it finds new function files (`docker compose restart`; a r
 existing ones). Then in game: stand where the build should start, and run `/function rsd/not-gate` (the build lands one
 block east of you). `/function rsd/not-gate_clear` removes it again. The checklist for the M3 sign-off is in
 `docs/verify-m3.md`.
+
+## Script API loader (M10)
+
+`pnpm rsd loader patterns/*.rsd.json -o rsd-loader.mcpack` makes one behavior pack with the loader script and those
+designs. Install it like any pack (unzip it into `behavior_packs/` and list its header UUID in the world's
+`world_behavior_packs.json`, or import the `.mcpack` on a client), restart, then `/scriptevent rsd:list`,
+`/scriptevent rsd:build not-gate <x> <y> <z>` and `/scriptevent rsd:clear not-gate <x> <y> <z>`, from chat or the
+console. `node deploy/test-world/ingame-check.mjs <container> --only patterns --via loader` builds every pattern
+through it and runs their tests (`docs/ingame/2026-10-09-loader.json`).

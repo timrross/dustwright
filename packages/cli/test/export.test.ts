@@ -311,3 +311,18 @@ describe("rsd export --to mcstructure", () => {
     );
   });
 });
+
+describe("rsd loader", () => {
+  it("writes one Script API pack for several designs, and refuses Java designs or a missing -o", async () => {
+    const out = fresh();
+    const file = join(out, "loader.mcpack");
+    const r = await rsd(["loader", example, join(root, "examples/repeater-line.rsd.json"), "-o", file]);
+    expect(r.exitCode).toBe(0);
+    expect([...readFileSync(file).subarray(0, 2)]).toEqual([0x50, 0x4b]);
+    expect((await rsd(["loader", example])).exitCode).toBe(2);
+    expect(
+      (await rsd(["loader", design("j", { edition: "java" }), "-o", join(out, "j.mcpack")])).exitCode,
+    ).toBe(2);
+    expect(readdirSync(out)).toEqual(["loader.mcpack"]);
+  });
+});

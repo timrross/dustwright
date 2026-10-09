@@ -146,8 +146,7 @@ export const TOOLS: readonly Tool[] = [
   },
   {
     name: "list_patterns",
-    description:
-      "Lists the pattern library: known-good designs, each built and tested in game (NOT, OR, AND, XOR gates, repeater line, pulse extender and limiter, clocks, T flip-flop, RS latch, piston door, hopper sorter). Returns each pattern's slug, name, description, ports and test count. Start from a pattern when one fits.",
+    description: `Lists the pattern library: known-good designs, each built and tested in game (NOT, OR, AND, XOR gates, repeater line, pulse extender and limiter, clocks, T flip-flop, RS latch, piston door, hopper sorter). Returns each pattern's slug, name, description, ports and test count. Start from a pattern when one fits, or stamp it into your design: "include": [{"pattern": "<slug>", "at": [x,y,z], "rotate": 0|90|180|270}] puts its lowest corner at "at", turned clockwise seen from above, on air cells of your layers; write your own ports and tests at the stamped positions.`,
     inputSchema: { type: "object", properties: {}, additionalProperties: false },
     async run(_args, host) {
       const patterns = (await host.patterns()).map(({ slug, text }) => {

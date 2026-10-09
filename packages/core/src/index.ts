@@ -83,3 +83,5 @@ export { formatSpec, parseSpec, printable, splitSpec, typedValue } from "./spec.
 export type { RawSpec } from "./spec.js";
 export { RSD_1_SCHEMA } from "./generated/schema.js";
 export { renderMappingDoc, renderVerifyLog } from "./mapping-doc.js";
+export { rotateBlock, rotatePos } from "./rotate.js";
+export { PATTERN_DESIGNS } from "./generated/patterns.js";

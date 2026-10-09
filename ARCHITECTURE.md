@@ -94,6 +94,14 @@ slug (E012).
 - **Format:** a new major version adds `migrations/rsd-N-to-M.ts`. Additive optional keys stay in `rsd/1`.
 - **Tool data:** the reserved `ext` object.
 
+## Pattern include (M10)
+
+`include` stamps patterns from the library into a design (`docs/m10-extensions.md`). Core carries the library as
+generated data (`generated/patterns.ts`, from `patterns/`; the schema names the same slugs), and the parser expands
+each include into blocks after the layers and overrides: positions and orientation states turn with `rotate`
+(`rotate.ts`), and a stamp outside the grid (E008) or onto a block (E009) is an error. Everything downstream sees
+ordinary blocks.
+
 ## Edition profiles
 
 `meta.edition` is the switch. `EditionProfile { id, rules, mechanics, mapping, exporters, docs }` is defined in
@@ -164,6 +172,11 @@ indices in x, z, y order) and `.litematic` is Litematica's format (one region, p
 max(2, bits) bits, fixed timestamps). Both name the file from the slug, write the pinned Java data version, and are
 deterministic; they are written into a plain directory (`rsd export --to schem -o <dir>`), through the same safe
 writer with its own allowed names.
+
+The Script API loader (M10, `loader.ts`, `rsd loader`) is a behavior pack holding a fixed script on the pinned
+stable `@minecraft/server` and the designs as data: each design's Bedrock blocks, mapped by the registry, in the
+function exporter's order, written as one JSON literal. In game `/scriptevent rsd:build <slug> <x> <y> <z>` places
+them with `BlockPermutation` in a job (no command limit). Nothing from a design is evaluated.
 
 An exporter returns files (`{ path, bytes }`) relative to a pack root; it never touches the disk. The CLI's
 `writeIntoPack` is the one place that writes, and the one place path safety lives. The `.mcfunction` exporter

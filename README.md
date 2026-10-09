@@ -28,6 +28,7 @@ pnpm rsd --help
 | `rsd sheets <file> -o <dir>`                                  | Layer sheet SVGs                     | M7                                |
 | `rsd export <file> --to schem\|litematic -o <dir>`            | A Java design as a schematic         | M9                                |
 | `rsd pack <file> -o <mcpack>`                                 | One-design behavior pack             | M7                                |
+| `rsd loader <file...> -o <mcpack>`                            | Script API pack that builds designs  | M10                               |
 | `rsd registry dump`                                           | Regenerate `docs/bedrock-mapping.md` | M1                                |
 | `rsd mcp`                                                     | MCP server over stdio (see below)    | M8                                |
 

@@ -15,8 +15,8 @@ sign-off) are listed under "Waiting on Tim" and logged in `VERIFY.md`.
 | M6        | Simulator                                                  | Done: review approved; game cross-check matches; in-game suite 116 passed, 0 failed, 6 skipped                                                    | 474aef6 |
 | M7        | Public site, embedding, bundle, layer sheets               | Done: review approved; .mcpack built on the test server; artifact published; phone and print checks pending Tim                                   | 461e821 |
 | M8        | LLM authoring: AUTHORING.md, patterns, eval, MCP           | Done: review approved; CLI eval 10/10 (9/10 by the brief: the toggle lamp fails its sequence), MCP 10/10; patterns and 3 eval builds pass in game | d9497a5 |
-| M9        | Java edition profile                                       | Done: review approved; patterns 13/13 and 63 probes in a Java world, .schem round trip 230/230, Java eval 9/10                                    |         |
-| M10       | Optional extensions                                        | In progress                                                                                                                                       |         |
+| M9        | Java edition profile                                       | Done: review approved; patterns 13/13 and 63 probes in a Java world, .schem round trip 230/230, Java eval 9/10                                    | 11c12ed |
+| M10       | Optional extensions                                        | Done: review approved; include (in game 9/9) and Script API loader (all patterns 60/0/6 in game); storage/gallery not built                       |         |
 
 ## Waiting on Tim
 
@@ -41,6 +41,9 @@ sign-off) are listed under "Waiting on Tim" and logged in `VERIFY.md`.
 - M9 (optional): open one `.litematic` export in Litematica, and look at a door and a trapdoor in the Java test
   world (`deploy/test-world-java`, localhost:25566) to confirm their `facing` (the only Java orientations not
   probed).
+- M10: optional: import the loader `.mcpack` on a client and run `/scriptevent rsd:build <slug> <x> <y> <z>` from
+  chat. Spec amendments: `include` (schema: the pattern slugs, `legend` may be empty with `include`), `rsd loader`
+  in the CLI contract, `PINS.scriptApiServer`.
 - Spec amendments to approve (implemented and documented in VERIFY.md): nbtify instead of prismarine-nbt as the
   NBT runtime dependency (CSP-safe in the browser); `Exporter.export` may return a Promise; `afterTicks` above 1,000
   is T002 rather than E013; all steps together add at most 50,000 positions; orientation meanings for stairs, door

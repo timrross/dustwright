@@ -1,0 +1,112 @@
+{
+  "format": "rsd/1",
+  "meta": {
+    "name": "Stamped gates",
+    "description": "Built only from include: a NOT gate turned 90 degrees and an OR gate turned 180, each with its pattern tests, its ports turned with it (M10 in-game proof of include).",
+    "edition": "bedrock",
+    "gameVersion": "1.26.50"
+  },
+  "legend": {},
+  "layers": [
+    [".......", ".......", ".......", ".......", "......."],
+    [".......", ".......", ".......", ".......", "......."]
+  ],
+  "include": [
+    {
+      "pattern": "not-gate",
+      "at": [0, 0, 0],
+      "rotate": 90
+    },
+    {
+      "pattern": "or-gate",
+      "at": [3, 0, 0],
+      "rotate": 180
+    }
+  ],
+  "ports": {
+    "inputs": [
+      {
+        "name": "not_A",
+        "pos": [0, 1, 0]
+      },
+      {
+        "name": "or_A",
+        "pos": [6, 1, 2]
+      },
+      {
+        "name": "or_B",
+        "pos": [6, 1, 0]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "not_out",
+        "pos": [0, 1, 4]
+      },
+      {
+        "name": "or_out",
+        "pos": [3, 1, 1]
+      }
+    ]
+  },
+  "tests": [
+    {
+      "set": {
+        "not_A": 0
+      },
+      "afterTicks": 4,
+      "expect": {
+        "not_out": 1
+      }
+    },
+    {
+      "set": {
+        "not_A": 1
+      },
+      "afterTicks": 4,
+      "expect": {
+        "not_out": 0
+      }
+    },
+    {
+      "set": {
+        "or_A": 0,
+        "or_B": 0
+      },
+      "afterTicks": 4,
+      "expect": {
+        "or_out": 0
+      }
+    },
+    {
+      "set": {
+        "or_A": 0,
+        "or_B": 1
+      },
+      "afterTicks": 4,
+      "expect": {
+        "or_out": 1
+      }
+    },
+    {
+      "set": {
+        "or_A": 1,
+        "or_B": 0
+      },
+      "afterTicks": 4,
+      "expect": {
+        "or_out": 1
+      }
+    },
+    {
+      "set": {
+        "or_A": 1,
+        "or_B": 1
+      },
+      "afterTicks": 4,
+      "expect": {
+        "or_out": 1
+      }
+    }
+  ]
+}

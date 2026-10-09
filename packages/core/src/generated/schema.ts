@@ -15,8 +15,8 @@ export const RSD_1_SCHEMA = {
     meta: { $ref: "#/$defs/meta" },
     legend: {
       type: "object",
-      description: "Maps single printable ASCII characters (not '.' or space) to block specs.",
-      minProperties: 1,
+      description:
+        "Maps single printable ASCII characters (not '.' or space) to block specs. At least one entry, unless the design stamps patterns with `include`.",
       propertyNames: { pattern: "^[!-\\-/-~]$" },
       additionalProperties: { $ref: "#/$defs/blockSpec" },
     },
@@ -35,6 +35,39 @@ export const RSD_1_SCHEMA = {
         required: ["pos", "block"],
         additionalProperties: false,
         properties: { pos: { $ref: "#/$defs/pos" }, block: { $ref: "#/$defs/blockSpec" } },
+      },
+    },
+    include: {
+      type: "array",
+      maxItems: 64,
+      description:
+        "Patterns from the built-in library stamped into the design: each lands with its lowest corner at `at`, turned `rotate` degrees clockwise seen from above. Only blocks are stamped; they must fall on air inside the grid.",
+      items: {
+        type: "object",
+        required: ["pattern", "at"],
+        additionalProperties: false,
+        properties: {
+          pattern: {
+            enum: [
+              "and-gate",
+              "hopper-sorter",
+              "not-gate",
+              "observer-clock",
+              "or-gate",
+              "piston-door-2x2",
+              "pulse-extender",
+              "pulse-limiter",
+              "repeater-clock",
+              "repeater-line",
+              "rs-latch",
+              "t-flip-flop",
+              "xor-gate",
+            ],
+            description: "A pattern from the library (patterns/ in the repository; list_patterns over MCP).",
+          },
+          at: { $ref: "#/$defs/pos" },
+          rotate: { enum: [0, 90, 180, 270], default: 0, description: "Degrees clockwise seen from above." },
+        },
       },
     },
     ports: {

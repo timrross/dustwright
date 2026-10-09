@@ -551,3 +551,40 @@ Deviations and findings:
   CI builds the report too (`RSD_REQUIRE_JAVA_DATA`).
 - **Eval method:** as M8 (one run per prompt, one model, Claude Code 2.1.295), with `rsd mcp` refused in CLI mode
   from the start. AUTHORING.md gained a short Java section (2,884 words) before the run; the review's additions came after it.
+
+## M10: Optional extensions (2026-10-09)
+
+Scope, written before the work: `docs/m10-extensions.md`. Environment: the Bedrock test server as M8 (BDS
+1.26.52.3), with a fresh world (below). Evidence: `docs/ingame/2026-10-09-include.json`,
+`docs/ingame/2026-10-09-loader.json`.
+
+Checks: `pnpm build`, `lint`, `typecheck`, `test` (792 passed), `gen:check`, `docs:check` and `check:licenses` pass;
+e2e 51 passed on macOS and in the Linux Playwright image (screenshot baselines unchanged).
+
+| Item                                                                                                                        | How                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Result                                                                                                 |
+| --------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Pattern `include`: stamp a library pattern at an offset with rotation                                                       | `include: [{ pattern, at, rotate }]` in `rsd/1` (additive; the schema names the 13 library slugs, a test keeps them equal to `patterns/`). The parser expands it with the core's copy of the library; positions and horizontal `facing`/`mount` turn clockwise seen from above. `test/include.test.ts`: rotation of states and positions; all 13 patterns stamped at all four rotations pass their own tests in the simulator, ports turned with them (the observer clock, whose phase follows the placement order a rotation changes, must keep running); unknown pattern (E001), stamp outside the grid (E008), stamp onto a block (E009). In game: `test/fixtures/include-demo/stamped-gates.rsd.json`, built only from a NOT gate turned 90 and an OR gate turned 180, exported and checked with `ingame-check.mjs --dir` | **Pass:** 56 unit tests; in game 9 of 9 (both truth tables, the rebuild, the pack matching the export) |
+| Script API loader: an add-on that reads designs from its pack and places blocks via `BlockPermutation`, stable modules only | `rsd loader <file...> -o <mcpack>` (`packages/export/src/loader.ts`): a fixed script on `@minecraft/server` 2.10.0 and the designs as one JSON literal of Bedrock blocks in the function exporter's order. The version was measured: a probe pack asking for 99.0.0 made BDS 1.26.52.3 list 0.1.0, 1.19.0, 2.10.0, 2.11.0-beta and 3.0.0-alpha. Unit tests: same blocks and order as the function, the designs module holds only data, only the pinned stable module is declared, deterministic, duplicate slugs refused, Java designs refused. In game: the pack of all 13 patterns installed on the test server; `ingame-check.mjs --only patterns --via loader` builds each with `/scriptevent rsd:build` (and clears with `rsd:clear`) and runs every test                                                                | **Pass:** 60 passed, 0 failed, 6 skipped (the same rebuild-in-place skips as the function builds)      |
+| Server-side storage or a gallery, if the site needs them                                                                    | Considered in `docs/m10-extensions.md`: no need has shown; the site is static and share links carry designs                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | Not built (recorded in `docs/ideas.md`)                                                                |
+
+Deviations and findings:
+
+- **No new diagnostic code for include**, unlike the scope's first draft (E016): an unknown pattern is a schema
+  error (E001, the schema lists the library), a stamp outside the grid E008 and onto a block E009, the codes the grid
+  and the overrides already use. The loader's data is plain `JSON.stringify` (the scope first said it would be
+  escaped like the bundle); it holds no free text. `docs/m10-extensions.md` marks both "as built".
+
+- **An include-only design may have an empty legend.** The schema's `minProperties: 1` on `legend` moved into the
+  parser (still E001 on `/legend`) so it can allow an empty legend when `include` is present; Ajv's strict mode
+  refused the schema-level condition.
+- **Rotating a clock changes its phase**: a free-running observer clock starts from the build-time pulse its
+  placement order gives, and turning the design changes that order (exporters place in x, z, y order), so its
+  exact-tick tests can fail when turned while it still runs. The include test checks the turned clock runs;
+  AUTHORING.md (2,973 words, near its 3,000 budget) does not mention it.
+- **The test world was replaced.** Before the loader run, a third of the check area's chunks stopped powering and
+  stayed so across cold starts and clearing every build band. A fresh `dw` world (same settings, the old one kept
+  in the scratch area) fixed it. While chasing it, the loader pack itself was ruled out: a fresh world with only
+  the loader, and one with a minimal script pack, both powered every chunk.
+- `@minecraft/server-net` (fetching designs over HTTP) is not used, as the spec requires without Tim's opt-in
+  (`docs/ideas.md`).
+- **Waiting on Tim (optional):** import the loader `.mcpack` on a client and run `/scriptevent rsd:build` from chat.

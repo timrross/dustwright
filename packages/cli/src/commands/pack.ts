@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { buildMcpack, renderLayerSheets } from "@dustwright/export";
+import { buildLoaderPack, buildMcpack, renderLayerSheets } from "@dustwright/export";
 import { validateText } from "@dustwright/validator";
 import type { Model } from "@dustwright/core";
 import { readDesignFile } from "../io.js";
@@ -78,5 +78,43 @@ export async function sheetsCommand(file: string, out: string | undefined, io: R
     io.stderr(`rsd: cannot write into ${out}: ${(err as Error).message}\n`);
     return { exitCode: 2 };
   }
+  return { exitCode: 0 };
+}
+
+/**
+ * `rsd loader <file...> -o <file.mcpack>`: one behavior pack with the Script API loader and these Bedrock designs;
+ * in game, `/scriptevent rsd:build <slug> <x> <y> <z>` builds one (M10).
+ */
+export async function loaderCommand(
+  files: readonly string[],
+  out: string | undefined,
+  io: RunIO,
+): Promise<RunResult> {
+  if (out === undefined) {
+    io.stderr("rsd: loader needs -o <file.mcpack>\n");
+    return { exitCode: 2 };
+  }
+  const models = [];
+  for (const file of files) {
+    const loaded = await loadValid(file, io);
+    if ("exitCode" in loaded) return loaded;
+    if (loaded.model.meta.edition !== "bedrock") {
+      io.stderr(
+        `rsd: the loader is a Bedrock add-on, and ${file} is a ${loaded.model.meta.edition} design\n`,
+      );
+      return { exitCode: 2 };
+    }
+    models.push(loaded.model);
+  }
+  const result = await buildLoaderPack(models);
+  for (const d of result.diagnostics) io.stderr(`${formatDiagnostic(files.join(", "), d)}\n`);
+  if (!result.bytes) return { exitCode: 1 };
+  try {
+    await writeFile(out, result.bytes);
+  } catch (err) {
+    io.stderr(`rsd: cannot write ${out}: ${(err as Error).message}\n`);
+    return { exitCode: 2 };
+  }
+  io.stdout(`${out}\n`);
   return { exitCode: 0 };
 }

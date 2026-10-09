@@ -1,6 +1,6 @@
 import { parseArgs } from "node:util";
 import { bundleCommand } from "./commands/bundle.js";
-import { packCommand, sheetsCommand } from "./commands/pack.js";
+import { loaderCommand, packCommand, sheetsCommand } from "./commands/pack.js";
 import { exportCommand, exportListCommand } from "./commands/export.js";
 import { mcpCommand } from "./commands/mcp.js";
 import { registryDumpCommand } from "./commands/registry.js";
@@ -118,6 +118,11 @@ export async function run(argv: readonly string[], io: RunIO): Promise<RunResult
         if (args.length !== 1)
           return usage(io, wantsJson, "pack takes exactly one file and -o <file.mcpack>");
         return await packCommand(args[0] as string, values.output, io);
+      }
+      case "loader": {
+        if (args.length < 1)
+          return usage(io, wantsJson, "loader takes one or more design files and -o <file.mcpack>");
+        return await loaderCommand(args as string[], values.output, io);
       }
       case "sheets": {
         if (args.length !== 1) return usage(io, wantsJson, "sheets takes exactly one file and -o <dir>");

@@ -2,6 +2,8 @@
 //   node deploy/test-world/ingame-check.mjs [container] [--only probes|examples|patterns|orientation|structures]
 //   node deploy/test-world/ingame-check.mjs [container] --only none --dir <designs-dir> [--pack <pack-dir>]
 //     (functions exported first; with --pack, each design's functions in the pack are checked against its export)
+//   node deploy/test-world/ingame-check.mjs [container] --only examples|patterns --via loader
+//     (builds with the Script API loader pack from `rsd loader`, installed in the world, instead of functions)
 // Needs `pnpm build` (it imports the built core and export packages) and every example exported into the pack the
 // container mounts, with the server restarted after a new file appears (a reload picks up edits to existing
 // functions but does not discover new ones). It only touches an 80 x 64 area at the world origin.
@@ -26,6 +28,7 @@ import { formatStates, mcfunctionExporter } from "../../packages/export/dist/ind
 import { settle } from "../../packages/sim/dist/index.js";
 import {
   add,
+  answer,
   at,
   block,
   chunksPower,
@@ -46,9 +49,14 @@ import {
 
 const args = process.argv.slice(2);
 const container =
-  args.find((a, i) => !a.startsWith("--") && !["--only", "--dir", "--pack"].includes(args[i - 1])) ??
+  args.find((a, i) => !a.startsWith("--") && !["--only", "--dir", "--pack", "--via"].includes(args[i - 1])) ??
   "dustwright-test";
 const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null;
+/**
+ * --via loader: build every design with the Script API loader pack (`rsd loader`, installed in the world) instead of
+ * its function (M10).
+ */
+const viaLoader = args.includes("--via") && args[args.indexOf("--via") + 1] === "loader";
 /** --pack <dir>: the behavior pack the container mounts; with --dir, each design's functions are checked against it. */
 const packDir = args.includes("--pack") ? args[args.indexOf("--pack") + 1] : null;
 const root = fileURLToPath(new URL("../..", import.meta.url));
@@ -501,6 +509,19 @@ async function designs(kind, dirOverride) {
         const from = [o[0], o[1] - 1, o[2] - 1];
         const to = [o[0] + model.size[0] + 1, o[1] + model.size[1], o[2] + model.size[2]];
         await cmd(`fill ${at(from)} ${at(to)} minecraft:air`);
+      }
+      if (viaLoader) {
+        // The Script API loader (M10) builds instead of the function, at the function's origin (one block east).
+        const origin = at([o[0] + 1, o[1], o[2]]);
+        await answer(`scriptevent rsd:clear ${slug} ${origin}`, (lines) =>
+          lines.find((l) => l.includes(`[rsd] cleared ${slug}`)),
+        );
+        await cmd("kill @e[type=item]");
+        await answer(`scriptevent rsd:build ${slug} ${origin}`, (lines) =>
+          lines.find((l) => l.includes(`[rsd] built ${slug}`)),
+        );
+        await sleep(2500);
+        return;
       }
       await cmd(`execute positioned ${at(o)} run function rsd/${slug}_clear`);
       await cmd("kill @e[type=item]");

@@ -70,3 +70,11 @@ export type { McpackResult } from "./mcpack.js";
 export { escapeXml, renderLayerSheets } from "./sheets.js";
 export type { LayerSheet } from "./sheets.js";
 export { zipDeterministic } from "./zip.js";
+export {
+  buildLoaderPack,
+  LOADER_SCRIPT,
+  loaderDesign,
+  loaderDesignsModule,
+  loaderManifest,
+} from "./loader.js";
+export type { LoaderDesign, LoaderPackResult } from "./loader.js";
