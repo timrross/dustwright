@@ -281,6 +281,9 @@ export class RedstoneViewer extends HTMLElement {
 
   connectedCallback(): void {
     globalThis.addEventListener("message", this.onMessage);
+    // An open note closes on a press anywhere outside it and its pin, in the viewer or elsewhere on the page.
+    globalThis.addEventListener("pointerdown", this.onOutsidePress, true);
+    globalThis.addEventListener("keydown", this.onNoteKey);
     this.applyHeight();
     this.applyTheme();
     if (!this.scene) {
@@ -331,6 +334,8 @@ export class RedstoneViewer extends HTMLElement {
 
   disconnectedCallback(): void {
     globalThis.removeEventListener("message", this.onMessage);
+    globalThis.removeEventListener("pointerdown", this.onOutsidePress, true);
+    globalThis.removeEventListener("keydown", this.onNoteKey);
     this.childWatcher?.disconnect();
     this.childWatcher = null;
     this.resizeObserver?.disconnect();
@@ -777,18 +782,42 @@ export class RedstoneViewer extends HTMLElement {
     }
   }
 
+  /** Closes the open note, if any. */
+  private closeNote(): void {
+    this.note?.remove();
+    this.note = null;
+  }
+
+  private readonly onOutsidePress = (e: PointerEvent): void => {
+    const note = this.note;
+    if (!note) return;
+    // The event's path crosses the shadow root, so a press on the note or on its own pin is recognised.
+    const path = e.composedPath();
+    const pin = [...this.labels.querySelectorAll<HTMLElement>(".pin")].find(
+      (p) => p.getAttribute("aria-label") === note.dataset.for,
+    );
+    if (path.includes(note) || (pin && path.includes(pin))) return;
+    this.closeNote();
+  };
+
+  private readonly onNoteKey = (e: KeyboardEvent): void => {
+    if (e.key === "Escape" && this.note) this.closeNote();
+  };
+
   private toggleNote(pin: HTMLElement, text: string): void {
     if (this.note && this.note.dataset.for === pin.getAttribute("aria-label")) {
-      this.note.remove();
-      this.note = null;
+      this.closeNote();
       return;
     }
     this.note?.remove();
     const note = el("div", { className: "note", text });
     note.setAttribute("role", "note");
     note.dataset.for = pin.getAttribute("aria-label") ?? "";
-    note.style.left = `${pin.offsetLeft + 14}px`;
-    note.style.top = `${pin.offsetTop}px`;
+    // Just right of the pin as drawn (it is shifted by a transform), so the note never covers its own pin.
+    const pr = pin.getBoundingClientRect();
+    const lr = this.labels.getBoundingClientRect();
+    note.style.left = `${pr.right - lr.left + 6}px`;
+    note.style.top = `${pr.top - lr.top}px`;
     this.labels.appendChild(note);
     this.note = note;
   }

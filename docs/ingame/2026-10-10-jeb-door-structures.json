@@ -1,0 +1,428 @@
+{
+  "when": "2026-10-10T19:19:53.990Z",
+  "container": "dw-bds",
+  "results": [
+    {
+      "area": "structure jeb-door",
+      "name": "loads with every block in place, by ID and state",
+      "status": "skipped",
+      "detail": "moves at rest: its pistons push blocks as soon as it loads; its tests below check it"
+    },
+    { "area": "structure jeb-door", "name": "loads without dropping items", "status": "pass", "detail": "" },
+    {
+      "area": "structure jeb-door",
+      "name": "air cells leave existing blocks alone",
+      "status": "skipped",
+      "detail": "8 layers tall: the test copy does not fit its band (at most 4)"
+    },
+    {
+      "area": "structure jeb-door",
+      "name": "test 0: set {\"outside\":0,\"inside\":0} expect side=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure jeb-door",
+      "name": "test 0: set {\"outside\":0,\"inside\":0} expect side_east=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure jeb-door",
+      "name": "test 0: set {\"outside\":0,\"inside\":0} expect front_power=12",
+      "status": "pass",
+      "detail": "actual 12"
+    },
+    {
+      "area": "structure jeb-door",
+      "name": "test 1: set {\"outside\":1} expect side=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure jeb-door",
+      "name": "test 1: set {\"outside\":1} expect side_east=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure jeb-door",
+      "name": "test 1: set {\"outside\":1} expect front_power=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure jeb-door",
+      "name": "test 2: set {\"inside\":1} expect side=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure jeb-door",
+      "name": "test 2: set {\"inside\":1} expect side_east=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure jeb-door",
+      "name": "test 2: set {\"inside\":1} expect front_power=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure jeb-door (90 degrees)",
+      "name": "loads with every block in place, by ID and state",
+      "status": "skipped",
+      "detail": "moves at rest: its pistons push blocks as soon as it loads; its tests below check it"
+    },
+    {
+      "area": "structure jeb-door (90 degrees)",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure jeb-door (90 degrees)",
+      "name": "test 0: set {\"outside\":0,\"inside\":0} expect side=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure jeb-door (90 degrees)",
+      "name": "test 0: set {\"outside\":0,\"inside\":0} expect side_east=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure jeb-door (90 degrees)",
+      "name": "test 0: set {\"outside\":0,\"inside\":0} expect front_power=12",
+      "status": "pass",
+      "detail": "actual 12"
+    },
+    {
+      "area": "structure jeb-door (90 degrees)",
+      "name": "test 1: set {\"outside\":1} expect side=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure jeb-door (90 degrees)",
+      "name": "test 1: set {\"outside\":1} expect side_east=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure jeb-door (90 degrees)",
+      "name": "test 1: set {\"outside\":1} expect front_power=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure jeb-door (90 degrees)",
+      "name": "test 2: set {\"inside\":1} expect side=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure jeb-door (90 degrees)",
+      "name": "test 2: set {\"inside\":1} expect side_east=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure jeb-door (90 degrees)",
+      "name": "test 2: set {\"inside\":1} expect front_power=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure not-gate",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "10 blocks"
+    },
+    { "area": "structure not-gate", "name": "loads without dropping items", "status": "pass", "detail": "" },
+    {
+      "area": "structure not-gate",
+      "name": "air cells leave existing blocks alone",
+      "status": "skipped",
+      "detail": "the design has no air cells"
+    },
+    {
+      "area": "structure not-gate",
+      "name": "test 0: set {\"A\":0} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure not-gate",
+      "name": "test 1: set {\"A\":1} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure not-gate (90 degrees)",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "10 blocks"
+    },
+    {
+      "area": "structure not-gate (90 degrees)",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure not-gate (90 degrees)",
+      "name": "test 0: set {\"A\":0} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure not-gate (90 degrees)",
+      "name": "test 1: set {\"A\":1} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure observer-clock",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "8 blocks"
+    },
+    {
+      "area": "structure observer-clock",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure observer-clock",
+      "name": "air cells leave existing blocks alone",
+      "status": "skipped",
+      "detail": "the design has no air cells"
+    },
+    {
+      "area": "structure observer-clock",
+      "name": "test 0: set {} expect tick=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure observer-clock",
+      "name": "test 1: set {} expect tick=15",
+      "status": "pass",
+      "detail": "actual 15"
+    },
+    {
+      "area": "structure observer-clock (90 degrees)",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "8 blocks"
+    },
+    {
+      "area": "structure observer-clock (90 degrees)",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure observer-clock (90 degrees)",
+      "name": "test 0: set {} expect tick=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure observer-clock (90 degrees)",
+      "name": "test 1: set {} expect tick=15",
+      "status": "pass",
+      "detail": "actual 15"
+    },
+    {
+      "area": "structure orientation-test",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "214 blocks"
+    },
+    {
+      "area": "structure orientation-test",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure orientation-test",
+      "name": "air cells leave existing blocks alone",
+      "status": "pass",
+      "detail": "5818 of 5818 air cells still glass"
+    },
+    {
+      "area": "structure 2x2-piston-door",
+      "name": "loads with every block in place, by ID and state",
+      "status": "skipped",
+      "detail": "moves at rest: its pistons push blocks as soon as it loads; its tests below check it"
+    },
+    {
+      "area": "structure 2x2-piston-door",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure 2x2-piston-door",
+      "name": "air cells leave existing blocks alone",
+      "status": "pass",
+      "detail": "47 of 47 air cells still glass"
+    },
+    {
+      "area": "structure 2x2-piston-door",
+      "name": "test 0: set {\"open\":0} expect closed=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure 2x2-piston-door",
+      "name": "test 1: set {\"open\":1} expect closed=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure 2x2-piston-door (90 degrees)",
+      "name": "loads with every block in place, by ID and state",
+      "status": "skipped",
+      "detail": "moves at rest: its pistons push blocks as soon as it loads; its tests below check it"
+    },
+    {
+      "area": "structure 2x2-piston-door (90 degrees)",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure 2x2-piston-door (90 degrees)",
+      "name": "test 0: set {\"open\":0} expect closed=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure 2x2-piston-door (90 degrees)",
+      "name": "test 1: set {\"open\":1} expect closed=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure repeater-line",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "38 blocks"
+    },
+    {
+      "area": "structure repeater-line",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure repeater-line",
+      "name": "air cells leave existing blocks alone",
+      "status": "skipped",
+      "detail": "the design has no air cells"
+    },
+    {
+      "area": "structure repeater-line",
+      "name": "test 0: set {\"A\":1} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure repeater-line",
+      "name": "test 1: set {\"A\":0} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure repeater-line (90 degrees)",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "38 blocks"
+    },
+    {
+      "area": "structure repeater-line (90 degrees)",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure repeater-line (90 degrees)",
+      "name": "test 0: set {\"A\":1} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure repeater-line (90 degrees)",
+      "name": "test 1: set {\"A\":0} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure t-flip-flop",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "88 blocks"
+    },
+    {
+      "area": "structure t-flip-flop",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure t-flip-flop",
+      "name": "air cells leave existing blocks alone",
+      "status": "pass",
+      "detail": "56 of 56 air cells still glass"
+    },
+    {
+      "area": "structure t-flip-flop",
+      "name": "test 0: set {\"T\":0} expect Q=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure t-flip-flop",
+      "name": "test 1: set {\"T\":1} expect Q=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure t-flip-flop (90 degrees)",
+      "name": "loads with every block in place, by ID and state",
+      "status": "pass",
+      "detail": "88 blocks"
+    },
+    {
+      "area": "structure t-flip-flop (90 degrees)",
+      "name": "loads without dropping items",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "area": "structure t-flip-flop (90 degrees)",
+      "name": "test 0: set {\"T\":0} expect Q=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "structure t-flip-flop (90 degrees)",
+      "name": "test 1: set {\"T\":1} expect Q=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "structure orientation-test (90 degrees)",
+      "name": "loads with every block turned, by ID and state",
+      "status": "pass",
+      "detail": "214 blocks"
+    }
+  ]
+}

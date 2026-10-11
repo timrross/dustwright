@@ -7,6 +7,10 @@ All notable user-facing changes are recorded here. The format follows
 
 ### Added
 
+- Example: `examples/jeb-door.rsd.json`, a hidden 2x2 Jeb door. Closed, the outside is plain stone; a pressure plate
+  on either side opens it in two stages (front pistons pull the stone blocks back, then side pistons pull them and
+  the front pistons aside) and leaving reverses it. Built and tested in game with a mob held on each plate.
+
 - M10: pattern `include` (stamp library patterns into a design at an offset with rotation) and the Script API
   loader (`rsd loader <file...> -o <mcpack>`: one behavior pack that builds its designs with
   `/scriptevent rsd:build <slug> <x> <y> <z>`, stable `@minecraft/server` only). Server-side storage and a gallery
@@ -63,6 +67,11 @@ All notable user-facing changes are recorded here. The format follows
 
 - M0: monorepo scaffold (`core`, `validator`, `sim`, `viewer`, `export`, `cli`, `mcp`, app `site`), CI, lint,
   licence allowlist and `rsd --help`.
+
+### Fixed
+
+- Viewer: an annotation note closes on a press anywhere outside it (in the viewer or on the page) or on Escape,
+  and no longer covers its own pin.
 
 ### Changed
 

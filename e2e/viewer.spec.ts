@@ -286,6 +286,33 @@ test("a design built only from include renders the stamped patterns with no erro
   expect(await viewer.evaluate((v: RV) => v.shownBlock([0, 1, 3])?.states.mount)).toBe("north");
 });
 
+test("a note closes on its pin, a press elsewhere in the viewer or on the page, or Escape; not on itself", async ({
+  page,
+}) => {
+  await openExample(page, "repeater-line");
+  const viewer = page.locator("redstone-viewer");
+  const pin = viewer.locator(".pin").first();
+  const note = viewer.locator(".note");
+  await pin.click();
+  await expect(note).toBeVisible();
+  await note.click();
+  await expect(note).toBeVisible();
+  await pin.click();
+  await expect(note).toHaveCount(0);
+  // A press in the 3D view, away from the pin.
+  await pin.click();
+  const stage = await viewer.locator(".stage").boundingBox();
+  await page.mouse.click((stage?.x ?? 0) + 10, (stage?.y ?? 0) + 10);
+  await expect(note).toHaveCount(0);
+  // A press on the page outside the viewer.
+  await pin.click();
+  await page.mouse.click(5, 5);
+  await expect(note).toHaveCount(0);
+  await pin.click();
+  await page.keyboard.press("Escape");
+  await expect(note).toHaveCount(0);
+});
+
 test("keyboard: [ and ] change the layer; the stage is focusable", async ({ page }) => {
   await openExample(page, "t-flip-flop");
   const viewer = page.locator("redstone-viewer");

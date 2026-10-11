@@ -572,6 +572,37 @@ async function designs(kind, dirOverride) {
         });
       }
     }
+    // A pressure plate set by /setblock is not a real press: for every test that steps on one plate, a mob stands
+    // on that plate in a fresh build instead, and the outputs must be the same.
+    for (const [i, t] of model.tests.entries()) {
+      const pressed = Object.entries(t.set).filter(([, v]) => v === 1);
+      const port =
+        pressed.length === 1 ? model.ports.inputs.find((p) => p.name === pressed[0][0]) : undefined;
+      if (!port || model.blocks.get(port.pos.join(","))?.type !== "pressure_plate") continue;
+      await check(area, `test ${i} with a pig standing on the ${port.name} plate`, async () => {
+        await build();
+        const p = [o[0] + 1 + port.pos[0], o[1] + port.pos[1], o[2] + port.pos[2]];
+        await cmd(`summon pig ${p[0] + 0.5} ${p[1]} ${p[2] + 0.5}`, 0);
+        // Held in place: an unhindered pig wanders off the plate within seconds.
+        await cmd("effect @e[type=pig] slowness 60 255 true");
+        const seen = [];
+        try {
+          await sleep(t.afterTicks * 100 + 800);
+          for (const [name, expected] of Object.entries(t.expect)) {
+            const actual = await readOutput(
+              model,
+              model.ports.outputs.find((q) => q.name === name),
+              o,
+              expected,
+            );
+            seen.push(`${name}=${actual}${actual === expected ? "" : ` (expected ${expected})`}`);
+          }
+        } finally {
+          await cmd("kill @e[type=pig]");
+        }
+        return [seen.every((x) => !x.includes("expected")), seen.join(", ")];
+      });
+    }
     const sequence = typeof SEQUENCES[slug] === "function" ? SEQUENCES[slug](model) : SEQUENCES[slug];
     if (sequence) {
       const label = `sequence ${sequence.map(([s, e]) => `${JSON.stringify(s)}->${JSON.stringify(e)}`).join(" ")}`;
@@ -655,6 +686,7 @@ async function designs(kind, dirOverride) {
       });
     }
     if (slug === "hopper-sorter") await sorter(model, o, area, build);
+    if (slug === "jeb-door") await jebStages(model, o, area, build);
     const start = CLOCK_START[slug];
     if ((model.tests.length === 0 || start) && model.ports.outputs.length > 0) {
       await check(area, "output changes over time (clock)", async () => {
@@ -688,6 +720,65 @@ async function designs(kind, dirOverride) {
         return [changed(), `samples ${samples.join(",")}`];
       });
     }
+  }
+}
+
+/**
+ * The Jeb door's stages, which its tests cannot order: with a pig held on each plate in turn (slowness, so it stays),
+ * the lower west door block must go from the skin to the middle of the cavity to aside, and on leaving come back
+ * aside, middle, skin. Polled as fast as the console answers.
+ */
+async function jebStages(model, o, area, build) {
+  const cell = (p) => [o[0] + 1 + p[0], o[1] + p[1], o[2] + p[2]];
+  const where = async () =>
+    (await isBlock(cell([5, 3, 1]), "minecraft:stone"))
+      ? "skin"
+      : (await isBlock(cell([5, 3, 2]), "minecraft:stone"))
+        ? "middle"
+        : (await isBlock(cell([4, 3, 2]), "minecraft:stone"))
+          ? "aside"
+          : "moving";
+  const watch = async (ms) => {
+    const seen = [];
+    for (const t0 = Date.now(); Date.now() - t0 < ms;) {
+      const w = await where();
+      if (w !== "moving" && seen.at(-1) !== w) seen.push(w);
+    }
+    return seen;
+  };
+  for (const name of ["outside", "inside"]) {
+    const port = model.ports.inputs.find((p) => p.name === name);
+    await check(area, `opens in two stages and closes in reverse, a pig on the ${name} plate`, async () => {
+      await build();
+      const p = cell(port.pos);
+      const before = await where();
+      await cmd(`summon pig ${p[0] + 0.5} ${p[1]} ${p[2] + 0.5}`, 0);
+      await cmd("effect @e[type=pig] slowness 60 255 true", 0);
+      let opening;
+      try {
+        opening = await watch(3500);
+      } finally {
+        await cmd("kill @e[type=pig]", 0);
+      }
+      const closing = await watch(4000);
+      // Closing passes through the middle for only about 2 game ticks, which a poll can miss; what must not happen
+      // is the front pistons pushing too early, which would shove the outer wall out: the skin either side of the
+      // doorway must still be stone, with air in front of it.
+      const skinIntact =
+        (await isBlock(cell([4, 3, 1]), "minecraft:stone")) &&
+        (await isBlock(cell([7, 3, 1]), "minecraft:stone")) &&
+        (await isBlock(cell([4, 3, 0]), "minecraft:air")) &&
+        (await isBlock(cell([7, 3, 0]), "minecraft:air"));
+      const pass =
+        before === "skin" &&
+        opening.join(",") === "skin,middle,aside" &&
+        ["aside,middle,skin", "aside,skin"].includes(closing.join(",")) &&
+        skinIntact;
+      return [
+        pass,
+        `opening ${opening.join(" > ")}; closing ${closing.join(" > ")}; outer wall ${skinIntact ? "intact" : "broken"}`,
+      ];
+    });
   }
 }
 
@@ -866,7 +957,7 @@ async function structures() {
         if (!/Loaded a structure/.test(reply)) throw new Error(reply);
         await sleep(2500);
       };
-      if (MOVES_AT_REST.has(slug)) {
+      if (movesAtRest(model)) {
         skip(
           area,
           "loads with every block in place, by ID and state",
@@ -898,9 +989,17 @@ async function structures() {
         const air = model.size[0] * model.size[1] * model.size[2] - filledCells(model).size;
         if (air === 0) {
           skip(area, "air cells leave existing blocks alone", "the design has no air cells");
+        } else if (model.size[1] > 4) {
+          // The test copy loads four layers up inside the design's eight-layer band, so it needs a design at most
+          // four tall; a taller one would overlap its own build or the next band.
+          skip(
+            area,
+            "air cells leave existing blocks alone",
+            `${model.size[1]} layers tall: the test copy does not fit its band (at most 4)`,
+          );
         } else {
           await check(area, "air cells leave existing blocks alone", async () => {
-            // Four layers up, inside this design's 8-layer band (every design is at most 4 tall).
+            // Four layers up, inside this design's 8-layer band (the design is at most 4 tall, above).
             const g = [o[0], o[1] + 4, o[2]];
             const [a, b] = box(g);
             await cmd(`fill ${at(a)} ${at(b)} minecraft:glass`);

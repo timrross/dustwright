@@ -588,3 +588,47 @@ Deviations and findings:
 - `@minecraft/server-net` (fetching designs over HTTP) is not used, as the spec requires without Tim's opt-in
   (`docs/ideas.md`).
 - **Waiting on Tim (optional):** import the loader `.mcpack` on a client and run `/scriptevent rsd:build` from chat.
+
+## After M10: Jeb door example and viewer notes (2026-10-10)
+
+Asked for after the milestones. Evidence: `docs/ingame/2026-10-10-jeb-door-examples.json` (every example, the Jeb
+door among them) and `docs/ingame/2026-10-10-jeb-door-structures.json` (every example's `.mcstructure`, as built
+and turned 90 degrees). Examples: 36 passed, 0 failed, 3 skipped; structures: 64 passed, 0 failed, 8 skipped.
+
+- **`examples/jeb-door.rsd.json`, a hidden 2x2 Jeb door.** Closed, the outside is plain stone: four stone blocks
+  flush in the wall, each held by a sticky piston behind it facing out. A pressure plate on either side opens it
+  in two stages: the front pistons pull the blocks back one block, then side pistons pull the blocks and the front
+  pistons aside, clearing the way; leaving the plate reverses it. Twelve sticky pistons. Every piston has its own
+  power (Bedrock has no quasi-connectivity): side pistons from a torch hidden in the wall (the lower one beside it,
+  the upper through the block above it), lower front pistons from a torch under the floor block below them, upper
+  front pistons from dust on the ceiling fed by a tower of three torches in the wall. Two delay-4 repeaters per side
+  make the side pistons wait on opening and lead on closing (I delayed feeds the side torches; I feeds the front
+  torches, and a front piston pulled aside stands next to nothing powered).
+- **Proof of the stages.** The design's tests (rest closed; either plate open after 25 ticks) cannot order the
+  stages, so: `test/jeb-door.test.ts` steps the simulator and requires the west door block to go skin, middle,
+  aside on opening and aside, middle, skin on closing, with the doorway cells of all three rows clear when open.
+  In game, `ingame-check.mjs` holds a pig on each plate in turn (slowness, so it stays) and polls the block: on both
+  plates it went skin, middle, aside and back aside, skin (the middle stage on closing lasts about 2 game ticks, too
+  short for the console to see reliably), with the outer wall either side of the doorway intact, which a front
+  piston firing early would have pushed out.
+- **A real press:** the in-game check also builds the design fresh and holds a pig on the plate of each test that
+  steps on one, and the outputs must match the test (both plates). A plate set pressed with `/setblock` is not a
+  real step.
+- The structure check now detects a design that moves at rest from the simulator, as the design checks already did,
+  instead of a fixed list. The structure check's air-cell test loads a copy four layers up inside the design's
+  8-layer band, so it now skips a design taller than 4 (the 8-tall Jeb door, whose copy overlapped the next band
+  and failed 87 of 88) instead of failing; every other design still runs it.
+- New example plumbing: export goldens, the parse snapshot, screenshot baselines on macOS and Linux; the site lists
+  it as a playground example (it reads `examples/`).
+- **Notes on the hidden step (2026-10-11):** two more annotations, on the top torch of the tower (it powers the stone
+  above it, which powers the ceiling dust beside it) and on the ceiling dust (it powers the blocks over the upper
+  front pistons). Notes only: the parse snapshot and the iso screenshot baselines (macOS, Linux) were updated;
+  exports and the in-game runs are unaffected.
+- **Superseded first draft:** a door with the pistons in the wall's face, side by side with the door; not a hidden
+  door, and replaced.
+- **Viewer notes:** an annotation's note closes on a press anywhere outside it (in the viewer or on the page) or on
+  Escape, and opens beside its pin rather than over it (a second click on the pin landed on the note). e2e: open,
+  click inside (stays), pin again, the 3D view, the page, and Escape each close it.
+
+Checks: `pnpm build`, `lint`, `typecheck`, `test` (806 passed), `gen:check`, `docs:check` and `check:licenses` pass;
+e2e 53 passed on macOS and in the Linux Playwright image.

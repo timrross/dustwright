@@ -4,6 +4,7 @@ import type { Page } from "@playwright/test";
 
 export const ROOT = fileURLToPath(new URL("..", import.meta.url));
 export const EXAMPLES = [
+  "jeb-door",
   "not-gate",
   "observer-clock",
   "piston-door-2x2",
