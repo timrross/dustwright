@@ -274,10 +274,10 @@ powered, and the lamp beside the torch follows it.
 
 To show a design without any tools: write it as one line of minified JSON, then replace every `%` with `%25`,
 every space with `%20` and every `#` with `%23` (nothing else needs changing), and put the result after
-`https://dustwright.dev/view/#json=` (once the site is deployed; a local build serves the same `/view/`). The site
+`https://timrross.github.io/dustwright/view/#json=` (a local build serves the same `/view/`). The site
 accepts at most 64 KB of fragment as the browser sends it, and browsers encode `"`, `<` and `>` again (`%22`, `%3C`,
 `%3E`), so keep the JSON under about 20 KB. For the NOT gate it starts
-`https://dustwright.dev/view/#json={"format":"rsd/1","meta":{"name":"NOT%20gate"},"legend":{"%23":"stone",...`
+`https://timrross.github.io/dustwright/view/#json={"format":"rsd/1","meta":{"name":"NOT%20gate"},"legend":{"%23":"stone",...`
 
 ## Patterns
 

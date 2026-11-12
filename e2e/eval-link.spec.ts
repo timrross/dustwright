@@ -5,7 +5,8 @@ import type { RedstoneViewer as RV } from "@dustwright/viewer/browser";
 import { ROOT } from "./helpers.js";
 
 // M8: the share link an agent with no tools wrote from AUTHORING.md alone (scripts/eval/link.mjs) opens a working
-// NOT gate. The link names dustwright.dev; the test opens the same path on the local build.
+// NOT gate. The link names the public site (dustwright.dev in the first run, then GitHub Pages); the test opens the
+// same page on the local build.
 const logs = readdirSync(join(ROOT, "docs/eval"))
   .filter((f) => f.endsWith("-link.json"))
   .sort();
@@ -18,8 +19,9 @@ test("the no-tools agent's /view#json= link opens a NOT gate that passes its tes
     link: string;
   };
   const url = new URL(link);
-  expect(url.hostname).toBe("dustwright.dev");
-  await page.goto(`${url.pathname}${url.hash}`);
+  expect(["dustwright.dev", "timrross.github.io"]).toContain(url.hostname);
+  expect(url.pathname.endsWith("/view/")).toBe(true);
+  await page.goto(`/view/${url.hash}`);
   await page.waitForFunction(() => !!document.querySelector("redstone-viewer")?.model);
   const viewer = page.locator("redstone-viewer");
   expect(await viewer.evaluate((v: RV) => v.model?.meta.name)).toBe("NOT gate");

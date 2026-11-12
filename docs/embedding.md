@@ -5,10 +5,10 @@ Three ways to show a design on another page, from most to least capable.
 ## 1. The web component
 
 Load the single-file viewer script and use the element. It works in a plain HTML page with no build step. The
-`dustwright.dev` URLs below apply once the site is deployed; until then, serve `apps/site/dist` yourself.
+URLs below are the public site on GitHub Pages; a build you serve yourself (`apps/site/dist`) works the same.
 
 ```html
-<script src="https://dustwright.dev/redstone-viewer.js"></script>
+<script src="https://timrross.github.io/dustwright/redstone-viewer.js"></script>
 <redstone-viewer src="designs/not-gate.rsd.json" mode="instructions" height="480"></redstone-viewer>
 ```
 
@@ -41,7 +41,7 @@ For hosts that only allow iframes, MediaWiki with an embed extension among them:
 
 ```html
 <iframe
-  src="https://dustwright.dev/viewer.html?src=https://example.org/not-gate.rsd.json&mode=instructions"
+  src="https://timrross.github.io/dustwright/viewer.html?src=https://example.org/not-gate.rsd.json&mode=instructions"
   width="100%"
   height="480"
   title="NOT gate"
@@ -70,9 +70,9 @@ itself. With `allowed-origins`, they go only to those origins.
 The parent may send three commands:
 
 ```js
-frame.contentWindow.postMessage({ type: "setStep", step: 2 }, "https://dustwright.dev");
-frame.contentWindow.postMessage({ type: "setLayer", layer: 0 }, "https://dustwright.dev");
-frame.contentWindow.postMessage({ type: "setMode", mode: "instructions" }, "https://dustwright.dev");
+frame.contentWindow.postMessage({ type: "setStep", step: 2 }, "https://timrross.github.io");
+frame.contentWindow.postMessage({ type: "setLayer", layer: 0 }, "https://timrross.github.io");
+frame.contentWindow.postMessage({ type: "setMode", mode: "instructions" }, "https://timrross.github.io");
 ```
 
 A command is accepted only when all of these hold; otherwise it is ignored without a reply:

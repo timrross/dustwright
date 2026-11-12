@@ -25,7 +25,7 @@ Each control is a hard rule with a test behind it. The milestone column says whe
 | Supply chain           | A dependency or its install script compromises the toolchain                | Exact versions; committed lockfile; `--frozen-lockfile`; dependency lifecycle scripts blocked; `pnpm audit --audit-level=high` in CI; Renovate weekly                                                                                                   | M0                                                       |
 | Runtime network        | Telemetry or fetches leak data                                              | None. The CLI never opens a socket (`rsd mcp` speaks MCP over stdio only); the viewer fetches only `src`                                                                                                                                                | M2, M8                                                   |
 | MCP server (`rsd mcp`) | A model, steered by a design's text, writes over a file or hangs the server | Runs locally with the user's rights; `export` uses the pack writer above; `bundle` writes only `.html` and `pack` only `.mcpack` paths; every design passes the 2 MB guard, all test cases share one simulation budget, and lines over 4 MB are refused | M8                                                       |
-| Secrets and worlds     | Server paths or credentials in the repo; an export hits a live world      | No secrets in the repo; the pack root is explicit on every run; only the test world container mounts the pack                                                                                                                                           | M3                                                       |
+| Secrets and worlds     | Server paths or credentials in the repo; an export hits a live world        | No secrets in the repo; the pack root is explicit on every run; only the test world container mounts the pack                                                                                                                                           | M3                                                       |
 
 Runtime dependencies are limited to three.js, nbtify (NBT for `.mcstructure`, with its one dependency mutf-8), the zip
 writer fflate (M7: `.mcpack` and layer-sheet zips; no dependencies) and the CLI argument parser (Node's built-in
@@ -36,10 +36,8 @@ tests. ajv is a dev dependency too: the schema validator is precompiled.
 
 ## Reporting a vulnerability
 
-The repository is private while it is being built. Report a problem directly to the maintainer, Tim Ross, by
-email (the address on the GitHub profile that owns the repository). Once the repository is public, use GitHub's
-private vulnerability reporting ("Report a vulnerability" on the Security tab). Please do not open a public issue
-for a security problem. Expect an acknowledgement within 7 days.
+Use GitHub's private vulnerability reporting ("Report a vulnerability" on the repository's Security tab). Please do
+not open a public issue for a security problem. Expect an acknowledgement within 7 days.
 
 ## Supported versions
 

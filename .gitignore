@@ -24,3 +24,5 @@ apps/site/public/AUTHORING.md
 apps/site/public/llms.txt
 apps/site/public/redstone-viewer.js
 apps/site/public/patterns/
+# Raw eval transcripts stay local: they record machine paths and session details (scripts/eval/run.mjs)
+docs/eval/**/*.transcript.jsonl

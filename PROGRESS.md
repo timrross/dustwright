@@ -6,17 +6,17 @@ sign-off) are listed under "Waiting on Tim" and logged in `VERIFY.md`.
 
 | Milestone | Scope                                                      | Status                                                                                                                                            | Commit  |
 | --------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| M0        | Scaffold: monorepo, CI, lint, empty packages, `rsd --help` | Done: review approved; CI on GitHub pending                                                                                                       | 06038ba |
-| M1        | Format, parser, registry, five examples, validator stage 1 | Done: review approved; mapping review and in-game checks pending Tim                                                                              | 38fcf19 |
-| M2        | Viewer MVP, playground, first single-file build            | Done: review approved; optional fps check by eye pending Tim                                                                                      | 9935384 |
-| M3        | `.mcfunction` export, behavior pack, in-game proof         | Done: review approved; automated in-game check passes; Tim's visual sign-off pending                                                              | 8824fa0 |
-| M4        | `.mcstructure` export                                      | Done: review approved; automated in-game proof incl. rotation and round trip; Tim's visual check pending                                          | 13365cb |
-| M5        | Validator stages 1 and 2                                   | Done: review approved; in-game suite re-run (116 passed, 0 failed, 6 skipped)                                                                     | ceeab66 |
-| M6        | Simulator                                                  | Done: review approved; game cross-check matches; in-game suite 116 passed, 0 failed, 6 skipped                                                    | 474aef6 |
-| M7        | Public site, embedding, bundle, layer sheets               | Done: review approved; .mcpack built on the test server; artifact published; phone and print checks pending Tim                                   | 461e821 |
-| M8        | LLM authoring: AUTHORING.md, patterns, eval, MCP           | Done: review approved; CLI eval 10/10 (9/10 by the brief: the toggle lamp fails its sequence), MCP 10/10; patterns and 3 eval builds pass in game | d9497a5 |
-| M9        | Java edition profile                                       | Done: review approved; patterns 13/13 and 63 probes in a Java world, .schem round trip 230/230, Java eval 9/10                                    | 11c12ed |
-| M10       | Optional extensions                                        | Done: review approved; include (in game 9/9) and Script API loader (all patterns 60/0/6 in game); storage/gallery not built                       | 30f951c |
+| M0        | Scaffold: monorepo, CI, lint, empty packages, `rsd --help` | Done: review approved; CI on GitHub pending                                                                                                       | 18bf4e2 |
+| M1        | Format, parser, registry, five examples, validator stage 1 | Done: review approved; mapping review and in-game checks pending Tim                                                                              | 4843643 |
+| M2        | Viewer MVP, playground, first single-file build            | Done: review approved; optional fps check by eye pending Tim                                                                                      | b14ac7f |
+| M3        | `.mcfunction` export, behavior pack, in-game proof         | Done: review approved; automated in-game check passes; Tim's visual sign-off pending                                                              | 4035ec6 |
+| M4        | `.mcstructure` export                                      | Done: review approved; automated in-game proof incl. rotation and round trip; Tim's visual check pending                                          | 9f5b1e3 |
+| M5        | Validator stages 1 and 2                                   | Done: review approved; in-game suite re-run (116 passed, 0 failed, 6 skipped)                                                                     | 3ad10a7 |
+| M6        | Simulator                                                  | Done: review approved; game cross-check matches; in-game suite 116 passed, 0 failed, 6 skipped                                                    | e386217 |
+| M7        | Public site, embedding, bundle, layer sheets               | Done: review approved; .mcpack built on the test server; artifact published; phone and print checks pending Tim                                   | 22ea7d5 |
+| M8        | LLM authoring: AUTHORING.md, patterns, eval, MCP           | Done: review approved; CLI eval 10/10 (9/10 by the brief: the toggle lamp fails its sequence), MCP 10/10; patterns and 3 eval builds pass in game | 76328d0 |
+| M9        | Java edition profile                                       | Done: review approved; patterns 13/13 and 63 probes in a Java world, .schem round trip 230/230, Java eval 9/10                                    | 9d36a7e |
+| M10       | Optional extensions                                        | Done: review approved; include (in game 9/9) and Script API loader (all patterns 60/0/6 in game); storage/gallery not built                       | 6773007 |
 
 ## Waiting on Tim
 
@@ -55,6 +55,19 @@ sign-off) are listed under "Waiting on Tim" and logged in `VERIFY.md`.
   the Bedrock ones. Edition checks outside the profile (W107's pin, W108's verification, the Bedrock-only lever
   rule in `isSupported`, conductivity by edition) are small lookups; they could move into the profile later.
 - M1: confirm the server's Bedrock version. The registry is pinned to 1.26.50.
+
+## Deploy
+
+- 2026-11-12: the repository is public (github.com/timrross/dustwright) and the site is published with GitHub Pages
+  at https://timrross.github.io/dustwright/ by `.github/workflows/pages.yml`, on every push to `main`. The build
+  takes the path it is served under from `DUSTWRIGHT_BASE` (`apps/site/base-path.ts`); without it the site builds
+  for the root of its own domain, as before.
+- GitHub Pages cannot send the response headers in `apps/site/public/_headers`: every page carries the CSP as a
+  meta tag, and `X-Content-Type-Options`, `Referrer-Policy` and `Permissions-Policy` are not sent there.
+- `dustwright.dev` is not registered. The embedding docs and AUTHORING.md name the GitHub Pages URL; the JSON
+  Schemas' `$id` still names `https://dustwright.dev/schema/...` (an identifier; changing it is a format decision).
+- Before the repository went public its history was rewritten (author email, raw eval transcripts removed); the
+  commit hashes in the table above are the new ones.
 
 ## Notes for later milestones (from reviews)
 
