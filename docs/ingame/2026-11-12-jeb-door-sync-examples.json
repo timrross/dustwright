@@ -1,0 +1,240 @@
+{
+  "when": "2026-11-12T14:55:27.916Z",
+  "container": "dustwright-test",
+  "results": [
+    {
+      "area": "example jeb-door",
+      "name": "builds without dropping items",
+      "status": "pass",
+      "detail": "no items"
+    },
+    {
+      "area": "example jeb-door",
+      "name": "test 0: set {\"outside\":0,\"inside\":0} expect side=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "example jeb-door",
+      "name": "test 0: set {\"outside\":0,\"inside\":0} expect side_east=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "example jeb-door",
+      "name": "test 0: set {\"outside\":0,\"inside\":0} expect front_power=12",
+      "status": "pass",
+      "detail": "actual 12"
+    },
+    {
+      "area": "example jeb-door",
+      "name": "test 1: set {\"outside\":1} expect side=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "example jeb-door",
+      "name": "test 1: set {\"outside\":1} expect side_east=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "example jeb-door",
+      "name": "test 1: set {\"outside\":1} expect front_power=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "example jeb-door",
+      "name": "test 2: set {\"inside\":1} expect side=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "example jeb-door",
+      "name": "test 2: set {\"inside\":1} expect side_east=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "example jeb-door",
+      "name": "test 2: set {\"inside\":1} expect front_power=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "example jeb-door",
+      "name": "test 1 with a pig standing on the outside plate",
+      "status": "pass",
+      "detail": "side=0, side_east=0, front_power=0"
+    },
+    {
+      "area": "example jeb-door",
+      "name": "test 2 with a pig standing on the inside plate",
+      "status": "pass",
+      "detail": "side=0, side_east=0, front_power=0"
+    },
+    {
+      "area": "example jeb-door",
+      "name": "clear, build, build equals clear, build",
+      "status": "skipped",
+      "detail": "moves at rest: rebuild only after the clear function"
+    },
+    {
+      "area": "example jeb-door",
+      "name": "opens in two stages and closes in reverse, a pig on the outside plate",
+      "status": "pass",
+      "detail": "opening skin > middle > aside; closing aside > skin; outer wall intact"
+    },
+    {
+      "area": "example jeb-door",
+      "name": "opens in two stages and closes in reverse, a pig on the inside plate",
+      "status": "pass",
+      "detail": "opening skin > middle > aside; closing aside > skin; outer wall intact"
+    },
+    {
+      "area": "example not-gate",
+      "name": "builds without dropping items",
+      "status": "pass",
+      "detail": "no items"
+    },
+    {
+      "area": "example not-gate",
+      "name": "test 0: set {\"A\":0} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "example not-gate",
+      "name": "test 1: set {\"A\":1} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "example not-gate",
+      "name": "clear, build, build equals clear, build",
+      "status": "pass",
+      "detail": "10 blocks compared"
+    },
+    {
+      "area": "example not-gate",
+      "name": "the build alone never removes a block",
+      "status": "pass",
+      "detail": "53 cells kept, 0 lost"
+    },
+    {
+      "area": "example observer-clock",
+      "name": "builds without dropping items",
+      "status": "pass",
+      "detail": "no items"
+    },
+    {
+      "area": "example observer-clock",
+      "name": "test 0: set {} expect tick=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "example observer-clock",
+      "name": "test 1: set {} expect tick=15",
+      "status": "pass",
+      "detail": "actual 15"
+    },
+    {
+      "area": "example observer-clock",
+      "name": "clear, build, build equals clear, build",
+      "status": "skipped",
+      "detail": "a free-running clock: its state changes between the two builds being compared"
+    },
+    {
+      "area": "example observer-clock",
+      "name": "output changes over time (clock)",
+      "status": "pass",
+      "detail": "samples 0,1"
+    },
+    {
+      "area": "example 2x2-piston-door",
+      "name": "builds without dropping items",
+      "status": "pass",
+      "detail": "no items"
+    },
+    {
+      "area": "example 2x2-piston-door",
+      "name": "test 0: set {\"open\":0} expect closed=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "example 2x2-piston-door",
+      "name": "test 1: set {\"open\":1} expect closed=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "example 2x2-piston-door",
+      "name": "clear, build, build equals clear, build",
+      "status": "skipped",
+      "detail": "moves at rest: rebuild only after the clear function"
+    },
+    {
+      "area": "example repeater-line",
+      "name": "builds without dropping items",
+      "status": "pass",
+      "detail": "no items"
+    },
+    {
+      "area": "example repeater-line",
+      "name": "test 0: set {\"A\":1} expect out=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "example repeater-line",
+      "name": "test 1: set {\"A\":0} expect out=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "example repeater-line",
+      "name": "clear, build, build equals clear, build",
+      "status": "pass",
+      "detail": "38 blocks compared"
+    },
+    {
+      "area": "example repeater-line",
+      "name": "the build alone never removes a block",
+      "status": "pass",
+      "detail": "151 cells kept, 0 lost"
+    },
+    {
+      "area": "example t-flip-flop",
+      "name": "builds without dropping items",
+      "status": "pass",
+      "detail": "no items"
+    },
+    {
+      "area": "example t-flip-flop",
+      "name": "test 0: set {\"T\":0} expect Q=0",
+      "status": "pass",
+      "detail": "actual 0"
+    },
+    {
+      "area": "example t-flip-flop",
+      "name": "test 1: set {\"T\":1} expect Q=1",
+      "status": "pass",
+      "detail": "actual 1"
+    },
+    {
+      "area": "example t-flip-flop",
+      "name": "sequence {\"T\":1}->{\"Q\":1} {\"T\":0}->{\"Q\":1} {\"T\":1}->{\"Q\":0} {\"T\":0}->{\"Q\":0}",
+      "status": "pass",
+      "detail": "steps ok: true,true,true,true"
+    },
+    {
+      "area": "example t-flip-flop",
+      "name": "clear, build, build equals clear, build",
+      "status": "pass",
+      "detail": "144 blocks compared"
+    }
+  ]
+}

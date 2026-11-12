@@ -75,6 +75,12 @@ All notable user-facing changes are recorded here. The format follows
 
 ### Changed
 
+- Example `examples/jeb-door.rsd.json`: the upper and lower door blocks now pull back on the same tick when the
+  door opens. The upper front pistons' signal climbs a tower of three torches, so they used to retract 6 game ticks
+  after the lower ones; the lower ones now wait behind delay-4 repeaters and the tower takes its own delay-2 tap
+  off the plate dust. The door starts to open 0.3 s later and is fully open at the same time as before. Measured
+  in game (`deploy/test-world/measure-door-sync.mjs`).
+
 - M6: the redstone topology helpers (directions, dust connections, diode faces, support) moved into core, shared
   by the stage 2 rules and the simulator. Dust is drawn brighter with more power.
 

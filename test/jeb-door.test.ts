@@ -36,4 +36,34 @@ describe("Jeb door", () => {
         for (const x of [5, 6])
           expect(sim.snapshot().blocks.get(`${x},${y},${z}`), `${x},${y},${z}`).toBeUndefined();
   });
+
+  // The upper front pistons get their signal through a tower of three torches, the lower ones through one torch;
+  // the repeaters before each are set so that both rows move on the same game tick.
+  it("moves the upper and lower door blocks on the same tick, opening and closing, from either plate", () => {
+    for (const plate of [0, 7]) {
+      const sim = settle(model);
+      const inSkin = (x: number, y: number) => sim.snapshot().blocks.get(`${x},${y},1`)?.type === "stone";
+      /** The game tick, counted from the change of the plate, at which each of the four door blocks leaves or reaches the skin. */
+      const changes = (value: number) => {
+        sim.setInput([5, 3, plate], value);
+        const cells = [5, 6].flatMap((x) => [3, 4].map((y) => [x, y] as const));
+        const before = cells.map(([x, y]) => inSkin(x, y));
+        const at = cells.map(() => -1);
+        for (let t = 1; t <= 80; t++) {
+          sim.step();
+          cells.forEach(([x, y], i) => {
+            if (at[i] === -1 && inSkin(x, y) !== before[i]) at[i] = t;
+          });
+        }
+        return at;
+      };
+      for (const value of [1, 0]) {
+        const at = changes(value);
+        expect(at[0], `plate z${plate}, ${value ? "opening" : "closing"}`).toBeGreaterThan(0);
+        expect(new Set(at).size, `plate z${plate}, ${value ? "opening" : "closing"}: ${at.join(", ")}`).toBe(
+          1,
+        );
+      }
+    }
+  });
 });

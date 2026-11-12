@@ -632,3 +632,34 @@ and turned 90 degrees). Examples: 36 passed, 0 failed, 3 skipped; structures: 64
 
 Checks: `pnpm build`, `lint`, `typecheck`, `test` (806 passed), `gen:check`, `docs:check` and `check:licenses` pass;
 e2e 53 passed on macOS and in the Linux Playwright image.
+
+## Jeb door: upper and lower rows in step (2026-11-12)
+
+Reported from a build in a world: when the door opens, the upper door blocks pull back slightly after the lower
+ones; closing is in step. Evidence: `docs/ingame/2026-11-12-jeb-door-sync.json` (game-tick measurement) and
+`docs/ingame/2026-11-12-jeb-door-sync-examples.json` (every example again: 36 passed, 0 failed, 3 skipped).
+
+- **Cause.** The lower front pistons switched 2 ticks after the plate (a delay-1 repeater, then the torch under
+  the floor); the upper ones 5 ticks after it (the same repeater, a second repeater, then the tower's three
+  torches). Closing was already in step because both power sources are on long before the side pistons push the
+  front pistons back under them.
+- **Change (under the floor only, west side).** The two repeaters before the lower torches are delay 4, so the
+  lower pistons also switch after 5 ticks. The tower no longer taps the block behind those repeaters: its base
+  torch hangs on a block fed by its own delay-2 repeater straight off the plate dust. The west pair of delay-4
+  repeaters for the side pistons moved one row south to make room. The door starts to open 0.3 s later; the side
+  pistons, and so the moment it is fully open, are unchanged.
+- **Simulator.** `test/jeb-door.test.ts` now also requires all four door blocks to leave the wall on one game tick
+  and to return on one game tick, from either plate. It fails on the previous design (lower 6, upper 12).
+- **In game** (BDS 1.26.52.3, `deploy/test-world/measure-door-sync.mjs`, a probe function run every game tick):
+  with a pig held on each plate in turn, three runs each, the four door blocks left the wall on the same game tick
+  and returned on the same game tick in every run (spread 0). The previous design, built at the same site as a
+  control, had both upper blocks 6 game ticks behind the lower ones on every opening and a spread of 0 on closing,
+  which is what was reported and what the simulator says.
+- The in-game example check (`ingame-check.mjs --only examples`) passes on the new design: its tests, a pig on
+  each plate, and the two stages in order with the outer wall intact.
+- Updated with it: the export goldens, the parse snapshot and the Jeb door's screenshot baselines (macOS, and Linux
+  from the Playwright image). The local test server was set up again for this (`deploy/test-world`, compose).
+
+Checks: `pnpm build`, `lint`, `typecheck`, `test` (812 passed), `gen:check`, `docs:check` and `check:licenses` pass;
+e2e 53 passed on macOS. In the Linux Playwright image (emulated on this Mac) 51 passed and 2 failed with a crashed
+page, neither a screenshot test.

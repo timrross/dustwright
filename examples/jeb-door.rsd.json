@@ -4,7 +4,7 @@
     "name": "Jeb door",
     "edition": "bedrock",
     "gameVersion": "1.26.50",
-    "description": "A hidden 2x2 Jeb door. Closed, the outside is plain stone: four stone blocks sit flush in the wall, each held there by a sticky piston behind it facing out. Step on a pressure plate on either side and it opens in two stages: the front pistons retract, pulling the blocks back one block into the wall; then, after a delay, side pistons pull the blocks and the front pistons aside into the wall, clearing the way. Leaving the plate reverses it: the side pistons bring everything back to the middle first, then the front pistons push the blocks flush again. Twelve sticky pistons; Bedrock has no quasi-connectivity, so every piston has its own power: the lower ones from blocks under the floor or beside them, the upper ones from the block above a torch or from dust on the ceiling. The plates feed dust under the floor; two delay-4 repeaters per side make the second stage wait. Only the plates and the door show; the rest is inside the wall, the floor and the ceiling, though the pistons can be seen from inside. The design shows the pistons retracted with the blocks in the middle; it closes itself when built, so clear it (rsd/jeb-door_clear) before building it again in place."
+    "description": "A hidden 2x2 Jeb door. Closed, the outside is plain stone: four stone blocks sit flush in the wall, each held there by a sticky piston behind it facing out. Step on a pressure plate on either side and it opens in two stages: the front pistons retract, pulling the blocks back one block into the wall; then, after a delay, side pistons pull the blocks and the front pistons aside into the wall, clearing the way. Leaving the plate reverses it: the side pistons bring everything back to the middle first, then the front pistons push the blocks flush again. Twelve sticky pistons; Bedrock has no quasi-connectivity, so every piston has its own power: the lower ones from blocks under the floor or beside them, the upper ones from the block above a torch or from dust on the ceiling. The plates feed dust under the floor; two delay-4 repeaters per side make the second stage wait. The signal to the upper front pistons climbs a tower of three torches, so the lower ones wait for it behind delay-4 repeaters and the upper and lower door blocks pull back together. Only the plates and the door show; the rest is inside the wall, the floor and the ceiling, though the pistons can be seen from inside. The design shows the pistons retracted with the blocks in the middle; it closes itself when built, so clear it (rsd/jeb-door_clear) before building it again in place."
   },
   "legend": {
     "#": "stone",
@@ -16,10 +16,10 @@
     "t": "torch mount=floor",
     "u": "torch mount=floor",
     "s": "torch mount=south",
-    "n": "torch mount=north",
     "P": "pressure_plate material=stone",
-    "^": "repeater facing=north delay=1",
+    "^": "repeater facing=north delay=4",
     "<": "repeater facing=west delay=1",
+    "2": "repeater facing=west delay=2",
     ">": "repeater facing=east delay=1",
     "L": "repeater facing=west delay=4",
     "R": "repeater facing=east delay=4"
@@ -41,10 +41,10 @@
       "########-###",
       "########-###",
       "#####ss#-###",
-      "-###<###-##-",
-      "-##n#^^#-##-",
-      "---LL----RR-",
-      "#####--#####",
+      "-#######-##-",
+      "-##s#^^#-##-",
+      "-###2----RR-",
+      "---LL--#####",
       "############"
     ],
     [
@@ -174,8 +174,16 @@
       "text": "Ceiling dust: it powers the blocks it lies on, right above the upper front pistons, which fire them (the lower pistons below are in the way of power from the floor)."
     },
     {
-      "pos": [4, 1, 6],
+      "pos": [4, 1, 7],
       "text": "Two delay-4 repeaters: the side pistons wait for the front pistons on opening, and lead on closing."
+    },
+    {
+      "pos": [4, 1, 6],
+      "text": "Delay-2 repeater: the tower's own tap off the plate dust. It and the three torches above it take 5 ticks to switch the upper front pistons."
+    },
+    {
+      "pos": [5, 1, 5],
+      "text": "Delay-4 repeaters: with the torch they feed, the lower front pistons also switch after 5 ticks, so both rows of the door pull back on the same tick."
     },
     {
       "pos": [5, 3, 0],

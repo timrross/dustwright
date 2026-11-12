@@ -72,6 +72,23 @@ node deploy/test-world/measure-timing.mjs uninstall <pack-dir>   # restart the s
 The probe runs a function every game tick (`functions/tick.json`). Remove it straight after the run: while it is
 installed, redstone stops ticking in parts of the world (seen on BDS 1.26.52.3), and `ingame-check.mjs` fails.
 
+## Jeb door sync
+
+`measure-door-sync.mjs` measures in game, at game-tick resolution, the tick at which each of the Jeb door's four
+blocks leaves the outer wall on opening and returns on closing, with a pig held on each plate, and reports how far
+apart they are (0 when the upper and lower rows move together). Extra slugs measure other versions of the door at
+the same site, to compare.
+
+```sh
+pnpm build
+pnpm rsd export examples/jeb-door.rsd.json --to mcfunction --clear
+node deploy/test-world/measure-door-sync.mjs install <pack-dir>     # restart the server cold
+node deploy/test-world/measure-door-sync.mjs run dustwright-test > sync.json
+node deploy/test-world/measure-door-sync.mjs uninstall <pack-dir>   # restart the server cold again
+```
+
+Like the timing probe, it runs a function every game tick: remove it straight after the run.
+
 ## Structure round trip
 
 Save a build with `/structure save <name> <from> <to> false disk true`, stop the server (the world database must
