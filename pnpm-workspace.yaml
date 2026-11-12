@@ -8,3 +8,8 @@ strictDepBuilds: true
 # esbuild ships its binary through optional dependencies; its install script is not needed.
 ignoredBuiltDependencies:
   - esbuild
+# rollup 4.64.2 lists this Linux-only native package as optional. It needs Node 22.20 or later, so on the Node this
+# repo pins (.nvmrc) pnpm skips it at install, and `pnpm licenses list` (check:licenses) then fails on Linux because
+# it is in the lockfile but not in the store. Nothing here uses it: leave it out of the lockfile altogether.
+ignoredOptionalDependencies:
+  - "@napi-rs/lzma-linux-x64-gnu"

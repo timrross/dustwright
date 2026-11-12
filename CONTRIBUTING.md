@@ -19,8 +19,10 @@ exact versions.
 and against single-file bundles made with `rsd bundle`. Install the browser once with
 `pnpm exec playwright install chromium`. WebGL runs on SwiftShader, so screenshots differ per platform: baselines
 live in `e2e/__screenshots__/` with a `-darwin` or `-linux` suffix and are compared with a 2% pixel tolerance.
-After an intended visual change, regenerate them with `pnpm e2e --update-snapshots` on macOS, and for Linux (CI)
-inside the Playwright image:
+CI runs the suite inside the Playwright image, because text is laid out with the system's fonts and a bare runner
+has different ones. After an intended visual change, regenerate the baselines with `pnpm e2e --update-snapshots`
+on macOS, and for Linux inside the same image (keep its tag, here and in `.github/workflows/ci.yml`, at the version
+of `@playwright/test`):
 
 ```sh
 docker run --rm --platform linux/amd64 --ipc=host -v "$PWD":/work mcr.microsoft.com/playwright:v1.63.0-noble \
