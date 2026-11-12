@@ -1,7 +1,8 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { marked } from "marked";
 import { defineConfig, type Plugin } from "vite";
+import { normaliseBase, rebaseHtml, rebaseMarkdown } from "./base-path.js";
 import { EMBED_EXAMPLE_CSP, SITE_CSP } from "./csp.js";
 
 const here = (path: string) => fileURLToPath(new URL(path, import.meta.url));
@@ -74,9 +75,32 @@ function cspMeta(): Plugin {
   };
 }
 
+/** "/" on the site's own domain; "/dustwright/" for the GitHub Pages project site (.github/workflows/pages.yml). */
+const BASE = normaliseBase(process.env.DUSTWRIGHT_BASE);
+
+/**
+ * Under a base path, puts the base in front of the root-relative links Vite leaves alone: links between pages and
+ * viewer `src` attributes in every page, and the links in the two public files that carry any (copied as they are).
+ */
+function rebase(): Plugin {
+  return {
+    name: "dustwright-rebase",
+    apply: "build",
+    transformIndexHtml: { order: "post", handler: (html) => rebaseHtml(html, BASE) },
+    closeBundle() {
+      if (BASE === "/") return;
+      const page = here("dist/plain-example.html");
+      writeFileSync(page, rebaseHtml(readFileSync(page, "utf8"), BASE));
+      const llms = here("dist/llms.txt");
+      writeFileSync(llms, rebaseMarkdown(readFileSync(llms, "utf8"), BASE));
+    },
+  };
+}
+
 // The site builds the workspace packages from source, so a dev server or build never depends on stale dist output.
 export default defineConfig({
-  plugins: [docs(), cspMeta()],
+  base: BASE,
+  plugins: [docs(), cspMeta(), rebase()],
   resolve: {
     alias: [
       { find: "@dustwright/viewer/browser", replacement: entry("viewer", "browser.ts") },

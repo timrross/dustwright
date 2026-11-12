@@ -1,6 +1,7 @@
 import { defineRedstoneViewer } from "@dustwright/viewer/browser";
 import { validateText } from "@dustwright/validator";
 import type { Diagnostic } from "@dustwright/core";
+import { sitePath } from "./base.js";
 import { download } from "./download.js";
 import { DESIGNS as EXAMPLES } from "./examples.js";
 import { decodeFragment, shareFragment } from "./fragment.js";
@@ -126,7 +127,7 @@ button("share", async () => {
     notice.textContent = `${link.error.code}: ${link.error.message}`;
     return;
   }
-  shareLink.value = `${location.origin}/view/#${link.fragment}`;
+  shareLink.value = `${location.origin}${sitePath("/view/")}#${link.fragment}`;
   shareLink.hidden = false;
   shareLink.select();
   try {

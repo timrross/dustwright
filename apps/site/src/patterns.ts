@@ -1,6 +1,7 @@
 // The patterns page: the pattern library, each with links to the playground and the viewer. Design text (names,
 // descriptions) goes in through textContent only.
 import { parseText } from "@dustwright/core";
+import { sitePath } from "./base.js";
 import { PATTERNS } from "./examples.js";
 import "./site.css";
 
@@ -18,10 +19,10 @@ for (const [slug, text] of PATTERNS) {
   facts.textContent = `${model.blocks.size} blocks, ${model.size.join(" × ")}; ${model.tests.length} test case(s).`;
   const links = document.createElement("p");
   const play = document.createElement("a");
-  play.href = `/play/?example=${encodeURIComponent(slug)}`;
+  play.href = sitePath(`/play/?example=${encodeURIComponent(slug)}`);
   play.textContent = "Open in the playground";
   const view = document.createElement("a");
-  view.href = `/view/?src=${encodeURIComponent(`/patterns/${slug}.rsd.json`)}`;
+  view.href = sitePath(`/view/?src=${encodeURIComponent(sitePath(`/patterns/${slug}.rsd.json`))}`);
   view.textContent = "View";
   links.append(play, " · ", view);
   item.append(title, description, facts, links);

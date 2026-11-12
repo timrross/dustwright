@@ -2,6 +2,7 @@
 // viewer's own checks), or from a file the visitor chooses or drops. The fragment never reaches a server.
 import { diag, LIMITS } from "@dustwright/core";
 import { defineRedstoneViewer } from "@dustwright/viewer/browser";
+import { sitePath } from "./base.js";
 import { decodeFragment, shareFragment } from "./fragment.js";
 import { showProblems } from "./problems.js";
 import "./site.css";
@@ -22,7 +23,7 @@ async function show(text: string, from: string): Promise<void> {
   status.textContent = ok ? `Opened from ${from}.` : `The design from ${from} has errors.`;
   const link = await shareFragment(text);
   edit.hidden = !("fragment" in link);
-  if ("fragment" in link) edit.href = `/play/#${link.fragment}`;
+  if ("fragment" in link) edit.href = sitePath(`/play/#${link.fragment}`);
   document.body.dataset.opened = String(Date.now());
 }
 

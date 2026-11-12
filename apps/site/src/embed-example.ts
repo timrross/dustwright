@@ -1,6 +1,7 @@
 // The embedding example: a host page that frames viewer.html and drives it with postMessage. Query parameters, for
 // trying it against a local build: `viewer` (the viewer.html URL, this site's or a loopback one), `design` (the design URL, resolved against the
 // viewer) and `allow` (the allowed-origins value; this page's origin by default).
+import { sitePath } from "./base.js";
 import "./site.css";
 
 const params = new URLSearchParams(location.search);
@@ -12,7 +13,7 @@ const current = document.querySelector<HTMLSpanElement>("#current")!;
 // that). Anything else falls back to this site's viewer, so the page can never frame a foreign site.
 const LOOPBACK = new Set(["127.0.0.1", "localhost", "[::1]"]);
 function viewerFrom(param: string | null): URL {
-  const fallback = new URL("/viewer.html", location.href);
+  const fallback = new URL(sitePath("/viewer.html"), location.href);
   if (param === null) return fallback;
   try {
     const url = new URL(param, location.href);
@@ -23,7 +24,7 @@ function viewerFrom(param: string | null): URL {
   }
 }
 const viewerUrl = viewerFrom(params.get("viewer"));
-viewerUrl.searchParams.set("src", params.get("design") ?? "/examples/t-flip-flop.rsd.json");
+viewerUrl.searchParams.set("src", params.get("design") ?? sitePath("/examples/t-flip-flop.rsd.json"));
 viewerUrl.searchParams.set("mode", "instructions");
 viewerUrl.searchParams.set("allowed-origins", params.get("allow") ?? location.origin);
 const viewerOrigin = viewerUrl.origin;
