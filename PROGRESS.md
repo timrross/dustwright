@@ -6,7 +6,7 @@ sign-off) are listed under "Waiting on Tim" and logged in `VERIFY.md`.
 
 | Milestone | Scope                                                      | Status                                                                                                                                            | Commit  |
 | --------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| M0        | Scaffold: monorepo, CI, lint, empty packages, `rsd --help` | Done: review approved; CI on GitHub pending                                                                                                       | 18bf4e2 |
+| M0        | Scaffold: monorepo, CI, lint, empty packages, `rsd --help` | Done: review approved; CI on GitHub fails in two places (see below)                                                                               | 18bf4e2 |
 | M1        | Format, parser, registry, five examples, validator stage 1 | Done: review approved; mapping review and in-game checks pending Tim                                                                              | 4843643 |
 | M2        | Viewer MVP, playground, first single-file build            | Done: review approved; optional fps check by eye pending Tim                                                                                      | b14ac7f |
 | M3        | `.mcfunction` export, behavior pack, in-game proof         | Done: review approved; automated in-game check passes; Tim's visual sign-off pending                                                              | 4035ec6 |
@@ -20,8 +20,11 @@ sign-off) are listed under "Waiting on Tim" and logged in `VERIFY.md`.
 
 ## Waiting on Tim
 
-- M0: push to GitHub and confirm CI runs (and fails on a deliberately broken test), which also proves the pinned
-  action SHAs.
+- M0: pushed to GitHub on 2026-11-12; the pinned action SHAs resolve and the Pages workflow passes. CI fails in two
+  places that pass locally, to fix before it is trusted: `pnpm check:licenses` (`pnpm licenses list` cannot find the
+  store index of `@napi-rs/lzma-linux-x64-gnu` on the runner) and the six "examples render" screenshot tests (3 to
+  7% of pixels differ from the `-linux` baselines on GitHub's runner). Still to do: see it fail on a deliberately
+  broken test.
 - M1: review `docs/bedrock-mapping.md` and the 21 assumptions in `docs/verify-in-game.md` (torch, piston,
   repeater, comparator and door were corrected from GeyserMC's mappings; all still need the M3 build).
 - M2 (optional): open `/bench/?blocks=10000` (`pnpm --filter @dustwright/site dev`) and confirm 60 fps by eye; the
