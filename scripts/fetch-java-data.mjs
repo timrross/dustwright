@@ -53,11 +53,16 @@ const work = `${dir}/generate`;
 rmSync(work, { recursive: true, force: true });
 mkdirSync(work, { recursive: true });
 copyFileSync(jar, `${work}/server.jar`);
+// Run as the calling user, so the files it writes into the mount can be removed again: on Linux a container's
+// default root user would own them (Docker Desktop on macOS maps them to the caller either way).
+const user =
+  typeof process.getuid === "function" ? ["--user", `${process.getuid()}:${process.getgid()}`] : [];
 execFileSync(
   "docker",
   [
     "run",
     "--rm",
+    ...user,
     "-v",
     `${work}:/work`,
     "-w",
