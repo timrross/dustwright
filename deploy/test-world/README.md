@@ -75,9 +75,10 @@ installed, redstone stops ticking in parts of the world (seen on BDS 1.26.52.3),
 ## Jeb door sync
 
 `measure-door-sync.mjs` measures in game, at game-tick resolution, the tick at which each of the Jeb door's four
-blocks leaves the outer wall on opening and returns on closing, with a pig held on each plate, and reports how far
-apart they are (0 when the upper and lower rows move together). Extra slugs measure other versions of the door at
-the same site, to compare.
+blocks leaves the outer wall on opening and returns on closing, and reports how far apart they are (0 when the
+upper and lower rows move together) and how long the blocks were away. The button is pressed through the console; a
+pig is held on the plate. Extra `slug=design-file` arguments measure other versions of the door at the same site,
+to compare, and `DOOR_AT=x,y,z` moves the site (across a chunk border, say).
 
 ```sh
 pnpm build

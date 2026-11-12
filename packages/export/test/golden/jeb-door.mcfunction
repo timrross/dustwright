@@ -108,21 +108,13 @@ setblock ~10 ~ ~8 minecraft:stone
 setblock ~11 ~ ~8 minecraft:stone
 setblock ~12 ~ ~8 minecraft:stone
 setblock ~1 ~1 ~ minecraft:stone
-setblock ~2 ~1 ~ minecraft:stone
-setblock ~3 ~1 ~ minecraft:stone
-setblock ~4 ~1 ~ minecraft:stone
-setblock ~5 ~1 ~ minecraft:stone
+setblock ~8 ~1 ~ minecraft:stone
+setblock ~9 ~1 ~ minecraft:stone
 setblock ~10 ~1 ~ minecraft:stone
 setblock ~11 ~1 ~ minecraft:stone
 setblock ~12 ~1 ~ minecraft:stone
 setblock ~1 ~1 ~1 minecraft:stone
-setblock ~2 ~1 ~1 minecraft:stone
-setblock ~3 ~1 ~1 minecraft:stone
-setblock ~4 ~1 ~1 minecraft:stone
 setblock ~5 ~1 ~1 minecraft:stone
-setblock ~6 ~1 ~1 minecraft:stone
-setblock ~7 ~1 ~1 minecraft:stone
-setblock ~8 ~1 ~1 minecraft:stone
 setblock ~10 ~1 ~1 minecraft:stone
 setblock ~11 ~1 ~1 minecraft:stone
 setblock ~12 ~1 ~1 minecraft:stone
@@ -197,7 +189,6 @@ setblock ~1 ~2 ~1 minecraft:stone
 setblock ~2 ~2 ~1 minecraft:stone
 setblock ~3 ~2 ~1 minecraft:stone
 setblock ~4 ~2 ~1 minecraft:stone
-setblock ~5 ~2 ~1 minecraft:stone
 setblock ~6 ~2 ~1 minecraft:stone
 setblock ~7 ~2 ~1 minecraft:stone
 setblock ~8 ~2 ~1 minecraft:stone
@@ -706,12 +697,20 @@ setblock ~9 ~7 ~8 minecraft:stone
 setblock ~10 ~7 ~8 minecraft:stone
 setblock ~11 ~7 ~8 minecraft:stone
 setblock ~12 ~7 ~8 minecraft:stone
+setblock ~2 ~1 ~ minecraft:redstone_wire ["redstone_signal"=0]
+setblock ~3 ~1 ~ minecraft:redstone_wire ["redstone_signal"=0]
+setblock ~4 ~1 ~ minecraft:redstone_wire ["redstone_signal"=0]
+setblock ~5 ~1 ~ minecraft:redstone_wire ["redstone_signal"=0]
 setblock ~6 ~1 ~ minecraft:redstone_wire ["redstone_signal"=0]
 setblock ~7 ~1 ~ minecraft:redstone_wire ["redstone_signal"=0]
-setblock ~8 ~1 ~ minecraft:redstone_wire ["redstone_signal"=0]
-setblock ~9 ~1 ~ minecraft:redstone_wire ["redstone_signal"=0]
+setblock ~2 ~1 ~1 minecraft:redstone_wire ["redstone_signal"=0]
+setblock ~3 ~1 ~1 minecraft:unpowered_repeater ["minecraft:cardinal_direction"="east","repeater_delay"=3]
+setblock ~4 ~1 ~1 minecraft:unpowered_repeater ["minecraft:cardinal_direction"="east","repeater_delay"=3]
+setblock ~6 ~1 ~1 minecraft:unpowered_repeater ["minecraft:cardinal_direction"="west","repeater_delay"=0]
+setblock ~7 ~1 ~1 minecraft:redstone_wire ["redstone_signal"=0]
+setblock ~8 ~1 ~1 minecraft:redstone_wire ["redstone_signal"=0]
 setblock ~9 ~1 ~1 minecraft:redstone_wire ["redstone_signal"=0]
-setblock ~9 ~1 ~2 minecraft:redstone_wire ["redstone_signal"=0]
+setblock ~9 ~1 ~2 minecraft:unpowered_repeater ["minecraft:cardinal_direction"="north","repeater_delay"=0]
 setblock ~9 ~1 ~3 minecraft:redstone_wire ["redstone_signal"=0]
 setblock ~1 ~1 ~4 minecraft:redstone_wire ["redstone_signal"=0]
 setblock ~9 ~1 ~4 minecraft:redstone_wire ["redstone_signal"=0]
@@ -737,6 +736,7 @@ setblock ~4 ~1 ~7 minecraft:unpowered_repeater ["minecraft:cardinal_direction"="
 setblock ~5 ~1 ~7 minecraft:unpowered_repeater ["minecraft:cardinal_direction"="east","repeater_delay"=3]
 setblock ~6 ~1 ~7 minecraft:redstone_wire ["redstone_signal"=0]
 setblock ~7 ~1 ~7 minecraft:redstone_wire ["redstone_signal"=0]
+setblock ~5 ~2 ~1 minecraft:redstone_wire ["redstone_signal"=0]
 setblock ~1 ~2 ~2 minecraft:redstone_wire ["redstone_signal"=0]
 setblock ~2 ~2 ~2 minecraft:unpowered_repeater ["minecraft:cardinal_direction"="west","repeater_delay"=0]
 setblock ~11 ~2 ~2 minecraft:unpowered_repeater ["minecraft:cardinal_direction"="east","repeater_delay"=0]
@@ -765,8 +765,7 @@ setblock ~6 ~6 ~5 minecraft:redstone_wire ["redstone_signal"=0]
 setblock ~6 ~1 ~3 minecraft:redstone_torch ["torch_facing_direction"="south"]
 setblock ~7 ~1 ~3 minecraft:redstone_torch ["torch_facing_direction"="south"]
 setblock ~4 ~1 ~5 minecraft:redstone_torch ["torch_facing_direction"="south"]
-setblock ~6 ~3 ~ minecraft:stone_pressure_plate ["redstone_signal"=0]
-setblock ~7 ~3 ~ minecraft:stone_pressure_plate ["redstone_signal"=0]
+setblock ~5 ~3 ~ minecraft:stone_button ["facing_direction"=2,"button_pressed_bit"=false]
 setblock ~3 ~3 ~2 minecraft:redstone_torch ["torch_facing_direction"="top"]
 setblock ~10 ~3 ~2 minecraft:redstone_torch ["torch_facing_direction"="top"]
 setblock ~3 ~3 ~3 minecraft:redstone_torch ["torch_facing_direction"="top"]

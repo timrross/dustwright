@@ -75,6 +75,10 @@ All notable user-facing changes are recorded here. The format follows
 
 ### Changed
 
+- Example `examples/jeb-door.rsd.json`: outside, a stone button on the door frame (to the right as you face the
+  door) replaces the pressure plates; the plates inside stay. The button powers the frame block it is on and dust
+  hidden under that block takes the signal below the floor, where a pulse extender (two delay-4 repeaters) keeps
+  the way clear for about 1.7 s per press. Measured in game on 1.26.52.3 and 1.26.63.1.
 - Example `examples/jeb-door.rsd.json`: the upper and lower door blocks now pull back on the same tick when the
   door opens. The upper front pistons' signal climbs a tower of three torches, so they used to retract 6 game ticks
   after the lower ones; the lower ones now wait behind delay-4 repeaters and the tower takes its own delay-2 tap

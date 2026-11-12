@@ -663,3 +663,41 @@ ones; closing is in step. Evidence: `docs/ingame/2026-11-12-jeb-door-sync.json` 
 Checks: `pnpm build`, `lint`, `typecheck`, `test` (812 passed), `gen:check`, `docs:check` and `check:licenses` pass;
 e2e 53 passed on macOS. In the Linux Playwright image (emulated on this Mac) 51 passed and 2 failed with a crashed
 page, neither a screenshot test.
+
+## Jeb door: a button outside (2026-11-12)
+
+Asked for: a button on the right-hand side of the door frame instead of the pressure plate. Evidence:
+`docs/ingame/2026-11-12-jeb-door-button-examples.json` (every example: 38 passed, 0 failed, 3 skipped),
+`docs/ingame/2026-11-12-jeb-door-button-sync.json` (BDS 1.26.52.3) and
+`docs/ingame/2026-11-12-jeb-door-button-sync-1.26.63.json` (BDS 1.26.63.1, the current release).
+
+- **Change.** A stone button on the north face of the frame block west of the doorway (to the right as you face the
+  door from outside), at the height of the lower door block, replaces the two outside plates. The inside plates
+  stay: they hold the door open hands-free on the way out. The button powers the frame block; dust under that block
+  (in the floor layer, covered on every side) powers the stone below it; a repeater east of that stone carries the
+  signal under the doorway to the dust column that the plates used, and a repeater in that column restores its
+  strength.
+- **Pulse extender.** A stone button's pulse is 1 s, and the door needs 1.3 s to open, which would leave the way
+  clear for well under a second. Two delay-4 repeaters west of the same stone send a copy 8 ticks late along dust
+  north of it, joined to the direct signal, so the way is clear from 1.3 s to 3.0 s after the press (simulator).
+  The late copy's dust runs past the stone it started from without pointing at it; in game the door closes again
+  after every press, so nothing latches.
+- **Simulator.** `test/jeb-door.test.ts`: one press goes skin, middle, aside, middle, skin with the way clear for at
+  least 1.5 s; the plate inside holds it open and leaving closes it; all four door blocks leave the wall on one game
+  tick and return on one, from the button and from the plate. The design's tests gained "closed again 7 s after a
+  press".
+- **In game.** `ingame-check.mjs` presses the button through the console for the stages check (its outer-wall test
+  now expects the button in front of the frame, not air) and the tests pass with it. `measure-door-sync.mjs`, three
+  runs per input: spread 0 on opening and closing from the button and from the plate; the door blocks are away from
+  the wall for 54 to 56 game ticks per press (the console holds the button about 4 ticks longer than a hand does)
+  and 116 with a pig on the plate for 3.5 s.
+- **"The top is still a tick slow" (reported from a hand-edited build).** Not reproduced: the plate version as
+  published and the button version both measure a spread of 0 on BDS 1.26.52.3 and on 1.26.63.1, and the plate
+  version also at seven sites chosen to put chunk borders through the tower, the doorway and the repeaters (0
+  everywhere). The first version, as a control, measures 6 on both releases. A build that is one tick out most likely
+  has one repeater a step off: the two before the lower torches must be on 4, the tower's tap on 2.
+- Updated with it: the export goldens, the parse snapshot and the Jeb door's screenshot baselines (macOS, and Linux
+  from the Playwright image, where all 53 tests passed).
+
+Checks: `pnpm build`, `lint`, `typecheck`, `test` (813 passed), `gen:check`, `docs:check` and `check:licenses` pass;
+e2e 53 passed on macOS and in the Linux Playwright image.

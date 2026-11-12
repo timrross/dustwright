@@ -1,25 +1,40 @@
 // Game cross-check for the Jeb door: measures in game, at game-tick resolution, the tick at which each of the four
 // door blocks leaves the outer wall when the door opens and the tick it is back when it closes, and reports how far
-// apart they are. The upper and lower rows are driven through different paths (a tower of three torches against
+// apart they are and how long the blocks were away. A plate input has a pig held on it for 3.5 s; a button input is
+// pressed once through the console (set pressed, set released a second later). The upper and lower rows are driven through different paths (a tower of three torches against
 // one torch), so they move together only if the delays before them match. All times are game ticks.
 //   node deploy/test-world/measure-door-sync.mjs install <pack-dir>      # then restart the server cold
-//   node deploy/test-world/measure-door-sync.mjs run [container] [slug...] > sync.json
+//   node deploy/test-world/measure-door-sync.mjs run [container] [slug[=design-file]...] > sync.json
 //   node deploy/test-world/measure-door-sync.mjs uninstall <pack-dir>    # then restart the server cold again
 // `install` adds a probe to the pack: `functions/tick.json` runs `dw_door/tick` every game tick, which records on a
-// scoreboard the tick of the last change of each door cell. The console alone cannot see single ticks. Remove the
+// scoreboard the tick each door cell was last left and the tick it was last filled again. The console alone cannot see single ticks. Remove the
 // probe as soon as the run is done (see measure-timing.mjs: a tick function can stop redstone in parts of the
 // world). Needs `pnpm build` and each slug exported into the pack (`--clear` too); slugs default to `jeb-door`. Any
-// other slug must be a design with the same door cells and plates, such as an earlier version to compare with.
+// other slug must be a design with the same door cells and inputs named `outside` and `inside`, such as an earlier
+// version to compare with; give its file after `=` (the example's is the default).
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { parseText } from "../../packages/core/dist/index.js";
-import { answer, at, cmd, isBlock, sleep, useContainer, worldTicks } from "./console.mjs";
+import { attachedFace, DIRS, parseText } from "../../packages/core/dist/index.js";
+import {
+  add,
+  answer,
+  at,
+  block,
+  cmd,
+  isBlock,
+  send,
+  sleep,
+  spec,
+  useContainer,
+  worldTicks,
+} from "./console.mjs";
 
 const root = fileURLToPath(new URL("../..", import.meta.url));
-const door = parseText(readFileSync(`${root}/examples/jeb-door.rsd.json`, "utf8")).model;
+const load = (file) => parseText(readFileSync(file, "utf8")).model;
 
-// Build origin; the function builds one block east of where it runs.
-const DOOR_AT = [34, 20, 40];
+// Build origin; the function builds one block east of where it runs. DOOR_AT=x,y,z moves it (for install and run
+// alike), to measure the door across a chunk border, say.
+const DOOR_AT = (process.env.DOOR_AT ?? "34,20,40").split(",").map(Number);
 const cell = (p) => [DOOR_AT[0] + 1 + p[0], DOOR_AT[1] + p[1], DOOR_AT[2] + p[2]];
 /** The four door blocks' places in the outer wall: lower and upper, west and east. */
 const CELLS = {
@@ -43,7 +58,8 @@ function install(pack) {
     lines.push(
       `execute if block ${at(cell(p))} minecraft:stone run scoreboard players set c${i} dw 1`,
       `execute unless block ${at(cell(p))} minecraft:stone run scoreboard players set c${i} dw 0`,
-      `execute unless score c${i} dw = p${i} dw run scoreboard players operation e${i} dw = t dw`,
+      `execute if score c${i} dw matches 0 if score p${i} dw matches 1 run scoreboard players operation o${i} dw = t dw`,
+      `execute if score c${i} dw matches 1 if score p${i} dw matches 0 run scoreboard players operation r${i} dw = t dw`,
       `scoreboard players operation p${i} dw = c${i} dw`,
     );
   });
@@ -75,20 +91,43 @@ async function score(name) {
   }
 }
 
-/** The tick of each cell's change since the last `arm`, relative to the earliest; -1 for a cell that did not change. */
-async function changes() {
+/** For scores `o` (left) or `r` (returned): each cell's tick relative to the earliest, and their spread; -1 if a cell did not change. */
+async function changes(kind) {
   const at4 = [];
-  for (let i = 0; i < NAMES.length; i++) at4.push(await score(`e${i}`));
+  for (let i = 0; i < NAMES.length; i++) at4.push(await score(`${kind}${i}`));
   const moved = at4.filter((v) => v > 0);
   const first = Math.min(...moved);
   return {
+    ticks: at4,
     behind: Object.fromEntries(NAMES.map((n, i) => [n, at4[i] > 0 ? at4[i] - first : -1])),
     spread: moved.length === NAMES.length ? Math.max(...moved) - first : -1,
   };
 }
 const arm = async () => {
-  for (let i = 0; i < NAMES.length; i++) await cmd(`scoreboard players set e${i} dw 0`, 30);
+  for (let i = 0; i < NAMES.length; i++) {
+    await cmd(`scoreboard players set o${i} dw 0`, 30);
+    await cmd(`scoreboard players set r${i} dw 0`, 30);
+  }
 };
+/**
+ * Presses a button from the console: set pressed and, a second later, released. Each change goes through air, and
+ * the block the button hangs on is swapped to another block and back, because a setblock updates neither (see
+ * driveInput in ingame-check.mjs).
+ */
+async function press(model, port) {
+  const b = model.blocks.get(port.pos.join(","));
+  const support = add(port.pos, DIRS[attachedFace(b)]);
+  const put = async (pressed) => {
+    send(`setblock ${at(cell(port.pos))} air`);
+    send(`setblock ${at(cell(port.pos))} ${spec(block(b.type, { ...b.states, pressed }))}`);
+    send(`setblock ${at(cell(support))} minecraft:cobblestone`);
+    await sleep(150);
+    send(`setblock ${at(cell(support))} minecraft:stone`);
+  };
+  await put(true);
+  await sleep(850);
+  await put(false);
+}
 const closed = async () => {
   for (const p of Object.values(CELLS)) if (!(await isBlock(cell(p), "minecraft:stone"))) return false;
   return true;
@@ -96,6 +135,8 @@ const closed = async () => {
 
 async function run(container, slugs) {
   useContainer(container);
+  // The same ticking area as ingame-check.mjs: with no player on the server, nothing else keeps the site loaded.
+  await cmd("tickingarea add 0 0 0 79 0 63 dustwright-check");
   if (!(await worldTicks(true))) throw new Error("the world does not tick; start the server cold");
   await cmd("scoreboard objectives remove dw");
   await cmd("scoreboard objectives add dw dummy");
@@ -104,26 +145,44 @@ async function run(container, slugs) {
   if (!((await score("t").catch(() => -1)) > t0))
     throw new Error("the probe is not running: install it first");
   const results = [];
-  for (const slug of slugs) {
+  const designs = slugs.map((s) => s.split("="));
+  slugs = designs.map(([slug]) => slug);
+  for (const [slug, file] of designs) {
+    const model = load(file ?? `${root}/examples/jeb-door.rsd.json`);
     for (const s of slugs) await cmd(`execute positioned ${at(DOOR_AT)} run function rsd/${s}_clear`);
     await cmd(`execute positioned ${at(DOOR_AT)} run function rsd/${slug}`, 5000);
     if (!(await closed())) throw new Error(`${slug}: the door did not close itself after building`);
     for (const plate of ["outside", "inside"]) {
-      const p = cell(door.ports.inputs.find((i) => i.name === plate).pos);
+      const port = model.ports.inputs.find((i) => i.name === plate);
+      const button = model.blocks.get(port.pos.join(","))?.type === "button";
+      const p = cell(port.pos);
       for (let n = 0; n < RUNS; n++) {
         await arm();
-        await cmd(`summon pig ${p[0] + 0.5} ${p[1]} ${p[2] + 0.5}`, 0);
-        await cmd("effect @e[type=pig] slowness 60 255 true", 0);
-        await sleep(3500);
-        const opening = await changes();
-        await arm();
-        await cmd("kill @e[type=pig]", 0);
-        await sleep(4500);
-        const closing = await changes();
+        if (button) {
+          await press(model, port);
+          await sleep(5000);
+        } else {
+          await cmd(`summon pig ${p[0] + 0.5} ${p[1]} ${p[2] + 0.5}`, 0);
+          await cmd("effect @e[type=pig] slowness 60 255 true", 0);
+          await sleep(3500);
+          await cmd("kill @e[type=pig]", 0);
+          await sleep(4500);
+        }
+        const opening = await changes("o");
+        const closing = await changes("r");
         await cmd("kill @e[type=item]", 0);
-        results.push({ slug, plate, run: n + 1, opening, closing });
+        const away = closing.ticks[0] - opening.ticks[0];
+        results.push({
+          slug,
+          input: plate,
+          kind: button ? "button" : "plate",
+          run: n + 1,
+          opening,
+          closing,
+          away,
+        });
         console.error(
-          `${slug}  ${plate} plate, run ${n + 1}: opening spread ${opening.spread} gt ${JSON.stringify(opening.behind)}; closing spread ${closing.spread} gt`,
+          `${slug}  ${plate} ${button ? "button" : "plate"}, run ${n + 1}: opening spread ${opening.spread} gt ${JSON.stringify(opening.behind)}; closing spread ${closing.spread} gt; away ${away} gt`,
         );
         if (!(await closed())) throw new Error(`${slug}: the door did not close again`);
       }

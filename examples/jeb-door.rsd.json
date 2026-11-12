@@ -4,7 +4,7 @@
     "name": "Jeb door",
     "edition": "bedrock",
     "gameVersion": "1.26.50",
-    "description": "A hidden 2x2 Jeb door. Closed, the outside is plain stone: four stone blocks sit flush in the wall, each held there by a sticky piston behind it facing out. Step on a pressure plate on either side and it opens in two stages: the front pistons retract, pulling the blocks back one block into the wall; then, after a delay, side pistons pull the blocks and the front pistons aside into the wall, clearing the way. Leaving the plate reverses it: the side pistons bring everything back to the middle first, then the front pistons push the blocks flush again. Twelve sticky pistons; Bedrock has no quasi-connectivity, so every piston has its own power: the lower ones from blocks under the floor or beside them, the upper ones from the block above a torch or from dust on the ceiling. The plates feed dust under the floor; two delay-4 repeaters per side make the second stage wait. The signal to the upper front pistons climbs a tower of three torches, so the lower ones wait for it behind delay-4 repeaters and the upper and lower door blocks pull back together. Only the plates and the door show; the rest is inside the wall, the floor and the ceiling, though the pistons can be seen from inside. The design shows the pistons retracted with the blocks in the middle; it closes itself when built, so clear it (rsd/jeb-door_clear) before building it again in place."
+    "description": "A hidden 2x2 Jeb door. Closed, the outside is plain stone: four stone blocks sit flush in the wall, each held there by a sticky piston behind it facing out. Press the stone button on the door frame outside, or step on a pressure plate inside, and it opens in two stages: the front pistons retract, pulling the blocks back one block into the wall; then, after a delay, side pistons pull the blocks and the front pistons aside into the wall, clearing the way. When the button's pulse ends, or you leave the plate, it reverses: the side pistons bring everything back to the middle first, then the front pistons push the blocks flush again. Twelve sticky pistons; Bedrock has no quasi-connectivity, so every piston has its own power: the lower ones from blocks under the floor or beside them, the upper ones from the block above a torch or from dust on the ceiling. The button powers the frame block it is on and dust hidden under that block carries the signal below the floor, where two delay-4 repeaters join a late copy to the button's one-second pulse, so one press keeps the way clear for about 1.7 seconds. The plates feed the dust under the floor directly. Two more delay-4 repeaters per side make the second stage wait. The signal to the upper front pistons climbs a tower of three torches, so the lower ones wait for it behind delay-4 repeaters and the upper and lower door blocks pull back together. Only the button, the plates and the door show; the rest is inside the wall, the floor and the ceiling, though the pistons can be seen from inside. The design shows the pistons retracted with the blocks in the middle; it closes itself when built, so clear it (rsd/jeb-door_clear) before building it again in place."
   },
   "legend": {
     "#": "stone",
@@ -17,6 +17,8 @@
     "u": "torch mount=floor",
     "s": "torch mount=south",
     "P": "pressure_plate material=stone",
+    "b": "button mount=south material=stone",
+    "v": "repeater facing=south delay=1",
     "^": "repeater facing=north delay=4",
     "<": "repeater facing=west delay=1",
     "2": "repeater facing=west delay=2",
@@ -37,9 +39,9 @@
       "############"
     ],
     [
-      "#####----###",
-      "########-###",
-      "########-###",
+      "#------#####",
+      "#-LL#>---###",
+      "########v###",
       "#####ss#-###",
       "-#######-##-",
       "-##s#^^#-##-",
@@ -49,7 +51,7 @@
     ],
     [
       "############",
-      "############",
+      "####-#######",
       "->########<-",
       "->########<-",
       "g##########g",
@@ -59,7 +61,7 @@
       "############"
     ],
     [
-      ".....PP.....",
+      "....b.......",
       "#####..#####",
       "##tE.##.Wt##",
       "##tE.FF.Wt##",
@@ -118,7 +120,7 @@
     "inputs": [
       {
         "name": "outside",
-        "pos": [5, 3, 0]
+        "pos": [4, 3, 0]
       },
       {
         "name": "inside",
@@ -186,8 +188,20 @@
       "text": "Delay-4 repeaters: with the torch they feed, the lower front pistons also switch after 5 ticks, so both rows of the door pull back on the same tick."
     },
     {
-      "pos": [5, 3, 0],
-      "text": "Outside plates."
+      "pos": [4, 3, 0],
+      "text": "Outside: a stone button on the door frame, to the right as you face the door."
+    },
+    {
+      "pos": [4, 2, 1],
+      "text": "Dust under the frame block the button is on: the button powers that block, the block powers this dust, and the dust powers the stone below it, which the repeaters either side of that stone read."
+    },
+    {
+      "pos": [2, 1, 1],
+      "text": "Pulse extender: two delay-4 repeaters send a copy of the button's pulse 8 ticks late along the dust to the north, where it joins the direct one from the repeater to the east. One press keeps the way clear for about 1.7 s."
+    },
+    {
+      "pos": [8, 1, 2],
+      "text": "Repeater: brings the button's signal back to full strength for the run south to the door's circuits."
     },
     {
       "pos": [5, 3, 7],
@@ -211,11 +225,22 @@
       "set": {
         "outside": 1
       },
-      "afterTicks": 25,
+      "afterTicks": 16,
       "expect": {
         "side": 0,
         "side_east": 0,
         "front_power": 0
+      }
+    },
+    {
+      "set": {
+        "outside": 1
+      },
+      "afterTicks": 70,
+      "expect": {
+        "side": 1,
+        "side_east": 1,
+        "front_power": 12
       }
     },
     {

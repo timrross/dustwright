@@ -724,9 +724,10 @@ async function designs(kind, dirOverride) {
 }
 
 /**
- * The Jeb door's stages, which its tests cannot order: with a pig held on each plate in turn (slowness, so it stays),
- * the lower west door block must go from the skin to the middle of the cavity to aside, and on leaving come back
- * aside, middle, skin. Polled as fast as the console answers.
+ * The Jeb door's stages, which its tests cannot order: the lower west door block must go from the skin to the middle
+ * of the cavity to aside, and then come back aside, middle, skin. For a plate, a pig is held on it (slowness, so it
+ * stays) and then removed; a button is pressed once, which opens the door and closes it again. Polled as fast as
+ * the console answers.
  */
 async function jebStages(model, o, area, build) {
   const cell = (p) => [o[0] + 1 + p[0], o[1] + p[1], o[2] + p[2]];
@@ -748,27 +749,43 @@ async function jebStages(model, o, area, build) {
   };
   for (const name of ["outside", "inside"]) {
     const port = model.ports.inputs.find((p) => p.name === name);
-    await check(area, `opens in two stages and closes in reverse, a pig on the ${name} plate`, async () => {
+    const button = model.blocks.get(port.pos.join(","))?.type === "button";
+    const how = button ? `the ${name} button pressed` : `a pig on the ${name} plate`;
+    await check(area, `opens in two stages and closes in reverse, ${how}`, async () => {
       await build();
       const p = cell(port.pos);
       const before = await where();
-      await cmd(`summon pig ${p[0] + 0.5} ${p[1]} ${p[2] + 0.5}`, 0);
-      await cmd("effect @e[type=pig] slowness 60 255 true", 0);
       let opening;
-      try {
-        opening = await watch(3500);
-      } finally {
-        await cmd("kill @e[type=pig]", 0);
+      let closing;
+      if (button) {
+        // One press opens the door and closes it again: what was seen is split at "aside".
+        await driveInput(model, port, 1, o, 0);
+        const seen = await watch(7000);
+        const aside = seen.indexOf("aside");
+        opening = aside < 0 ? seen : seen.slice(0, aside + 1);
+        closing = aside < 0 ? [] : seen.slice(aside);
+      } else {
+        await cmd(`summon pig ${p[0] + 0.5} ${p[1]} ${p[2] + 0.5}`, 0);
+        await cmd("effect @e[type=pig] slowness 60 255 true", 0);
+        try {
+          opening = await watch(3500);
+        } finally {
+          await cmd("kill @e[type=pig]", 0);
+        }
+        closing = await watch(4000);
       }
-      const closing = await watch(4000);
       // Closing passes through the middle for only about 2 game ticks, which a poll can miss; what must not happen
       // is the front pistons pushing too early, which would shove the outer wall out: the skin either side of the
-      // doorway must still be stone, with air in front of it.
+      // doorway must still be stone, with what the design has in front of it (air, or the button on the frame).
+      const inFront = async (p) => {
+        const b = model.blocks.get(p.join(","));
+        return isBlock(cell(p), b ? toEditionBlocks(b, "bedrock")[0].id : "minecraft:air");
+      };
       const skinIntact =
         (await isBlock(cell([4, 3, 1]), "minecraft:stone")) &&
         (await isBlock(cell([7, 3, 1]), "minecraft:stone")) &&
-        (await isBlock(cell([4, 3, 0]), "minecraft:air")) &&
-        (await isBlock(cell([7, 3, 0]), "minecraft:air"));
+        (await inFront([4, 3, 0])) &&
+        (await inFront([7, 3, 0]));
       const pass =
         before === "skin" &&
         opening.join(",") === "skin,middle,aside" &&

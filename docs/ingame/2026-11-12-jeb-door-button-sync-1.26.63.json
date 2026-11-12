@@ -1,0 +1,495 @@
+{
+  "when": "2026-11-12T16:53:33.172Z",
+  "container": "dustwright-test-latest",
+  "unit": "game ticks",
+  "ticking": true,
+  "results": [
+    {
+      "slug": "jeb-door",
+      "input": "outside",
+      "kind": "button",
+      "run": 1,
+      "opening": {
+        "ticks": [181, 181, 181, 181],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "closing": {
+        "ticks": [235, 235, 235, 235],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 54
+    },
+    {
+      "slug": "jeb-door",
+      "input": "outside",
+      "kind": "button",
+      "run": 2,
+      "opening": {
+        "ticks": [375, 375, 375, 375],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "closing": {
+        "ticks": [429, 429, 429, 429],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 54
+    },
+    {
+      "slug": "jeb-door",
+      "input": "outside",
+      "kind": "button",
+      "run": 3,
+      "opening": {
+        "ticks": [569, 569, 569, 569],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "closing": {
+        "ticks": [623, 623, 623, 623],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 54
+    },
+    {
+      "slug": "jeb-door",
+      "input": "inside",
+      "kind": "plate",
+      "run": 1,
+      "opening": {
+        "ticks": [757, 757, 757, 757],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "closing": {
+        "ticks": [873, 873, 873, 873],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 116
+    },
+    {
+      "slug": "jeb-door",
+      "input": "inside",
+      "kind": "plate",
+      "run": 2,
+      "opening": {
+        "ticks": [981, 981, 981, 981],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "closing": {
+        "ticks": [1097, 1097, 1097, 1097],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 116
+    },
+    {
+      "slug": "jeb-door",
+      "input": "inside",
+      "kind": "plate",
+      "run": 3,
+      "opening": {
+        "ticks": [1205, 1205, 1205, 1205],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "closing": {
+        "ticks": [1321, 1321, 1321, 1321],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 116
+    },
+    {
+      "slug": "jeb-door-plates",
+      "input": "outside",
+      "kind": "plate",
+      "run": 1,
+      "opening": {
+        "ticks": [1563, 1563, 1563, 1563],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "closing": {
+        "ticks": [1679, 1679, 1679, 1679],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 116
+    },
+    {
+      "slug": "jeb-door-plates",
+      "input": "outside",
+      "kind": "plate",
+      "run": 2,
+      "opening": {
+        "ticks": [1787, 1787, 1787, 1787],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "closing": {
+        "ticks": [1903, 1903, 1903, 1903],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 116
+    },
+    {
+      "slug": "jeb-door-plates",
+      "input": "outside",
+      "kind": "plate",
+      "run": 3,
+      "opening": {
+        "ticks": [2011, 2011, 2011, 2011],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "closing": {
+        "ticks": [2127, 2127, 2127, 2127],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 116
+    },
+    {
+      "slug": "jeb-door-plates",
+      "input": "inside",
+      "kind": "plate",
+      "run": 1,
+      "opening": {
+        "ticks": [2237, 2237, 2237, 2237],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "closing": {
+        "ticks": [2353, 2353, 2353, 2353],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 116
+    },
+    {
+      "slug": "jeb-door-plates",
+      "input": "inside",
+      "kind": "plate",
+      "run": 2,
+      "opening": {
+        "ticks": [2461, 2461, 2461, 2461],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "closing": {
+        "ticks": [2577, 2577, 2577, 2577],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 116
+    },
+    {
+      "slug": "jeb-door-plates",
+      "input": "inside",
+      "kind": "plate",
+      "run": 3,
+      "opening": {
+        "ticks": [2683, 2683, 2683, 2683],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "closing": {
+        "ticks": [2799, 2799, 2799, 2799],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 116
+    },
+    {
+      "slug": "jeb-door-first",
+      "input": "outside",
+      "kind": "plate",
+      "run": 1,
+      "opening": {
+        "ticks": [3035, 3041, 3035, 3041],
+        "behind": {
+          "lower west": 0,
+          "upper west": 6,
+          "lower east": 0,
+          "upper east": 6
+        },
+        "spread": 6
+      },
+      "closing": {
+        "ticks": [3157, 3157, 3157, 3157],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 122
+    },
+    {
+      "slug": "jeb-door-first",
+      "input": "outside",
+      "kind": "plate",
+      "run": 2,
+      "opening": {
+        "ticks": [3259, 3265, 3259, 3265],
+        "behind": {
+          "lower west": 0,
+          "upper west": 6,
+          "lower east": 0,
+          "upper east": 6
+        },
+        "spread": 6
+      },
+      "closing": {
+        "ticks": [3381, 3381, 3381, 3381],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 122
+    },
+    {
+      "slug": "jeb-door-first",
+      "input": "outside",
+      "kind": "plate",
+      "run": 3,
+      "opening": {
+        "ticks": [3483, 3489, 3483, 3489],
+        "behind": {
+          "lower west": 0,
+          "upper west": 6,
+          "lower east": 0,
+          "upper east": 6
+        },
+        "spread": 6
+      },
+      "closing": {
+        "ticks": [3605, 3605, 3605, 3605],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 122
+    },
+    {
+      "slug": "jeb-door-first",
+      "input": "inside",
+      "kind": "plate",
+      "run": 1,
+      "opening": {
+        "ticks": [3707, 3713, 3707, 3713],
+        "behind": {
+          "lower west": 0,
+          "upper west": 6,
+          "lower east": 0,
+          "upper east": 6
+        },
+        "spread": 6
+      },
+      "closing": {
+        "ticks": [3829, 3829, 3829, 3829],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 122
+    },
+    {
+      "slug": "jeb-door-first",
+      "input": "inside",
+      "kind": "plate",
+      "run": 2,
+      "opening": {
+        "ticks": [3931, 3937, 3931, 3937],
+        "behind": {
+          "lower west": 0,
+          "upper west": 6,
+          "lower east": 0,
+          "upper east": 6
+        },
+        "spread": 6
+      },
+      "closing": {
+        "ticks": [4053, 4053, 4053, 4053],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 122
+    },
+    {
+      "slug": "jeb-door-first",
+      "input": "inside",
+      "kind": "plate",
+      "run": 3,
+      "opening": {
+        "ticks": [4153, 4159, 4153, 4159],
+        "behind": {
+          "lower west": 0,
+          "upper west": 6,
+          "lower east": 0,
+          "upper east": 6
+        },
+        "spread": 6
+      },
+      "closing": {
+        "ticks": [4275, 4275, 4275, 4275],
+        "behind": {
+          "lower west": 0,
+          "upper west": 0,
+          "lower east": 0,
+          "upper east": 0
+        },
+        "spread": 0
+      },
+      "away": 122
+    }
+  ],
+  "version": "1.26.63.1"
+}
